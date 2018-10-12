@@ -1,3 +1,4 @@
-Dobrodosli na projekt
+Dobrodosli na projekt!!
+
 Lista ljudi koji su uspjesno instalirali git i napravili commit
-1. Luka Mrkovic
+	1. Luka Mrkovic

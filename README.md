@@ -5,3 +5,4 @@ Lista ljudi koji su uspjesno instalirali git i napravili commit
 	2. Josip Ramljak
 	3. Ivan Zuglic
 	4. Toni Sterbic
+	5. Maja Matesic

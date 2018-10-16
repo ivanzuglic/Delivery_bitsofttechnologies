@@ -9,5 +9,12 @@
 
 2. sastanak:
 	16.10.2018.
-	U sklopu laboratorijske vjezbe...
+	U sklopu laboratorijske vjezbe.
+	Prisutni svi clanovi tima.
+	Razjašnjena neka pitanja vezana uz problematiku zadatka.
+	Dogovorena raspodjela posla za 3. tjedan.
+	Maja, Lucia, Josip  - obrasci uporabe
+	Ivan, Luka 	    - tehnologije
+	Luka                - opis zadatka
+	Toni                - dijagrami
 	

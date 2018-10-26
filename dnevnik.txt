@@ -17,4 +17,10 @@
 	Ivan, Luka 	    - tehnologije
 	Luka                - opis zadatka
 	Toni                - dijagrami
-	
+
+3. sastanak:
+	23.10.2018.
+	Tim se sastao na sat vremena u svrhu pregleda i provjere do tada odradjenog posla.
+	Prisutni svi clanovi tima.
+	Detaljno pregledana cijela, do tada napravljena, dokumentacija; fokus na provjeri obrazaca uporabe.
+	Postignut dogovor oko dorade obrazaca uporabe prije daljnje izrade dijagrama.

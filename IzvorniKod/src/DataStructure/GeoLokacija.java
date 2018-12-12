@@ -2,23 +2,23 @@ package DataStructure;
 
 public class GeoLokacija {
 
-	private int geoSirina;
-	private int geoDuziina;
+	private float geoSirina;
+	private float geoDuziina;
 	
 	
-	public GeoLokacija(int geoSirina, int geoDuziina) {
+	public GeoLokacija(float geoSirina, float geoDuziina) {
 		super();
 		this.geoSirina = geoSirina;
 		this.geoDuziina = geoDuziina;
 	}
 
 
-	public int getGeoSirina() {
+	public float getGeoSirina() {
 		return geoSirina;
 	}
 
 
-	public int getGeoDuziina() {
+	public float getGeoDuziina() {
 		return geoDuziina;
 	}
 	

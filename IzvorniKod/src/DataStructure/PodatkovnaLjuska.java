@@ -21,6 +21,7 @@ public class PodatkovnaLjuska {
 		boolean valjan = false;
 		
 		// provjeri dostupnost korisnickog imena u bazi podataka
+		// ako je korisnicko ime dostupno postavi valjan u true
 		
 		if (valjan) {
 			this.trenutniKorisnik = new Klijent(korisnickoIme, lozinka, ime, prezime, eMail, starost);
@@ -35,7 +36,7 @@ public class PodatkovnaLjuska {
 		VrstaKorisnika vrsta = null;
 		
 		// provjeri valjanost podataka u bazi podataka
-		// ako su podaci valjani, dohvati vrstu korisnika iz baze podataka
+		// ako su podaci valjani, dohvati vrstu korisnika iz baze podataka i postavi valjan u true
 		
 		if (valjan) {
 			if (vrsta == VrstaKorisnika.KLIJENT) {

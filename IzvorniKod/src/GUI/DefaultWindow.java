@@ -10,6 +10,7 @@ public class DefaultWindow extends JFrame{
 		setSize(500, 480);
 	    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	    setTitle("Dostavljaona!");
+	    add(new KorisnikPanel());
 	}
 	
 	public static void main(String[] args) throws Exception {

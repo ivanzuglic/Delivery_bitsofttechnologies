@@ -7,10 +7,10 @@ import javax.swing.WindowConstants;
 
 public class DefaultWindow extends JFrame{
 	public DefaultWindow() {
-		setSize(500, 480);
+		setSize(640, 480);
 	    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	    setTitle("Dostavljaona!");
-	    add(new KorisnikPanel());
+	    add(new KorisnikPanelAlt());
 	}
 	
 	public static void main(String[] args) throws Exception {

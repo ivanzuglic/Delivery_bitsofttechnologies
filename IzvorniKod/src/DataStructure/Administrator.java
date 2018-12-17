@@ -48,6 +48,8 @@ public class Administrator extends Korisnik {
 	
 	private void napuniListuKorisnika () {
 		
+		
+		// vuce sve korisnike
 		// metoda koja ce iz baze podataka puniti listu korisnika
 	}
 }

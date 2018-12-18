@@ -2,37 +2,31 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneLayout;
-import javax.swing.SpringLayout;
 import javax.swing.Timer;
 
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+/**
+ * Razred koji definira izgled i funkcije panela za Korisnika
+ * @author tonis
+ *
+ */
 
-import javafx.scene.control.SplitPane;
-
-public class KorisnikPanelAlt extends JPanel{
-	
+public class KorisnikPanel extends JPanel {
 	private JPanel buttonsPanel;
 	private JPanel showPanel;
 	private JPanel logoPanel;
@@ -40,30 +34,40 @@ public class KorisnikPanelAlt extends JPanel{
 	private ActionListener registrirajSeListener;
 	private DefaultWindow window;
 	
-	public KorisnikPanelAlt(DefaultWindow window) {
+	
+	/**
+	 * Defaultni konstruktor, konstruktor mora primiti referencu na instancu DefaultWindow radi promjene panela
+	 * @param window
+	 */
+	public KorisnikPanel(DefaultWindow window) {
+		this.window = window;
+		setLayout(new BorderLayout());
 		
+		//Definicija Listenera za gumbove za Prijavu i Registraciju
 		prijaviSeListener = (actionEvent) -> {
 			prijaviSeWindow();
 		};
-		
 		registrirajSeListener = (actionEvent) -> {
 			registrirajSeWindow();
 		};
 		
-		this.window = window;
-		setLayout(new BorderLayout());
-		buttonsPanel = new JPanel();
-		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+		//Definicija gumba PrijaviSe
 		JButton PrijaviSe = new JButton("    Prijavi se    ");
 		PrijaviSe.setMaximumSize(new Dimension(120, 120));
 		PrijaviSe.addActionListener(prijaviSeListener);
 		ImageIcon image1 = new ImageIcon(getClass().getResource("/images/PrijaviSeLogoMini.png"));
 		PrijaviSe.setIcon(image1);
+		
+		//Definicija gumba RegistrirajSe
 		JButton RegistrirajSe = new JButton("Registriraj se");
 		RegistrirajSe.addActionListener(registrirajSeListener);
 		RegistrirajSe.setMaximumSize(new Dimension (120, 120));
 		ImageIcon image2  = new ImageIcon(getClass().getResource("/images/RegistrirajSELogoMini.png"));
 		RegistrirajSe.setIcon(image2);
+		
+		//Definicija panela sa gumbovima
+		buttonsPanel = new JPanel();
+		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
 		buttonsPanel.add(PrijaviSe);
 		buttonsPanel.add(RegistrirajSe);
 		buttonsPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
@@ -71,6 +75,7 @@ public class KorisnikPanelAlt extends JPanel{
 		buttonsPanel.setPreferredSize(new Dimension(120, 500));
 		add(buttonsPanel, BorderLayout.EAST);
 		
+		//Definicija panela sa logom
 		logoPanel = new JPanel();
 		logoPanel.setBackground(Color.white);
 		logoPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 3));
@@ -79,6 +84,8 @@ public class KorisnikPanelAlt extends JPanel{
 		logoPanel.add(new JLabel(imageLogo));
 		add(logoPanel, BorderLayout.NORTH);
 		
+		//Nepotpuna definicija panela sa listom restorana
+		//Potrebno dalje istraziti kako radi JScrollPane
 		showPanel = new JPanel();
 		showPanel.setLayout(new ScrollPaneLayout());
 		JScrollPane showScrollPane = new JScrollPane();
@@ -86,16 +93,21 @@ public class KorisnikPanelAlt extends JPanel{
 		showPanel.setBackground(Color.white);
 		showPanel.setLayout(new FlowLayout());
 		puniShowPanel(); //Funkcija za punjenje panela sa restoranima
-		showPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 3));
+		showPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
 		add(showPanel, BorderLayout.CENTER);
 	}
 
 	private void registrirajSeWindow() {
+		//Kreiranje dialog prozora
 		JDialog Registracija = new JDialog();
 		Registracija.setLayout(new BorderLayout());
+		
+		//Kreiranje sredisnjeg panela
 		JPanel podaci = new JPanel();
 		podaci.setLayout(new FlowLayout());
+		podaci.setBackground(Color.white);
 		
+		//Definicija panela za korisnicko ime
 		JPanel korImePanel = new JPanel();
 		korImePanel.setBackground(Color.white);
 		korImePanel.setLayout(new FlowLayout());
@@ -105,6 +117,7 @@ public class KorisnikPanelAlt extends JPanel{
 		korImePanel.add(korImeField);
 		podaci.add(korImePanel);
 		
+		//Definicija panela za lozinku
 		JPanel lozinkaPanel = new JPanel();
 		lozinkaPanel.setBackground(Color.white);
 		lozinkaPanel.setLayout(new FlowLayout());
@@ -114,6 +127,7 @@ public class KorisnikPanelAlt extends JPanel{
 		lozinkaPanel.add(lozinkaField);
 		podaci.add(lozinkaPanel);
 		
+		//Definicija panela za potvrdu lozinke
 		JPanel potvrLozinkaPanel = new JPanel();
 		potvrLozinkaPanel.setBackground(Color.white);
 		potvrLozinkaPanel.setLayout(new FlowLayout());
@@ -123,6 +137,7 @@ public class KorisnikPanelAlt extends JPanel{
 		potvrLozinkaPanel.add(potvrdLozinkaField);
 		podaci.add(potvrLozinkaPanel);
 		
+		//Definicija panela za ime korisnika
 		JPanel imePanel = new JPanel();
 		imePanel.setBackground(Color.white);
 		imePanel.setLayout(new FlowLayout());
@@ -132,6 +147,7 @@ public class KorisnikPanelAlt extends JPanel{
 		imePanel.add(imeField);
 		podaci.add(imePanel);
 		
+		//Definicija panela za prezime korisnkia
 		JPanel prezPanel = new JPanel();
 		prezPanel.setBackground(Color.white);
 		prezPanel.setLayout(new FlowLayout());
@@ -141,6 +157,7 @@ public class KorisnikPanelAlt extends JPanel{
 		prezPanel.add(prezField);
 		podaci.add(prezPanel);
 		
+		//Definicija panela za dob korisnka
 		JPanel dobPanel = new JPanel();
 		dobPanel.setBackground(Color.white);
 		dobPanel.setLayout(new FlowLayout());
@@ -150,6 +167,7 @@ public class KorisnikPanelAlt extends JPanel{
 		dobPanel.add(dobField);
 		podaci.add(dobPanel);
 		
+		//Definicija panela za unos email adrses
 		JPanel mailPanel = new JPanel();
 		mailPanel.setBackground(Color.white);
 		mailPanel.setLayout(new FlowLayout());
@@ -159,16 +177,18 @@ public class KorisnikPanelAlt extends JPanel{
 		mailPanel.add(mailField);
 		podaci.add(mailPanel);
 		
-		podaci.setBackground(Color.white);
-		
+		//Definicija juznog panela
 		JPanel southPanel = new JPanel();
 		southPanel.setBackground(Color.white);
 		southPanel.setLayout(new BorderLayout());
+		
+		//Definicjia panela za poruku koji ide u juzni panel
 		JPanel poruka = new JPanel();
 		poruka.setBackground(Color.white);
 		poruka.setSize(lozinkaPanel.getWidth(), lozinkaPanel.getHeight());
 		southPanel.add(poruka, BorderLayout.NORTH);
 		
+		//Definicjia funkcionalnosti gumba za registraciju
 		ActionListener RegistracijaDialog = (actionEvent) -> {
 			if(registracijaProvjera(korImeField.getText(), lozinkaField.getText(), potvrdLozinkaField.getText(), imeField.getText(), prezField.getText(), dobField.getText(), mailField.getText())) {
 				poruka.removeAll();
@@ -193,20 +213,23 @@ public class KorisnikPanelAlt extends JPanel{
 		JButton OK = new JButton("Registriraj se");
 		OK.addActionListener(RegistracijaDialog);
 		
+		//Definicija funkcionalnsti gumba odustani
 		ActionListener OdustaniDialog = (actionEvent) -> {
 			Registracija.dispatchEvent(new WindowEvent(Registracija, WindowEvent.WINDOW_CLOSING));
 		};
 		JButton NOK = new JButton("Odustani");
 		NOK.addActionListener(OdustaniDialog);
 		
+		//Definicjia panela sa gumbovima koji ide u juzni panel
 		JPanel DialogButtons = new JPanel();
 		DialogButtons.setBackground(Color.white);
 		DialogButtons.setLayout(new FlowLayout());
 		DialogButtons.add(NOK);
 		DialogButtons.add(OK);
 		southPanel.add(DialogButtons, BorderLayout.SOUTH);
-		Registracija.add(southPanel, BorderLayout.SOUTH);
 		
+		//Krajnji modifikatori za dialog prozora
+		Registracija.add(southPanel, BorderLayout.SOUTH);
 		Registracija.add(podaci, BorderLayout.CENTER);
 		Registracija.setTitle("Registracija");
 		Registracija.setResizable(false);
@@ -225,12 +248,16 @@ public class KorisnikPanelAlt extends JPanel{
 	}
 
 	private void prijaviSeWindow() {
+		//Kreiranje dialog prozora
 		JDialog Prijava = new JDialog();
 		Prijava.setLayout(new BorderLayout());
+		
+		//Kreiranje sredisnjeg panela
 		JPanel imeLozinka = new JPanel();
 		imeLozinka.setLayout(new FlowLayout());
 		imeLozinka.setBackground(Color.white);
 		
+		//Definicija panela za korisnicko ime
 		JPanel ime = new JPanel();
 		ime.setBackground(Color.white);
 		ime.setLayout(new FlowLayout());
@@ -240,6 +267,7 @@ public class KorisnikPanelAlt extends JPanel{
 		ime.add(imeField);
 		imeLozinka.add(ime);
 		
+		//Definicija panela za lozinku
 		JPanel lozinka = new JPanel();
 		lozinka.setBackground(Color.white);
 		lozinka.setLayout(new FlowLayout());
@@ -249,14 +277,18 @@ public class KorisnikPanelAlt extends JPanel{
 		lozinka.add(lozinkaField);
 		imeLozinka.add(lozinka);
 		
+		//Definicija juznog panela
 		JPanel southPanel = new JPanel();
 		southPanel.setBackground(Color.white);
 		southPanel.setLayout(new BorderLayout());
+		
+		//Definicija panela za poruku koji ide u juzni panel
 		JPanel poruka = new JPanel();
 		poruka.setBackground(Color.white);
 		poruka.setSize(lozinka.getWidth(), lozinka.getHeight());
 		southPanel.add(poruka, BorderLayout.NORTH);
 		
+		//Defincija funkcionalnosti gumba za prijavu
 		ActionListener PrijavaDialog = (actionEvent) -> {
 			if(prijaviSeProvjera(imeField.getText(), lozinkaField.getText())) {
 				poruka.removeAll();
@@ -278,16 +310,17 @@ public class KorisnikPanelAlt extends JPanel{
 				poruka.revalidate();
 			}
 		};
-		
 		JButton OK = new JButton("Prijavi se");
 		OK.addActionListener(PrijavaDialog);
 		
+		//Definicija funkcionalnosti gumba odustani
 		ActionListener OdustaniDialog = (actionEvent) -> {
 			Prijava.dispatchEvent(new WindowEvent(Prijava, WindowEvent.WINDOW_CLOSING));
 		};
 		JButton NOK = new JButton("Odustani");
 		NOK.addActionListener(OdustaniDialog);
 		
+		//Definicja panela s gumbovima koji ulazi u juzni panel
 		JPanel DialogButtons = new JPanel();
 		DialogButtons.setBackground(Color.white);
 		DialogButtons.setLayout(new FlowLayout());
@@ -296,6 +329,7 @@ public class KorisnikPanelAlt extends JPanel{
 		southPanel.add(DialogButtons, BorderLayout.SOUTH);
 		Prijava.add(southPanel, BorderLayout.SOUTH);
 		
+		//Krajnji modifikatori za dialog prozora
 		Prijava.add(imeLozinka, BorderLayout.CENTER);
 		Prijava.setTitle("Prijava");
 		Prijava.setResizable(false);

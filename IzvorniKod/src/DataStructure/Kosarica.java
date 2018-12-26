@@ -6,7 +6,8 @@ import java.util.Set;
 
 public class Kosarica {
 
-	private float  ukupnaCijena;
+	private float ukupnaCijena;
+	private Restoran restoran = null;
     private Map<Artikl, Integer> odabraniProizvodi;
 
     
@@ -18,8 +19,19 @@ public class Kosarica {
     
     public void dodajArtikl (Artikl noviArtikl, int kolicina) {
     	
-    	this.odabraniProizvodi.put(noviArtikl, kolicina);
-    	this.ukupnaCijena = this.izracunajCijenu();
+    	if (this.restoran.equals(null) || this.restoran.equals(noviArtikl.getRestoran())) {
+    		this.odabraniProizvodi.put(noviArtikl, kolicina);
+        	this.ukupnaCijena = this.izracunajCijenu();
+        	
+        	if (this.restoran.equals(null)) {
+        		this.restoran = noviArtikl.getRestoran();
+        	}
+    	}
+    	else {
+    		
+    		// baci upozorenje
+    		
+    	}
     }
 
     public void promijeniKolicinu (Artikl artikl, int novaKolicina) {
@@ -32,31 +44,39 @@ public class Kosarica {
     	
     	this.odabraniProizvodi.remove(uklonjenArtikl);
     	this.ukupnaCijena = this.izracunajCijenu();
+    	
+    	if (this.odabraniProizvodi.isEmpty()) {
+    		this.restoran = null;
+    	}
     }
 
     public void clear () {
 
         this.odabraniProizvodi.clear();
         this.ukupnaCijena = 0;
+        this.restoran = null;
     }
     
-    public Narudzba finalizirajNarudzbu (GeoLokacija lokacijaDostave) {
+    public Narudzba finalizirajNarudzbu (GeoLokacija lokacijaDostave, Korisnik trenutniKorisnik) {
 
-    	Narudzba finaliziranaNarudzba = null;
-    	
-    	// stvoriti i vratiti objekt narudzbe stvoren iz kosarice i lokacije dostave
-    	
+    	Narudzba finaliziranaNarudzba = new Narudzba(this, lokacijaDostave, trenutniKorisnik);
+    		
     	return finaliziranaNarudzba;
     }
     
-    public float getUkupnaCijena() {
+    public float getUkupnaCijena () {
 		
-    	return ukupnaCijena;
+    	return this.ukupnaCijena;
 	}
 
-	public Map<Artikl, Integer> getOdabraniProizvodi() {
+	public Map<Artikl, Integer> getOdabraniProizvodi () {
 		
-		return odabraniProizvodi;
+		return this.odabraniProizvodi;
+	}
+	
+	public Restoran getRestoran () {
+		
+		return this.restoran;
 	}
 
     private float izracunajCijenu () {

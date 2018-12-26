@@ -1,91 +1,131 @@
 package DataStructure;
 
-import java.util.HashMap;
-
-import com.sun.jmx.snmp.Timestamp;
+import java.sql.Timestamp;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class Narudzba {
 	
-	private int cijena;
-	private HashMap<Artikl, Integer> odabraniProizvodi;
+	private float cijena;
+	private Map<Artikl, Integer> odabraniProizvodi;
+	private Restoran restoran;
 	private GeoLokacija lokacijaPreuzimanja;
 	private GeoLokacija lokacijaDostavljanja;
 	private Korisnik kupac;
-	private Korisnik dostavljac;
+	private Dostavljac dostavljac = null;
+	private Timestamp vrijemeStvaranja;
 	private Timestamp vrijemeSpremnosti;
 	private Timestamp vrijemeZavrsetka;
 	private boolean aktivna= true;
 	
-	public Narudzba(int cijena,HashMap<Artikl, Integer> proizvodi, GeoLokacija lokacijaPreuzimanja,GeoLokacija lokacijaDostavljanja) {
-		this.cijena=cijena;
-		this.odabraniProizvodi=proizvodi;
-		this.lokacijaPreuzimanja=lokacijaPreuzimanja;
-		this.lokacijaDostavljanja=lokacijaDostavljanja;
+	
+	public Narudzba (Kosarica izvorisnaKosarica, GeoLokacija lokacijaDostavljanja, Korisnik trenutniKorisnik) {
+		
+		this.cijena = izvorisnaKosarica.getUkupnaCijena();
+		this.odabraniProizvodi = izvorisnaKosarica.getOdabraniProizvodi();
+		this.restoran = izvorisnaKosarica.getRestoran();
+		this.lokacijaPreuzimanja = izvorisnaKosarica.getRestoran().getLokacija();
+		this.lokacijaDostavljanja = lokacijaDostavljanja;
+		this.kupac = trenutniKorisnik;
+		this.vrijemeStvaranja = new Timestamp(System.currentTimeMillis());
+		this.izracunajVrijemeSpremnosti();
+		
+		// spremi narudzbu u bazu podataka
 	}
-
-	public Korisnik getDostavljac() {
-		return dostavljac;
-	}
-
-	public void setDostavljac(Korisnik dostavljac, Zastavice z) {
-		if(z.isDispecer())
-			this.dostavljac = dostavljac;
-	}
-
-	public Timestamp getVrijemeSpremnosti() {
-		return vrijemeSpremnosti;
-	}
-
-	public void setVrijemeSpremnosti(Timestamp vrijemeSpremnosti,Zastavice z) {
-		if(z.isVlasnik())
-			this.vrijemeSpremnosti = vrijemeSpremnosti;
-	}
-
-	public Timestamp getVrijemeZavrsetka() {
-		return vrijemeZavrsetka;
-	}
-
-	public void setVrijemeZavrsetka(Timestamp vrijemeZavrsetka,Zastavice z) {
-		if(z.isDostavljac())
-			this.vrijemeZavrsetka = vrijemeZavrsetka;
-	}
-
-	public boolean isAktivna() {
-		return aktivna;
-	}
-
-	public void setAktivna(boolean aktivna) {
-		this.aktivna = aktivna;
-	}
-// ne znam jel ja tu racunam cijenu narudbze ili cemo negdje drugdje
-	public int getCijena(HashMap<Artikl, Integer> proizvodi) {
-		for(Integer cijenaProiz : proizvodi.values()) {
-			cijena=cijena+cijenaProiz;
+	
+	public void OznaciNarudzbuGotovom (Zastavice z) {
+		
+		if (z.isDostavljac()) {
+			this.vrijemeZavrsetka = new Timestamp(System.currentTimeMillis());
+			this.aktivna = false;
+			
+			// spremi u bazu podataka
 		}
-		return cijena;
+	}
+	
+	public PodaciKarte StvoriRutu () {
+		
+		List<GeoLokacija> listaZaRutu = new LinkedList<GeoLokacija>();
+		PodaciKarte podaci;
+		
+		listaZaRutu.add(lokacijaPreuzimanja);
+		listaZaRutu.add(lokacijaDostavljanja);
+		podaci = new PodaciKarte(listaZaRutu, true);
+		
+		return podaci;
 	}
 
-	public HashMap<Artikl, Integer> getOdabraniProizvodi() {
-		return odabraniProizvodi;
+	public Dostavljac getDostavljac () {
+		
+		return this.dostavljac;
 	}
 
-	public GeoLokacija getLokacijaPreuzimanja() {
-		return lokacijaPreuzimanja;
+	public void setDostavljac (Dostavljac dostavljac, Zastavice z) {
+		
+		if(z.isDispecer()) {
+			this.dostavljac = dostavljac;
+			
+			// spremi u bazu podataka
+		}
 	}
 
-	public GeoLokacija getLokacijaDostavljanja() {
-		return lokacijaDostavljanja;
+	public Timestamp getVrijemeSpremnosti () {
+		
+		return this.vrijemeSpremnosti;
+	}
+
+	public Timestamp getVrijemeZavrsetka () {
+		
+		return this.vrijemeZavrsetka;
+	}
+	
+	public boolean isAktivna () {
+		
+		return this.aktivna;
+	}
+
+	public float getCijena () {
+		
+		return this.cijena;
+	}
+
+	public Map<Artikl, Integer> getOdabraniProizvodi () {
+		
+		return this.odabraniProizvodi;
+	}
+
+	public GeoLokacija getLokacijaPreuzimanja () {
+		
+		return this.lokacijaPreuzimanja;
+	}
+
+	public GeoLokacija getLokacijaDostavljanja () {
+		return this.lokacijaDostavljanja;
 	}
 
 	public Korisnik getKupac() {
-		return kupac;
-	}
-// treba zavrsiti ovu metodu	
-//	public PodaciKarte stvoriRutu() {
 		
+		return this.kupac;
+	}
 	
+	public Restoran getRestoran() {
+		
+		return this.restoran;
+	}
 	
-	
-	
-	
+	private void izracunajVrijemeSpremnosti () {
+		
+		int dodatnoVrijemeMin = 0;
+		long duration = 0;
+		
+		for (Artikl artikl : odabraniProizvodi.keySet()) {
+			if (dodatnoVrijemeMin < artikl.getVrijemePripravljanja()) {
+				dodatnoVrijemeMin = artikl.getVrijemePripravljanja();
+			}
+		}
+		
+		duration = dodatnoVrijemeMin * 60 * 1000;
+		this.vrijemeSpremnosti = new Timestamp(this.vrijemeStvaranja.getTime() + duration); 
+	}
 }

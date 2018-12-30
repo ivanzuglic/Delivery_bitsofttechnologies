@@ -73,9 +73,9 @@ public class PodatkovnaLjuska {
 	}
 	
 
-	public void setTrenutniRestoran(Restoran trenutniRestoran) {
+	public void setTrenutniRestoran(Restoran noviRestoran) {
 		
-		this.trenutniRestoran = trenutniRestoran;
+		this.trenutniRestoran = noviRestoran;
 	}
 	
 
@@ -122,7 +122,7 @@ public class PodatkovnaLjuska {
 	
 	private void napuniSetRestorana () {
 		
-		// metoda koja ce puniti set restorana
+		// metoda koja ce iz baze podataka puniti set restorana
 	}
 }
 

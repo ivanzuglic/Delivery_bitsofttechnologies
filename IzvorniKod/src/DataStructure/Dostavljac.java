@@ -35,6 +35,6 @@ public class Dostavljac extends Korisnik{
 	
 	private void napuniListuZadataka () {
 		
-		// metoda koja ce puniti listu zadataka
+		// metoda koja ce puniti listu zadataka iz baze podataka
 	}
 }

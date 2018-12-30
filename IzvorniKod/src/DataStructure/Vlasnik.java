@@ -20,11 +20,6 @@ public class Vlasnik extends Klijent {
 		// metoda koja ce puniti set Ai2h iz baze podataka
 	}
 	
-	public void urediMeni () {
-		
-		// metoda za uredjivanje menija
-	}
-
 	public Restoran getVlastitiRestoran() {
 		
 		return vlastitiRestoran;

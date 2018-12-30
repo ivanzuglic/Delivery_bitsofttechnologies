@@ -1,5 +1,7 @@
 package DataStructure;
 
+import com.sun.prism.Image;
+
 public class Klijent extends Korisnik {
 
 	private Kosarica kosarica;
@@ -29,9 +31,10 @@ public class Klijent extends Korisnik {
 		return lokacijaTrenutneNarudzbe;
 	}
 	
-	public void predloziRestoran () {
+	public void predloziRestoran (String ime, GeoLokacija lokacija, String opis, Image slika, int telefon) {
 		
-		// metoda za predlaganje restorana
+		Restoran predlozeniRestoran = new Restoran(ime, this, lokacija, opis, slika, false, telefon);
+		predlozeniRestoran.SpremiUBazu();
 	}
 	
 	public Narudzba getAktivnaNarudzba() {

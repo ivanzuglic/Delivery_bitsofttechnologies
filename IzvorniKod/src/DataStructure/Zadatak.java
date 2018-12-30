@@ -16,7 +16,7 @@ public class Zadatak {
 
     	GeoLokacija lokacija = null;
     	
-    	// metoda koja ce dohvacati lokaciju zadatka
+    	// metoda koja ce dohvacati lokaciju zadatka iz baze podataka
     	
     	return lokacija;
     }

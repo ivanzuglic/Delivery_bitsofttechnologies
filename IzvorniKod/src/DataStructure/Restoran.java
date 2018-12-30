@@ -16,7 +16,7 @@ public class Restoran {
 	private int telefon;
 	
 	
-	public Restoran (String ime, Korisnik vlasnik, GeoLokacija lokacija, String opis, Image slika, Set<Artikl> meni, boolean odobren, int telefon) {
+	public Restoran (String ime, Korisnik vlasnik, GeoLokacija lokacija, String opis, Image slika, boolean odobren, int telefon) {
 		
 		this.ime = ime;
 		this.vlasnik = vlasnik;
@@ -28,6 +28,11 @@ public class Restoran {
 		
 		this.meni = new TreeSet<Artikl>();
 		this.napuniMeni();
+	}
+	
+	public void SpremiUBazu () {
+		
+		// spremi restoran u bazu podataka
 	}
 	
 	public String getIme() {

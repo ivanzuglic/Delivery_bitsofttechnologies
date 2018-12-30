@@ -1,5 +1,6 @@
 package DataStructure;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Dostavljac extends Korisnik{
@@ -15,17 +16,18 @@ public class Dostavljac extends Korisnik{
 	
 	public PodaciKarte stvoriRutu () {
 		
-		PodaciKarte ruta = null;
 		this.napuniListuZadataka();
+		PodaciKarte stvorenaRuta = new PodaciKarte(new LinkedList<GeoLokacija>(), true);
 		
-		// metoda koja ce iz liste zadataka stvoriti podatke karte potrebene za iscrtavanje rute
-		
-		return ruta;
+		for (Zadatak zadatak : listaZadataka) {
+			stvorenaRuta.dodajUListuLokacija(zadatak.dohvatiLokaciju());
+		}
+		return stvorenaRuta;
 	}
 	
 	public void oznaciGotovim (Zadatak zadatak) {
 		
-		// metoda koja ce zadatak oznaciti gotovim
+		zadatak.setGotov(true);
 	}
 	
 	public List<Zadatak> getListaZadataka() {

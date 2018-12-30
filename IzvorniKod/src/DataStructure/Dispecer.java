@@ -17,9 +17,19 @@ public class Dispecer extends Korisnik {
 		this.napuniListuNerasporedjenihNarudzbi();
 	}
 	
-	public void dodijeliZadatak (VrsteZadataka vrstaZadatka) {
+	public void dodijeliZadatak (VrsteZadataka vrstaZadatka, Zastavice z) {
 		
-		// metoda za dodjeljivanje zadaka trenutnom paru narudzbe i dostavljaca
+		trenutnaNarudzba.setDostavljac(trenutniDostavljac, z);
+		Zadatak noviZadatak = new Zadatak(trenutnaNarudzba, vrstaZadatka, false);
+		
+		// spremi novi zadatak u bazu podataka
+	}
+	
+	public void pošaljiNaLokaciju (GeoLokacija lokacija) {
+		
+		Zadatak noviZadatak = new Zadatak(lokacija, false);
+		
+		// spremi novi zadatak u bazu podataka
 	}
 	
 	public Narudzba getTrenutnaNarudzba() {

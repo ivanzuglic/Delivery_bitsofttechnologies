@@ -5,7 +5,7 @@ import java.util.List;
 public class PodaciKarte {
 	
 	private List<GeoLokacija> listaLokacija;
-    private boolean ruta = false;
+    private boolean ruta;
     
     
     public PodaciKarte (List<GeoLokacija> listaLokacija, boolean ruta) {

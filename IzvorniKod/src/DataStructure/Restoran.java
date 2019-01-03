@@ -6,6 +6,7 @@ import com.sun.prism.Image;
 
 public class Restoran {
 	 
+	private int id;					//dodano za AdministratorDAO
 	private String ime;
 	private Korisnik vlasnik;
 	private GeoLokacija lokacija;
@@ -28,6 +29,10 @@ public class Restoran {
 		
 		this.meni = new TreeSet<Artikl>();
 		this.napuniMeni();
+	}
+	
+	public int getId() {   			//dodano za AdministratorDAO
+		return this.id;
 	}
 	
 	public String getIme() {

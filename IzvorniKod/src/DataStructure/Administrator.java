@@ -39,28 +39,36 @@ public class Administrator extends Korisnik {
 		System.out.println("Uspjesnost upita: " + rezultat); 	
 	}
 
-	public List<Restoran> getListaOdobrenihRestorana() {
+	public List<Restoran> getListaOdobrenihRestorana() {	
 		
-		return listaOdobrenihRestorana;
+		return this.listaOdobrenihRestorana;
 	}
 
 	public List<Restoran> getListaNeodobrenihRestorana() {
 		
-		return listaNeodobrenihRestorana;
+		return this.listaNeodobrenihRestorana;
 	}
 
-	public List<Korisnik> getListaKorisnika() {
+	public List<Korisnik> getListaKorisnika() {	
 		
-		return listaKorisnika;
+		return this.listaKorisnika;
 	}
 	
 	private void napuniListeRestorana () {
 		
 		// metoda koja ce iz baze podataka puniti liste odobrenih i neodobrenih restorana
+		
+		AdministratorDAO aDAO = new AdministratorDAO(this.getKorisnickoIme(), this.getLozinka());
+		this.listaOdobrenihRestorana = aDAO.selectRestoraniPoOdobrenju(true);
+		this.listaNeodobrenihRestorana = aDAO.selectRestoraniPoOdobrenju(false);
+		
 	}
 	
 	private void napuniListuKorisnika () {
 		
 		// metoda koja ce iz baze podataka puniti listu korisnika
+		
+		AdministratorDAO aDAO = new AdministratorDAO(this.getKorisnickoIme(), this.getLozinka());
+		this.listaKorisnika = aDAO.selectKorisnici();		
 	}
 }

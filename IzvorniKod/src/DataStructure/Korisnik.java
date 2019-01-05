@@ -32,11 +32,12 @@ public class Korisnik {
 		this.prezime = prezime;
 		this.eMail = eMail;
 		this.starost = starost;
-		//this.uloga = "KLIJENT"; 				---> implementacija enum-a VrstaKorisnika
+		//this.uloga = "KLIJENT"; 				---> implementacija enum-a VrstaKorisnika potrebna
 		
 		// pohrani korisnika u bazu podataka 
-		// i vrati idKor (ako se id generira automatski, tj. ne zadaje ga sam korisnik)
-		//this.idKor = (pohrani korisnika);
+		// i vrati idKor (ako se id generira automatski, tj. ne zadaje ga sam korisnik --> dogovorit se)
+		
+		//this.idKor = pohraniKorisnika();
 	}
 	
 	public int getKorisnickiId() {		//dodano za AdministratorDAO

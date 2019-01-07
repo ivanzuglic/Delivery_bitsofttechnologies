@@ -18,20 +18,16 @@ public class Administrator extends Korisnik {
 		this.napuniListuKorisnika();
 	}
 	
-	public void odobriRestoran (Restoran restoran) {	//dodana implementacija AdministratorDAO klase	
+	public void odobriRestoran (Restoran restoran, Zastavice z) {	//dodana implementacija AdministratorDAO klase	
 		
-		// metoda koja ce odobravati restoran
-		
+		restoran.setOdobren(true, z);	// dodano da se automatski azurira i lokalni objekt - LM
 		AdministratorDAO aDAO = new AdministratorDAO(this.getKorisnickoIme(), this.getLozinka());
 		int rezultat = aDAO.setRestoranOdobren(restoran.getId());
 		
 		System.out.println("Uspjesnost upita: " + rezultat); 		
-		
 	}
 	
-	public void promijeniRazinuPristupa (Korisnik korisnik, VrstaKorisnika novaRazinaPristupa) { //dodana implementacija AdministratorDAO klase
-		
-		// metoda koja ce mijenjatirazinu pristupa korisnika
+	public void promijeniRazinuPristupa (Korisnik korisnik, VrstaKorisnika novaRazinaPristupa) {	//dodana implementacija AdministratorDAO klase
 		
 		AdministratorDAO aDAO = new AdministratorDAO(this.getKorisnickoIme(), this.getLozinka());
 		int rezultat = aDAO.setRazinaPristupa(korisnik.getKorisnickiId(), novaRazinaPristupa.toString());
@@ -39,24 +35,22 @@ public class Administrator extends Korisnik {
 		System.out.println("Uspjesnost upita: " + rezultat); 	
 	}
 
-	public List<Restoran> getListaOdobrenihRestorana() {	
+	public List<Restoran> getListaOdobrenihRestorana () {	
 		
 		return this.listaOdobrenihRestorana;
 	}
 
-	public List<Restoran> getListaNeodobrenihRestorana() {
+	public List<Restoran> getListaNeodobrenihRestorana () {
 		
 		return this.listaNeodobrenihRestorana;
 	}
 
-	public List<Korisnik> getListaKorisnika() {	
+	public List<Korisnik> getListaKorisnika () {	
 		
 		return this.listaKorisnika;
 	}
 	
 	private void napuniListeRestorana () {
-		
-		// metoda koja ce iz baze podataka puniti liste odobrenih i neodobrenih restorana
 		
 		AdministratorDAO aDAO = new AdministratorDAO(this.getKorisnickoIme(), this.getLozinka());
 		this.listaOdobrenihRestorana = aDAO.selectRestoraniPoOdobrenju(true);
@@ -65,10 +59,6 @@ public class Administrator extends Korisnik {
 	}
 	
 	private void napuniListuKorisnika () {
-		
-		
-		// vuce sve korisnike
-		// metoda koja ce iz baze podataka puniti listu korisnika
 		
 		AdministratorDAO aDAO = new AdministratorDAO(this.getKorisnickoIme(), this.getLozinka());
 		this.listaKorisnika = aDAO.selectKorisnici();		

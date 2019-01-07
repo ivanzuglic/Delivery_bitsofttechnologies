@@ -1,27 +1,29 @@
 package DataStructure;
 
-import java.awt.image.BufferedImage;	//pogledat i dogovorit se
+import java.awt.image.BufferedImage;					//pogledat i dogovorit se
 import java.util.Set;
 import java.util.TreeSet;
 
 
 public class Restoran {
 	 
-	private int id;					//dodano za AdministratorDAO
+	private int id;										//dodano za AdministratorDAO
+	
 	private String ime;
 	private Korisnik vlasnik;
 	private GeoLokacija lokacija;
 	private String opis;
 	private BufferedImage slika;
-	private String fax;				//
-	private String adresa;			//
+	private String telefon;     						//mora biti String za slucaj ako broj telefona pocinje s nulom ili plusom
+	private String fax;									//vrijedi gornja opaska
+	private String adresa;
 	private Set<Artikl> meni;
+	
 	private boolean odobren;
-	private String telefon;     //mora biti String za slucaj ako broj telefona pocinje s nulom ili plusom
 	
 	
+	// konstruktor koristen prilikom predlaganja restorana (u tom slucaju, id treba biti generiran)
 	public Restoran (String ime, Korisnik vlasnik, GeoLokacija lokacija, String opis, BufferedImage slika, boolean odobren, String telefon, String fax, String adresa) {
-
 		
 		this.ime = ime;
 		this.vlasnik = vlasnik;
@@ -33,11 +35,30 @@ public class Restoran {
 		this.fax = fax;
 		this.adresa = adresa;
 		
-		this.meni = new TreeSet<Artikl>();   // ne treba gore u konstruktoru traziti cijeli meni nego se dodaje u posebnoj metodi nakon sto se stvori restoran
-		this.napuniMeni();
+		this.meni = new TreeSet<Artikl>();
+		this.pohraniBP();	// prijedlog treba  biti pohranjen u bazu podataka
 	}
 	
-	public int getId() {   			//dodano za AdministratorDAO
+	// konstruktor koristen prilikom dohvacanja iz baze podataka (u tom slucaju, id je vec odredjen i postoji)
+	public Restoran (int id, String ime, Korisnik vlasnik, GeoLokacija lokacija, String opis, BufferedImage slika, boolean odobren, String telefon, String fax, String adresa) {
+		
+		this.id = id;
+		this.ime = ime;
+		this.vlasnik = vlasnik;
+		this.lokacija = lokacija;
+		this.opis = opis;
+		this.slika = slika;
+		this.odobren = odobren;
+		this.telefon = telefon;
+		this.fax = fax;
+		this.adresa = adresa;
+		
+		this.meni = new TreeSet<Artikl>();
+
+	}
+	
+	public int getId () {   
+		
 		return this.id;
 	}
 	
@@ -49,10 +70,12 @@ public class Restoran {
 	public void setIme (String novoIme, Zastavice z, Korisnik trenutniKorisnik) {
 		
 		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
+			
 			this.ime = novoIme;
+			this.azurirajBP();	// prommjene potrebno pohraniti u bazu podataka
 		}
 	}
-
+	
 	public Korisnik getVlasnik () {
 		
 		return this.vlasnik;
@@ -66,7 +89,9 @@ public class Restoran {
 	public void setLokacija (GeoLokacija novaLokacija, Zastavice z, Korisnik trenutniKorisnik) {
 		
 		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
+			
 			this.lokacija = novaLokacija;
+			this.azurirajBP();	// promjene potrebno pohraniti u bazu podataka
 		}	
 	}
 
@@ -78,27 +103,37 @@ public class Restoran {
 	public void setSlika (BufferedImage novaSlika, Zastavice z, Korisnik trenutniKorisnik) {
 		
 		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
+			
 			this.slika = novaSlika;
+			this.azurirajBP();	// promjene potrebno pohraniti u bazu podataka
 		}
 	}
 	
-	public String getAdresa() {			//novododano
+	public String getAdresa () {
+		
 		return this.adresa;
 	}
 	
-	public void setAdresa(String novaAdresa, Zastavice z, Korisnik trenutniKorisnik) {  //novododano
+	public void setAdresa (String novaAdresa, Zastavice z, Korisnik trenutniKorisnik) {
+		
 		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
+			
 			this.adresa = novaAdresa;
+			this.azurirajBP();	// promjene treba pohraniti u bazu podataka
 		}	
 	}
-	
-	public String getFax() {  			//novododano
+
+	public String getFax () {
+		
 		return this.fax;
 	}
 	
-	public void setFax(String noviFax, Zastavice z, Korisnik trenutniKorisnik) {	//novododano
+	public void setFax (String noviFax, Zastavice z, Korisnik trenutniKorisnik) {
+		
 		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
+			
 			this.fax = noviFax;
+			this.azurirajBP();	// promjene treba pohraniti u bazu podataka
 		}	
 	}
 
@@ -110,7 +145,9 @@ public class Restoran {
 	public void setOpis (String noviOpis, Zastavice z, Korisnik trenutniKorisnik) {
 		
 		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
+			
 			this.opis = noviOpis;
+			this.azurirajBP(); // promjene treba pohraniti u bazu podataka
 		}	
 	}
 
@@ -122,14 +159,18 @@ public class Restoran {
 	public void AddMeni (Artikl noviArtikl, Zastavice z, Korisnik trenutniKorisnik) {
 		
 		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
+			
 			this.meni.add(noviArtikl);
+			this.azurirajBP();	// promjene treba pohraniti u bazu podataka
 		}
 	}
 	
 	public void RemoveMeni (Artikl izbaciArtikl, Zastavice z, Korisnik trenutniKorsnik) {
 		
 		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorsnik)) {
+			
 			this.meni.remove(izbaciArtikl);
+			this.azurirajBP();	// promjene treba pohraniti u bazu podataka
 		}	
 	}
 
@@ -141,6 +182,7 @@ public class Restoran {
 	public void setOdobren (boolean odobren, Zastavice z) {
 		
 		if (z.isAdministrator()) {
+			
 			this.odobren = odobren;
 		}
 	}
@@ -153,13 +195,24 @@ public class Restoran {
 	public void setTelefon (String noviTelefon, Zastavice z, Korisnik trenutniKorisnik) {
 		
 		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
+			
 			this.telefon = noviTelefon;
+			this.azurirajBP();	// promjene  treba pohraniti u bazu podataka
 		}
 	}
 	
 	private void napuniMeni () {
 		
 		// iz baze podataka povuci meni restorana
+	}
+	
+	private void pohraniBP () {
 		
+		// metoda koja ce restoran pohraniti u bazu podataka (potpuno novi restoran)
+	}
+	
+	private void azurirajBP () {
+		
+		// metoda koja ce restoran azurirati u bazi podataka nakon sto je isti azuriran na lokalnom racunalu
 	}
 }

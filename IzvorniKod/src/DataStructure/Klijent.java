@@ -1,6 +1,6 @@
 package DataStructure;
 
-import com.sun.prism.Image;
+import java.awt.image.BufferedImage;
 
 public class Klijent extends Korisnik {
 
@@ -31,10 +31,9 @@ public class Klijent extends Korisnik {
 		return lokacijaTrenutneNarudzbe;
 	}
 	
-	public void predloziRestoran (String ime, GeoLokacija lokacija, String opis, Image slika, int telefon) {
+	public void predloziRestoran (String ime, GeoLokacija lokacija, String opis, BufferedImage slika, String telefon, String fax, String adresa) {
 		
-		Restoran predlozeniRestoran = new Restoran(ime, this, lokacija, opis, slika, false, telefon);
-		predlozeniRestoran.SpremiUBazu();
+		Restoran predlozeniRestoran = new Restoran(ime, this, lokacija, opis, slika, false, telefon, fax, adresa);
 	}
 	
 	public Narudzba getAktivnaNarudzba() {

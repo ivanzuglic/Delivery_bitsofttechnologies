@@ -40,67 +40,84 @@ public class Korisnik {
 		//this.idKor = pohraniKorisnika();
 	}
 	
-	public int getKorisnickiId() {		//dodano za AdministratorDAO
+	public int getKorisnickiId () {
+		
 		return this.idKor;
 	}
 
-	public String getKorisnickoIme() {
+	public String getKorisnickoIme () {
 		
 		return korisnickoIme;
 	}
 
-	public void setKorisnickoIme(String korisnickoIme) {
+	public void setKorisnickoIme (String korisnickoIme) {
 		
 		this.korisnickoIme = korisnickoIme;
+		this.azurirajBP();
 	}
 
-	public String getLozinka() {
+	public String getLozinka () {
 		
-		return lozinka;
+		return this.lozinka;
 	}
 
-	public void setLozinka(String lozinka) {
+	public void setLozinka (String lozinka) {
 		
 		this.lozinka = lozinka;
+		this.azurirajBP();
 	}
 
-	public String getIme() {
+	public String getIme () {
 		
-		return ime;
+		return this.ime;
 	}
 
-	public void setIme(String ime) {
+	public void setIme (String ime) {
 		
 		this.ime = ime;
+		this.azurirajBP();
 	}
 
-	public String getPrezime() {
+	public String getPrezime () {
 		
-		return prezime;
+		return this.prezime;
 	}
 
-	public void setPrezime(String prezime) {
+	public void setPrezime (String prezime) {
 		
 		this.prezime = prezime;
+		this.azurirajBP();
 	}
 
-	public String geteMail() {
+	public String geteMail () {
 		
-		return eMail;
+		return this.eMail;
 	}
 
-	public void seteMail(String eMail) {
+	public void seteMail (String eMail) {
 	
 		this.eMail = eMail;
+		this.azurirajBP();
 	}
 
-	public int getStarost() {
+	public int getStarost () {
 		
-		return starost;
+		return this.starost;
 	}
 
-	public void setStarost(int starost) {
+	public void setStarost (int starost) {
 		
 		this.starost = starost;
+		this.azurirajBP();
+	}
+	
+	private void pohraniBP () {
+		
+		// metoda koja ce novog korisnika pohranjivati u bazu podataka
+	}
+	
+	private void azurirajBP () {
+		
+		// metoda koja ce promjene u korisniku pohranjivati u bazu podataka (UPDATE)
 	}
 }

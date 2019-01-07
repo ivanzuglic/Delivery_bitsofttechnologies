@@ -31,8 +31,7 @@ public class AdministratorDAO {
 			Connection con = adminDAO.openConnection(currentUser, currentUserPassw);
 			PreparedStatement prepSt = con.prepareStatement(sql);
 			prepSt.setBoolean(1, true);
-			prepSt.setInt(2, idRestoran); 		//u klasi 'Restoran' - ID se dobiva automatski 
-											//							ili vlasnik sam odreduje?
+			prepSt.setInt(2, idRestoran); 		//u klasi 'Restoran' - ID se dobiva automatski ili vlasnik sam odreduje? -- Je li moguce generirati ID direktno u bazi podataka? -LM
 			result = prepSt.executeUpdate();
 			
 		} catch (SQLException sqlExc) {
@@ -50,8 +49,7 @@ public class AdministratorDAO {
 			Connection con = adminDAO.openConnection(currentUser, currentUserPassw);
 			PreparedStatement prepSt = con.prepareStatement(sql);
 			prepSt.setString(1, novaRazinaPristupa);
-			prepSt.setInt(2, idKor); 		//u klasi 'Korisnik' - ID se dobiva automatski 
-										//							ili korisnik sam odreduje?
+			prepSt.setInt(2, idKor); 		//u klasi 'Korisnik' - ID se dobiva automatski ili korisnik sam odreduje?
 			result = prepSt.executeUpdate();
 			
 		} catch (SQLException sqlExc) {
@@ -81,8 +79,8 @@ public class AdministratorDAO {
 				String imeRestoran = rs.getString(2);
 				String opis = rs.getString(3);
 				String adresa = rs.getString(4);
-				float lokacijaSirina = rs.getFloat(5);	 //
-				float lokacijaDuzina = rs.getFloat(6);   //popravi u DB : tip Decimal(9,6) 
+				float lokacijaSirina = rs.getFloat(5);	//
+				float lokacijaDuzina = rs.getFloat(6);	//popravi u DB : tip Decimal(9,6) 
 				String telefon = rs.getString(7);
 				String fax = rs.getString(8);
 				int oib = rs.getInt(9);					// prepravi u string u DB
@@ -100,7 +98,7 @@ public class AdministratorDAO {
 				String uloga = rs.getString(21);
 				boolean online = rs.getBoolean(22);
 				
-				Korisnik vlasnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, email, 0); // uloga umjesto starost?
+				Korisnik vlasnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, email, 0);	// uloga umjesto starost?
 				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
 				BufferedImage slika = null;
 				try {
@@ -109,7 +107,7 @@ public class AdministratorDAO {
 		            e.printStackTrace();
 		        }
 				
-				Restoran trenRestoran = new Restoran(imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, adresa);
+				Restoran trenRestoran = new Restoran(idRestoran, imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, adresa);	// dodan i id restorana u restorane koji vec postoje i stvaraju se iz baze podataka -LM
 				restorani.add(trenRestoran);
 			}
 			

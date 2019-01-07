@@ -54,7 +54,11 @@ public class Zadatak {
     public void setGotov (boolean gotov) {
     	
     	this.gotov = gotov;
+    	this.azurirajDB();
+    }
+    
+    private void azurirajDB () {
     	
-    	// spremi u bazu podataka
+    	// metoda koja ce zadatak u data bazi oznaciti gotovim
     }
 }

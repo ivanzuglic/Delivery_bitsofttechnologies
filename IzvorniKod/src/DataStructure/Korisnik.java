@@ -20,7 +20,7 @@ public class Korisnik {
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
 		
-		// dohvati ostatak podataka iz baze podataka
+		this.dohvatiBP();
 	}
 	
 	// konstruktor koji se koristi prilikom registracije
@@ -32,9 +32,9 @@ public class Korisnik {
 		this.prezime = prezime;
 		this.eMail = eMail;
 		this.starost = starost;
-		//this.uloga = "KLIJENT"; 				---> implementacija enum-a VrstaKorisnika potrebna
+		this.uloga = "KLIJENT";
 		
-		// pohrani korisnika u bazu podataka 
+		this.pohraniBP();
 		// i vrati idKor (ako se id generira automatski, tj. ne zadaje ga sam korisnik --> dogovorit se)
 		
 		//this.idKor = pohraniKorisnika();
@@ -119,5 +119,10 @@ public class Korisnik {
 	private void azurirajBP () {
 		
 		// metoda koja ce promjene u korisniku pohranjivati u bazu podataka (UPDATE)
+	}
+	
+	private void dohvatiBP () {
+		
+		// metoda koja ce iz baze podataka dohvatiti preostale podatke prilikom prijave
 	}
 }

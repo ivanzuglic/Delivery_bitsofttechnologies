@@ -1,22 +1,27 @@
 package DataStructure;
 
+import java.awt.image.BufferedImage;	//pogledat i dogovorit se
 import java.util.Set;
 import java.util.TreeSet;
-import com.sun.prism.Image;
+
 
 public class Restoran {
 	 
+	private int id;					//dodano za AdministratorDAO
 	private String ime;
 	private Korisnik vlasnik;
 	private GeoLokacija lokacija;
 	private String opis;
-	private Image slika;
+	private BufferedImage slika;
+	private String fax;				//
+	private String adresa;			//
 	private Set<Artikl> meni;
 	private boolean odobren;
-	private int telefon;
+	private String telefon;     //mora biti String za slucaj ako broj telefona pocinje s nulom ili plusom
 	
 	
-	public Restoran (String ime, Korisnik vlasnik, GeoLokacija lokacija, String opis, Image slika, boolean odobren, int telefon) {
+	public Restoran (String ime, Korisnik vlasnik, GeoLokacija lokacija, String opis, BufferedImage slika, boolean odobren, String telefon, String fax, String adresa) {
+
 		
 		this.ime = ime;
 		this.vlasnik = vlasnik;
@@ -25,14 +30,15 @@ public class Restoran {
 		this.slika = slika;
 		this.odobren = odobren;
 		this.telefon = telefon;
+		this.fax = fax;
+		this.adresa = adresa;
 		
-		this.meni = new TreeSet<Artikl>();
+		this.meni = new TreeSet<Artikl>();   // ne treba gore u konstruktoru traziti cijeli meni nego se dodaje u posebnoj metodi nakon sto se stvori restoran
 		this.napuniMeni();
 	}
 	
-	public void SpremiUBazu () {
-		
-		// spremi restoran u bazu podataka
+	public int getId() {   			//dodano za AdministratorDAO
+		return this.id;
 	}
 	
 	public String getIme() {
@@ -64,16 +70,36 @@ public class Restoran {
 		}	
 	}
 
-	public Image getSlika () {
+	public BufferedImage getSlika () {
 		
 		return this.slika;
 	}
 
-	public void setSlika (Image novaSlika, Zastavice z, Korisnik trenutniKorisnik) {
+	public void setSlika (BufferedImage novaSlika, Zastavice z, Korisnik trenutniKorisnik) {
 		
 		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
 			this.slika = novaSlika;
 		}
+	}
+	
+	public String getAdresa() {			//novododano
+		return this.adresa;
+	}
+	
+	public void setAdresa(String novaAdresa, Zastavice z, Korisnik trenutniKorisnik) {  //novododano
+		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
+			this.adresa = novaAdresa;
+		}	
+	}
+	
+	public String getFax() {  			//novododano
+		return this.fax;
+	}
+	
+	public void setFax(String noviFax, Zastavice z, Korisnik trenutniKorisnik) {	//novododano
+		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
+			this.fax = noviFax;
+		}	
 	}
 
 	public String getOpis () {
@@ -119,12 +145,12 @@ public class Restoran {
 		}
 	}
 
-	public int getTelefon () {
+	public String getTelefon () {
 		
 		return this.telefon;
 	}
 
-	public void setTelefon (int noviTelefon, Zastavice z, Korisnik trenutniKorisnik) {
+	public void setTelefon (String noviTelefon, Zastavice z, Korisnik trenutniKorisnik) {
 		
 		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
 			this.telefon = noviTelefon;

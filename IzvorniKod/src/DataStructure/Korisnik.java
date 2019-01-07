@@ -2,6 +2,9 @@ package DataStructure;
 
 public class Korisnik {
 
+	private int idKor;				//dodano za AdministratorDAO 
+	private String uloga;			//dodano za AdministratorDAO
+	
 	private String korisnickoIme;
 	private String lozinka;
 	
@@ -29,8 +32,16 @@ public class Korisnik {
 		this.prezime = prezime;
 		this.eMail = eMail;
 		this.starost = starost;
+		//this.uloga = "KLIJENT"; 				---> implementacija enum-a VrstaKorisnika potrebna
 		
-		// pohrani korisnika u bazu podataka
+		// pohrani korisnika u bazu podataka 
+		// i vrati idKor (ako se id generira automatski, tj. ne zadaje ga sam korisnik --> dogovorit se)
+		
+		//this.idKor = pohraniKorisnika();
+	}
+	
+	public int getKorisnickiId() {		//dodano za AdministratorDAO
+		return this.idKor;
 	}
 
 	public String getKorisnickoIme() {

@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -16,9 +18,14 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.SpringLayout;
 import javax.swing.Timer;
+
+import DataStructure.Klijent;
+import jdk.nashorn.internal.ir.BlockLexicalContext;
 
 /**
  * Razred koji definira izgled i funkcije panela za Korisnika
@@ -28,8 +35,10 @@ import javax.swing.Timer;
 
 public class KorisnikPanel extends JPanel {
 	private JPanel buttonsPanel;
-	private JPanel showPanel;
+	private JScrollPane showScrollPane;
 	private JPanel logoPanel;
+	private JPanel northPanel;
+	private JPanel usrInfoPanel;
 	private ActionListener prijaviSeListener;
 	private ActionListener registrirajSeListener;
 	private DefaultWindow window;
@@ -75,6 +84,11 @@ public class KorisnikPanel extends JPanel {
 		buttonsPanel.setPreferredSize(new Dimension(120, 500));
 		add(buttonsPanel, BorderLayout.EAST);
 		
+		//Definicija sjevernog panela
+		northPanel = new JPanel();
+		northPanel.setLayout(new BorderLayout());
+		add(northPanel, BorderLayout.NORTH);
+		
 		//Definicija panela sa logom
 		logoPanel = new JPanel();
 		logoPanel.setBackground(Color.white);
@@ -82,19 +96,49 @@ public class KorisnikPanel extends JPanel {
 		logoPanel.setPreferredSize(new Dimension(1080, 75));
 		ImageIcon imageLogo = new ImageIcon(getClass().getResource("/images/GlavniLogo.png"));
 		logoPanel.add(new JLabel(imageLogo));
-		add(logoPanel, BorderLayout.NORTH);
+		northPanel.add(logoPanel, BorderLayout.CENTER);
+		
+		//Definicjia panela za prikaz korisnickih informacija
+		usrInfoPanel = new JPanel();
+		usrInfoPanel.setLayout(new BorderLayout());
+		JTextArea usrName = new JTextArea();
+		usrName.setForeground(new Color(0, 153, 255));
+		usrName.setEditable(false);
+		usrName.setFont(new Font("Arial", 0, 14));
+		usrName.setText("\n Prijavljen kao:\n Anonimni korisnik");
+		usrInfoPanel.add(usrName, BorderLayout.CENTER);
+		usrInfoPanel.setPreferredSize(new Dimension(120, 75));
+		usrInfoPanel.setBackground(Color.white);
+		usrInfoPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
+		northPanel.add(usrInfoPanel, BorderLayout.EAST);
 		
 		//Nepotpuna definicija panela sa listom restorana
 		//Potrebno dalje istraziti kako radi JScrollPane
-		showPanel = new JPanel();
-		showPanel.setLayout(new ScrollPaneLayout());
-		JScrollPane showScrollPane = new JScrollPane();
-		showPanel.add(showScrollPane);
-		showPanel.setBackground(Color.white);
-		showPanel.setLayout(new FlowLayout());
-		puniShowPanel(); //Funkcija za punjenje panela sa restoranima
-		showPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
-		add(showPanel, BorderLayout.CENTER);
+		JPanel restorani = new JPanel();
+		restorani.setLayout(new BoxLayout(restorani, BoxLayout.PAGE_AXIS));
+		restorani.setBackground(Color.WHITE);
+		
+		//Primjer1
+		JPanel restoran = new JPanel();
+		restoran.setMaximumSize(new Dimension(900, 100));
+		restoran.setLayout(new BorderLayout());
+		restoran.add(new JLabel(new ImageIcon(getClass().getResource("/images/DodajrestoranMini.png"))), BorderLayout.WEST);
+		restoran.add(new JTextField("Nekakav opis za restoran"), BorderLayout.CENTER);
+		restoran.add(new JButton("Naruci"), BorderLayout.EAST);
+		restorani.add(restoran);
+		
+		//Primjer2
+		JPanel restoran2 = new JPanel();
+		restoran2.setMaximumSize(new Dimension(900, 100));
+		restoran2.setLayout(new BorderLayout());
+		restoran2.add(new JLabel(new ImageIcon(getClass().getResource("/images/DodajrestoranMini.png"))), BorderLayout.WEST);
+		restoran2.add(new JTextField("Nekakav opis za restoran"), BorderLayout.CENTER);
+		restoran2.add(new JButton("Naruci"), BorderLayout.EAST);
+		restorani.add(restoran2);
+		
+		showScrollPane = new JScrollPane(restorani);
+		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
+		add(showScrollPane, BorderLayout.CENTER);
 	}
 
 	private void registrirajSeWindow() {
@@ -167,7 +211,7 @@ public class KorisnikPanel extends JPanel {
 		dobPanel.add(dobField);
 		podaci.add(dobPanel);
 		
-		//Definicija panela za unos email adrses
+		//Definicija panela za unos email adrese
 		JPanel mailPanel = new JPanel();
 		mailPanel.setBackground(Color.white);
 		mailPanel.setLayout(new FlowLayout());
@@ -194,7 +238,7 @@ public class KorisnikPanel extends JPanel {
 				poruka.removeAll();
 				poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
 				poruka.revalidate();
-				window.switchToKlijent();
+				window.switchToKlijent(new Klijent(korImeField.getText(), lozinkaField.getText(), imeField.getText(), prezField.getText(), mailField.getText(), Integer.parseInt(dobField.getText())));
 				Timer timer = new Timer(1500, new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            	Registracija.dispatchEvent(new WindowEvent(Registracija, WindowEvent.WINDOW_CLOSING));
@@ -224,8 +268,8 @@ public class KorisnikPanel extends JPanel {
 		JPanel DialogButtons = new JPanel();
 		DialogButtons.setBackground(Color.white);
 		DialogButtons.setLayout(new FlowLayout());
-		DialogButtons.add(NOK);
 		DialogButtons.add(OK);
+		DialogButtons.add(NOK);
 		southPanel.add(DialogButtons, BorderLayout.SOUTH);
 		
 		//Krajnji modifikatori za dialog prozora
@@ -294,7 +338,8 @@ public class KorisnikPanel extends JPanel {
 				poruka.removeAll();
 				poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
 				poruka.revalidate();
-				window.switchToKlijent();
+				//window.switchToKlijent(getUsr(imeField.getText(), lozinkaField.getText()));
+				window.switchToKlijent(new Klijent("NekiPti", "69696969", "Ivo", "Ivic", "NekiMail", 69));
 				Timer timer = new Timer(1500, new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            	Prijava.dispatchEvent(new WindowEvent(Prijava, WindowEvent.WINDOW_CLOSING));
@@ -324,8 +369,8 @@ public class KorisnikPanel extends JPanel {
 		JPanel DialogButtons = new JPanel();
 		DialogButtons.setBackground(Color.white);
 		DialogButtons.setLayout(new FlowLayout());
-		DialogButtons.add(NOK);
 		DialogButtons.add(OK);
+		DialogButtons.add(NOK);
 		southPanel.add(DialogButtons, BorderLayout.SOUTH);
 		Prijava.add(southPanel, BorderLayout.SOUTH);
 		

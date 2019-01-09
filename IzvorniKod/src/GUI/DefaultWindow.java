@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
+import DataStructure.Klijent;
+
 
 /**
  * Glavni razred koji koristimo za stvaranje glavnog prozora u kojeg punimo zeljenim panelima.
@@ -31,9 +33,9 @@ public class DefaultWindow extends JFrame{
 	/**
 	 * Metoda za promjenu panela sa Korisnika na KLijenta
 	 */
-	public void switchToKlijent() {
+	public void switchToKlijent(Klijent klijent) {
 		remove(korPanel);
-		klijentPanel = new KlijentPanel(this);
+		klijentPanel = new KlijentPanel(this, klijent);
 		add(klijentPanel);
 		revalidate();
 	}

@@ -147,6 +147,9 @@ public class PodatkovnaLjuska {
 	private void napuniSetRestorana () {
 		
 		// metoda koja ce iz baze podataka puniti set restorana
+		
+		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO(this.korImeZaPrviPristup, this.lozinkaZaPrviPristup);
+		this.restorani = dao.ucitajRestorane();
 	}
 	
 	private boolean korisnickoImeDostupno (String korisnickoIme) {

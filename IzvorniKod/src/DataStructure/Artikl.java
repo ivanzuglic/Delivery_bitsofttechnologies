@@ -1,14 +1,24 @@
 package DataStructure;
 
 public class Artikl {
-
+	
+	private int idArtikl;
 	private String naziv;
     private float cijena;
     private int vrijemePripravljanjaMin;
     private Restoran restoran;
+    private String opis;
 
     
-    public Artikl (String naziv, float cijena, int vrijemePripravljanja, Restoran restoran) {
+    public String getOpis() {
+		return opis;
+	}
+
+	public void setOpis(String opis) {
+		this.opis = opis;
+	}
+
+	public Artikl (String naziv, float cijena, int vrijemePripravljanja, Restoran restoran) {
 
     	this.naziv = naziv;
     	this.cijena = cijena;
@@ -16,7 +26,15 @@ public class Artikl {
     	this.restoran = restoran;
     }
 
-    public String getNaziv () {
+    public int getIdArtikl() {
+		return idArtikl;
+	}
+
+	public void setIdArtikl(int idArtikl) {
+		this.idArtikl = idArtikl;
+	}
+
+	public String getNaziv () {
 
     	return this.naziv;
     }
@@ -49,5 +67,9 @@ public class Artikl {
     public Restoran getRestoran () {
 
     	return this.restoran;
+    }
+    
+    public void pohraniBP() {
+    	
     }
 }

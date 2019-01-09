@@ -25,7 +25,7 @@ public class Dispecer extends Korisnik {
 		// spremi novi zadatak u bazu podataka
 	}
 	
-	public void pošaljiNaLokaciju (GeoLokacija lokacija) {
+	public void posaljiNaLokaciju (GeoLokacija lokacija) {
 		
 		Zadatak noviZadatak = new Zadatak(lokacija, false);
 		

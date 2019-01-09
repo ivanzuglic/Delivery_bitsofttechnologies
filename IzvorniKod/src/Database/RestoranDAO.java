@@ -1,21 +1,23 @@
 package Database;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import DataStructure.Restoran;
 
-public class RestoranDAO {
+public class RestoranDAO {			//ispravljen try-catch i konstruktor
 	
-	private DAO dao;
-	private String currentUser;
-	private String currentUserPassw;
+	private String userDB;
+	private String passwDB;
+	private String host;
 	
-	public RestoranDAO (String currentUser, String currentUserPassw) {
+	public RestoranDAO () {
 		
-		this.currentUser = currentUser;
-		this.currentUserPassw = currentUserPassw;
+		this.userDB = "myuser";
+		this.passwDB = "abc";
+		this.host = "jdbc:mysql://localhost:3306/dostavljaona?useSSL=false&useLegacyDatetimeCode=false";
 	}
 	
 	public int pohraniRestoran (Restoran restoran) {
@@ -24,16 +26,14 @@ public class RestoranDAO {
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		int result = 2; // za testiranje
 		
-		try {
-			
-			Connection con = dao.openConnection(currentUser, currentUserPassw);
-			PreparedStatement prepSt = con.prepareStatement(sql);
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
+			PreparedStatement prepSt = con.prepareStatement(sql)) {
 			
 			//idRestorana
 			prepSt.setString(2, restoran.getIme());
 			prepSt.setString(3, restoran.getOpis());
 			prepSt.setString(4, restoran.getAdresa());
-			// lokacija na karti koja je vjerojatno promjenjena
+			// lokacija na karti koja je vjerojatno promjenjena  ----> dvije koordinate = dva podatka u bazi
 			prepSt.setString(6, restoran.getTelefon());
 			prepSt.setString(7, restoran.getFax());
 			// oib

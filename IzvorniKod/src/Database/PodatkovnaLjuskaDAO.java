@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,16 +17,17 @@ import DataStructure.GeoLokacija;
 import DataStructure.Korisnik;
 import DataStructure.Restoran;
 
-public class PodatkovnaLjuskaDAO {
+public class PodatkovnaLjuskaDAO { 		//Ivan: maknuta 'starost' i ispravljeni try-catch blokovi i ispravljen konstruktor
+			
+	private String userDB;
+	private String passwDB;
+	private String host;
 	
-	private DAO dao;
-	private String currentUser;
-	private String currentUserPassw;
-	
-	public PodatkovnaLjuskaDAO (String currentUser, String currentUserPassw) {
+	public PodatkovnaLjuskaDAO () {
 		
-		this.currentUser = currentUser;
-		this.currentUserPassw = currentUserPassw;
+		this.userDB = "myuser";
+		this.passwDB = "abc";
+		this.host = "jdbc:mysql://localhost:3306/dostavljaona?useSSL=false&useLegacyDatetimeCode=false";
 	}
 	
 	public String vrstaKorisnika (String korisnickoIme) {
@@ -34,11 +36,9 @@ public class PodatkovnaLjuskaDAO {
 		
 		String result = null;
 		
-		try {
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
+			PreparedStatement prepSt = con.prepareStatement(sql)) {
 			
-			Connection con = dao.openConnection(currentUser, currentUserPassw);
-			
-			PreparedStatement prepSt = con.prepareStatement(sql);
 			prepSt.setString(1, korisnickoIme);
 			ResultSet rs = prepSt.executeQuery();
 			
@@ -58,11 +58,9 @@ public class PodatkovnaLjuskaDAO {
 		
 		boolean result = false;
 		
-		try {
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
+			PreparedStatement prepSt = con.prepareStatement(sql)) {
 			
-			Connection con = dao.openConnection(currentUser, currentUserPassw);
-			
-			PreparedStatement prepSt = con.prepareStatement(sql);
 			prepSt.setString(1, korisnickoIme);
 			ResultSet rs = prepSt.executeQuery();
 			
@@ -86,11 +84,9 @@ public class PodatkovnaLjuskaDAO {
 		String ucitanaLozinka;
 		boolean result = false;
 		
-		try {
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
+			PreparedStatement prepSt = con.prepareStatement(sql)) {
 			
-			Connection con = dao.openConnection(currentUser, currentUserPassw);
-			
-			PreparedStatement prepSt = con.prepareStatement(sql);
 			prepSt.setString(1, korisnickoIme);
 			ResultSet rs = prepSt.executeQuery();
 			
@@ -113,11 +109,9 @@ public class PodatkovnaLjuskaDAO {
 		
 		String sql = "UPDATE korisnik SET online = ? WHERE korisnickoIme = ?";
 		
-		try {
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
+			PreparedStatement prepSt = con.prepareStatement(sql)) {
 			
-			Connection con = dao.openConnection(currentUser, currentUserPassw);
-			
-			PreparedStatement prepSt = con.prepareStatement(sql);
 			prepSt.setBoolean(1, status);
 			prepSt.setString(2, korisnickoIme);
 			
@@ -136,9 +130,8 @@ public class PodatkovnaLjuskaDAO {
 		
 		String sql = "SELECT restoran.*, korisnik.* FROM restoran NATURAL JOIN korisnik WHERE restoranOdobren = true";
 		
-		try {
-			Connection con = dao.openConnection(currentUser, currentUserPassw);
-			PreparedStatement prepSt = con.prepareStatement(sql);
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
+			PreparedStatement prepSt = con.prepareStatement(sql)) {
 			
 			ResultSet rs = prepSt.executeQuery();
 			
@@ -166,7 +159,7 @@ public class PodatkovnaLjuskaDAO {
 				String uloga = rs.getString(21);
 				boolean online = rs.getBoolean(22);
 				
-				Korisnik vlasnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, email, 0);	// uloga umjesto starost?
+				Korisnik vlasnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, email);	// uloga umjesto starost?
 				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
 				BufferedImage slika = null;
 				try {

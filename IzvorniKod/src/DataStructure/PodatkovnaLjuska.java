@@ -4,7 +4,7 @@ import java.util.Set;
 
 import Database.PodatkovnaLjuskaDAO;
 
-public class PodatkovnaLjuska {
+public class PodatkovnaLjuska {					//Ivan: uklonjena starost
 
 	private Set<Restoran> restorani;
 	private Restoran trenutniRestoran = null;
@@ -22,7 +22,7 @@ public class PodatkovnaLjuska {
 	}
 	
 	// metoda vraca true ako je registracija uspjesno provedena, vraca false ako korisnicko ime nije dostupno
-	public boolean registracija (String korisnickoIme, String lozinka, String ime, String prezime, String eMail, int starost) {
+	public boolean registracija (String korisnickoIme, String lozinka, String ime, String prezime, String eMail) {
 		
 		boolean valjan = false;
 		
@@ -31,7 +31,7 @@ public class PodatkovnaLjuska {
 		
 		if (valjan) {
 			
-			this.trenutniKorisnik = new Klijent(korisnickoIme, lozinka, ime, prezime, eMail, starost);
+			this.trenutniKorisnik = new Klijent(korisnickoIme, lozinka, ime, prezime, eMail);
 			this.postaviZastavice(VrstaKorisnika.KLIJENT);
 			this.postaviOnlineStatus(trenutniKorisnik.getKorisnickoIme(), true);
 			

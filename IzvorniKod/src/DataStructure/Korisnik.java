@@ -1,9 +1,9 @@
 package DataStructure;
 
-public class Korisnik {
+public class Korisnik {				// Ivan: maknut atribut 'starost' i njegovi konstruktori
 
-	private int idKor;				//dodano za AdministratorDAO 
-	private String uloga;			//dodano za AdministratorDAO
+	private int idKor;				 
+	private String uloga;			
 	
 	private String korisnickoIme;
 	private String lozinka;
@@ -11,7 +11,6 @@ public class Korisnik {
 	private String ime;
 	private String prezime;
 	private String eMail;
-	private int starost;
 	
 	
 	// konstruktor koji se koristi prilikom prijave
@@ -24,14 +23,13 @@ public class Korisnik {
 	}
 	
 	// konstruktor koji se koristi prilikom registracije
-	public Korisnik (String korisnickoIme, String lozinka, String ime, String prezime, String eMail, int starost) {
+	public Korisnik (String korisnickoIme, String lozinka, String ime, String prezime, String eMail) {
 		
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
 		this.ime = ime;
 		this.prezime = prezime;
 		this.eMail = eMail;
-		this.starost = starost;
 		this.uloga = "KLIJENT";
 		
 		this.pohraniBP();
@@ -100,16 +98,6 @@ public class Korisnik {
 		this.azurirajBP();
 	}
 
-	public int getStarost () {
-		
-		return this.starost;
-	}
-
-	public void setStarost (int starost) {
-		
-		this.starost = starost;
-		this.azurirajBP();
-	}
 	
 	private void pohraniBP () {
 		

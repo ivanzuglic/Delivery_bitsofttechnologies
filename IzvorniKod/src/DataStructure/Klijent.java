@@ -2,16 +2,16 @@ package DataStructure;
 
 import java.awt.image.BufferedImage;
 
-public class Klijent extends Korisnik {
+public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 
 	private Kosarica kosarica;
 	private Narudzba aktivnaNarudzba;
 	
 	
 	// ovaj konstruktor se koristi prilikom registracije
-	public Klijent (String korisnickoIme, String lozinka, String ime, String prezime, String eMail, int starost) {
+	public Klijent (String korisnickoIme, String lozinka, String ime, String prezime, String eMail) {
 		
-		super(korisnickoIme, lozinka, ime, prezime, eMail, starost);
+		super(korisnickoIme, lozinka, ime, prezime, eMail);
 		this.kosarica = new Kosarica();
 	}
 	

@@ -14,22 +14,24 @@ import DataStructure.Restoran;
 
 
 public class AdministratorDAO {
-		
-	private DAO adminDAO;
-	private String currentUser;
-	private String currentUserPassw;
 	
-	public AdministratorDAO (String currentUser, String currentUserPassw) {
-		this.currentUser = currentUser;
-		this.currentUserPassw = currentUserPassw;
+	private String userDB;
+	private String passwDB;
+	private String host;
+	
+	public AdministratorDAO () {
+		this.userDB = "myuser";
+		this.passwDB = "abc";
+		this.host = "jdbc:mysql://localhost:3306/dostavljaona?useSSL=false&useLegacyDatetimeCode=false";
 	}
 	
 	public int setRestoranOdobren(int idRestoran) {
 		String sql = "UPDATE restoran SET restoranOdobren = ? WHERE idRestoran = ?";
 		int result = 2; // za testiranje
-		try {
-			Connection con = adminDAO.openConnection(currentUser, currentUserPassw);
-			PreparedStatement prepSt = con.prepareStatement(sql);
+		
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB);
+			PreparedStatement prepSt = con.prepareStatement(sql)) {
+			
 			prepSt.setBoolean(1, true);
 			prepSt.setInt(2, idRestoran); 		//u klasi 'Restoran' - ID se dobiva automatski ili vlasnik sam odreduje? -- Je li moguce generirati ID direktno u bazi podataka? -LM
 			result = prepSt.executeUpdate();
@@ -45,11 +47,12 @@ public class AdministratorDAO {
 	public int setRazinaPristupa(int idKor, String novaRazinaPristupa) {
 		int result = 2;
 		String sql = "UPDATE korisnik SET uloga = ? WHERE idKor = ?";
-		try {
-			Connection con = adminDAO.openConnection(currentUser, currentUserPassw);
-			PreparedStatement prepSt = con.prepareStatement(sql);
+		
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
+			PreparedStatement prepSt = con.prepareStatement(sql)) {
+			
 			prepSt.setString(1, novaRazinaPristupa);
-			prepSt.setInt(2, idKor); 		//u klasi 'Korisnik' - ID se dobiva automatski ili korisnik sam odreduje?
+			prepSt.setInt(2, idKor); 		
 			result = prepSt.executeUpdate();
 			
 		} catch (SQLException sqlExc) {
@@ -59,14 +62,14 @@ public class AdministratorDAO {
 		return result;
 	}
 	
-	//potreban dogovor za klase Restoran i Korisnik
-	public List<Restoran> selectRestoraniPoOdobrenju(boolean odobrenje){
+	
+	public List<Restoran> selectRestoraniPoOdobrenju(boolean odobrenje) {
 		List<Restoran> restorani = new ArrayList<>();
 		String sql = "SELECT restoran.*, korisnik.* FROM restoran NATURAL JOIN korisnik WHERE restoranOdobren = ?";
 		
-		try {
-			Connection con = adminDAO.openConnection(currentUser, currentUserPassw);
-			PreparedStatement prepSt = con.prepareStatement(sql);
+		try (Connection con = DriverManager.getConnection(host, userDB, passwDB);
+			 PreparedStatement prepSt = con.prepareStatement(sql)) {
+			
 			if(odobrenje == true) {
 				prepSt.setBoolean(1, true);	
 			} else {
@@ -79,7 +82,7 @@ public class AdministratorDAO {
 				String imeRestoran = rs.getString(2);
 				String opis = rs.getString(3);
 				String adresa = rs.getString(4);
-				float lokacijaSirina = rs.getFloat(5);	//
+				float lokacijaSirina = rs.getFloat(5);	//popravi u DB : tip Decimal(8,6)
 				float lokacijaDuzina = rs.getFloat(6);	//popravi u DB : tip Decimal(9,6) 
 				String telefon = rs.getString(7);
 				String fax = rs.getString(8);
@@ -98,7 +101,7 @@ public class AdministratorDAO {
 				String uloga = rs.getString(21);
 				boolean online = rs.getBoolean(22);
 				
-				Korisnik vlasnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, email, 0);	// uloga umjesto starost?
+				Korisnik vlasnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, email);	// uloga umjesto starost?
 				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
 				BufferedImage slika = null;
 				try {
@@ -121,9 +124,10 @@ public class AdministratorDAO {
 	public List<Korisnik> selectKorisnici(){
 		List<Korisnik> korisnici = new ArrayList<>();
 		String sql = "SELECT * FROM korisnik";
-		try {
-			Connection con = adminDAO.openConnection(currentUser, currentUserPassw);
-			PreparedStatement prepSt = con.prepareStatement(sql);	
+		
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB);
+			PreparedStatement prepSt = con.prepareStatement(sql)) {	
+			
 			ResultSet rs = prepSt.executeQuery();
 			
 			while(rs.next()) {
@@ -136,7 +140,7 @@ public class AdministratorDAO {
 				String uloga = rs.getString(8);
 				boolean online = rs.getBoolean(9);
 				
-				Korisnik trenKorisnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, email, 0); //uloga potrebna
+				Korisnik trenKorisnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, email); //uloga potrebna
 				korisnici.add(trenKorisnik);
 			}
 						

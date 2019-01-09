@@ -2,12 +2,17 @@ package DataStructure;
 
 import java.util.Set;
 
+import Database.PodatkovnaLjuskaDAO;
+
 public class PodatkovnaLjuska {
 
 	private Set<Restoran> restorani;
 	private Restoran trenutniRestoran = null;
 	private Korisnik trenutniKorisnik = null;
 	private Zastavice zastavice;
+	
+	private String korImeZaPrviPristup; 
+	private String lozinkaZaPrviPristup;
 	
 	
 	public PodatkovnaLjuska () {
@@ -16,27 +21,39 @@ public class PodatkovnaLjuska {
 		this.zastavice = new Zastavice();
 	}
 	
-	public void registracija (String korisnickoIme, String lozinka, String ime, String prezime, String eMail, int starost) {
+	// metoda vraca true ako je registracija uspjesno provedena, vraca false ako korisnicko ime nije dostupno
+	public boolean registracija (String korisnickoIme, String lozinka, String ime, String prezime, String eMail, int starost) {
 		
 		boolean valjan = false;
 		
-		// provjeri dostupnost korisnickog imena u bazi podataka
-		// ako je korisnicko ime dostupno postavi valjan u true
+		// provjeri dostupnost korisnickog imena u bazi podataka - ako je korisnicko ime dostupno postavi valjan u true
+		valjan = this.korisnickoImeDostupno(korisnickoIme);
 		
 		if (valjan) {
+			
 			this.trenutniKorisnik = new Klijent(korisnickoIme, lozinka, ime, prezime, eMail, starost);
 			this.postaviZastavice(VrstaKorisnika.KLIJENT);
-			this.postaviOnlineStatus(true);
+			this.postaviOnlineStatus(trenutniKorisnik.getKorisnickoIme(), true);
+			
+			return true;
+		}
+		else {
+			
+			return false;
 		}
 	}
-	
-	public void prijava (String korisnickoIme, String lozinka) {
+
+	// metoda vraca true ako je prijava uspjesno provedena, vraca false ako nije
+	public boolean prijava (String korisnickoIme, String lozinka) {
 		
 		boolean valjan = false;
 		VrstaKorisnika vrsta = null;
 		
 		// provjeri valjanost podataka u bazi podataka
+		valjan = this.imeILozinkaIspravni(korisnickoIme, lozinka);
+		
 		// ako su podaci valjani, dohvati vrstu korisnika iz baze podataka i postavi valjan u true
+		vrsta = dohvatiVrstu(korisnickoIme);
 		
 		if (valjan) {
 			if (vrsta == VrstaKorisnika.KLIJENT) {
@@ -55,13 +72,19 @@ public class PodatkovnaLjuska {
 				this.trenutniKorisnik = new Administrator(korisnickoIme, lozinka);
 			}
 			this.postaviZastavice(vrsta);
-			this.postaviOnlineStatus(true);
+			this.postaviOnlineStatus(trenutniKorisnik.getKorisnickoIme(), true);
+			
+			return true;
+		}
+		else {
+			
+			return false;
 		}
 	}
 	
 	public void odjava () {
 		
-		this.postaviOnlineStatus(false);
+		this.postaviOnlineStatus(trenutniKorisnik.getKorisnickoIme(), false);
 		this.zastavice.resetirajZastavice();
 		this.trenutniKorisnik = null;
 	}
@@ -115,9 +138,10 @@ public class PodatkovnaLjuska {
 		}
 	}
 	
-	private void postaviOnlineStatus (boolean status) {
+	private void postaviOnlineStatus (String korisnickoIme, boolean status) {
 		
-		// metoda koja ce u bazi podataka mjenjati online status korisnika
+		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO(korImeZaPrviPristup, lozinkaZaPrviPristup);
+		dao.postaviOnlineStatus(korisnickoIme, status);
 	}
 	
 	private void napuniSetRestorana () {
@@ -125,12 +149,76 @@ public class PodatkovnaLjuska {
 		// metoda koja ce iz baze podataka puniti set restorana
 	}
 	
-	private boolean korisnickoImeDostupno () {
+	private boolean korisnickoImeDostupno (String korisnickoIme) {
 		
 		// metoda koja provjerava je li korisnicko ime dostupno
+		
+		boolean postoji = false;
+		
+		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO(this.korImeZaPrviPristup, this.lozinkaZaPrviPristup);
+		postoji = dao.korisnickoImePostoji(korisnickoIme);
+		
+		if (postoji) {
+			return false;
+		}
+		else {
+			return true;
+		}
+		
 	}
 	
+	private boolean imeILozinkaIspravni (String korisnickoIme, String lozinka) {
+		
+		// metoda koja provjerava jesu li korisnicko ime i lozinka ispravni
+		
+		boolean lozinkaIspravna = false;
+		boolean postoji = false;
+		
+		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO(this.korImeZaPrviPristup, this.lozinkaZaPrviPristup);
+		postoji = dao.korisnickoImePostoji(korisnickoIme);
+		
+		if (postoji) {
+			
+			lozinkaIspravna = dao.lozinkaIspravna(korisnickoIme, lozinka);
+			
+			if (lozinkaIspravna) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
 	
+	private VrstaKorisnika dohvatiVrstu (String korisnickoIme) {
+		
+		// metoda koja dohvaca vrstu korisnika iz baze podataka
+		
+		String vrsta;
+		
+		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO(this.korImeZaPrviPristup, this.lozinkaZaPrviPristup);
+		vrsta = dao.vrstaKorisnika(korisnickoIme);
+		
+		if (vrsta.equals(VrstaKorisnika.ADMIN.toString())) {
+			return VrstaKorisnika.ADMIN;
+		}
+		else if (vrsta.equals(VrstaKorisnika.DISPECER.toString())) {
+			return VrstaKorisnika.DISPECER;
+		}
+		else if (vrsta.equals(VrstaKorisnika.DOSTAVLJAC.toString())) {
+			return VrstaKorisnika.DOSTAVLJAC;
+		}
+		else if (vrsta.equals(VrstaKorisnika.KLIJENT.toString())) {
+			return VrstaKorisnika.KLIJENT;
+		}
+		else if (vrsta.equals(VrstaKorisnika.VLASNIK.toString())) {
+			return VrstaKorisnika.VLASNIK;
+		}
+		else {
+			return null;
+		}
+	}
 }
-
-

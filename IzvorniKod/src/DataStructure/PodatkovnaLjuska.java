@@ -124,6 +124,13 @@ public class PodatkovnaLjuska {
 		
 		// metoda koja ce iz baze podataka puniti set restorana
 	}
+	
+	private boolean korisnickoImeDostupno () {
+		
+		// metoda koja provjerava je li korisnicko ime dostupno
+	}
+	
+	
 }
 
 

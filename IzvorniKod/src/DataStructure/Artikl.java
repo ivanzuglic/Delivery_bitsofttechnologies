@@ -1,5 +1,7 @@
 package DataStructure;
 
+import Database.ArtiklDAO;
+
 public class Artikl {
 	
 	private int idArtikl;
@@ -10,28 +12,36 @@ public class Artikl {
     private String opis;
 
     
-    public String getOpis() {
-		return opis;
-	}
-
-	public void setOpis(String opis) {
-		this.opis = opis;
-	}
-
-	public Artikl (String naziv, float cijena, int vrijemePripravljanja, Restoran restoran) {
+    // konstruktor koji se koristi kada se stvara novi artikl
+	public Artikl (String naziv, float cijena, int vrijemePripravljanja, Restoran restoran,  String opis) {
 
     	this.naziv = naziv;
     	this.cijena = cijena;
     	this.vrijemePripravljanjaMin = vrijemePripravljanja;
     	this.restoran = restoran;
+    	this.opis= opis;
+    }
+	
+	// konstruktor koji se koristi kada se artikl ucitava iz baze podataka
+	public Artikl (int idArtikl, String naziv, float cijena, int vrijemePripravljanja, Restoran restoran,  String opis) {
+
+		this.idArtikl= idArtikl;
+    	this.naziv = naziv;
+    	this.cijena = cijena;
+    	this.vrijemePripravljanjaMin = vrijemePripravljanja;
+    	this.restoran = restoran;
+    	this.opis= opis;
     }
 
     public int getIdArtikl() {
-		return idArtikl;
+		
+    	return this.idArtikl;
 	}
 
 	public void setIdArtikl(int idArtikl) {
+		
 		this.idArtikl = idArtikl;
+		this.azurirajDB();
 	}
 
 	public String getNaziv () {
@@ -42,6 +52,7 @@ public class Artikl {
     public void setNaziv (String noviNaziv) {
 
         this.naziv = noviNaziv;
+        this.azurirajDB();
     }
     
     public float getCijena () {
@@ -52,6 +63,7 @@ public class Artikl {
     public void setCijena (float novaCijena) {
 
         this.cijena = novaCijena;
+        this.azurirajDB();
     }
 
     public int getVrijemePripravljanja () {
@@ -62,6 +74,7 @@ public class Artikl {
     public void setVrijemePripravljanja (int novoVP) {
 
         this.vrijemePripravljanjaMin = novoVP;
+        this.azurirajDB();
     }
 
     public Restoran getRestoran () {
@@ -69,7 +82,27 @@ public class Artikl {
     	return this.restoran;
     }
     
-    public void pohraniBP() {
+    public String getOpis () {
+		
+    	return this.opis;
+	}
+
+	public void setOpis(String opis) {
+		
+		this.opis = opis;
+		this.azurirajDB();
+	}
+	
+    private void pohraniDB () {
     	
+    	// metoda koja pohranjuje novi artikl u bazu podataka
+    	
+    	ArtiklDAO dao = new ArtiklDAO();	// od kuda da povlacimo user i password?
+    	dao.pohraniArtikl(this);
+    }
+    
+    private void azurirajDB () {
+    	
+    	// metoda koja azurira podatke u bazi podataka
     }
 }

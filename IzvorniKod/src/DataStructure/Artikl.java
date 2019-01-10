@@ -106,5 +106,7 @@ public class Artikl {
     private void azurirajDB () {
     	
     	// metoda koja azurira podatke u bazi podataka
+    	ArtiklDAO dao = new ArtiklDAO();
+    	dao.azurirajArtikl(this);
     }
 }

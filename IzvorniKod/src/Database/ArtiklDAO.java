@@ -43,4 +43,27 @@ public class ArtiklDAO {
 		}
 		return result;
 	}
+	
+	public int azurirajArtikl(Artikl artikl) {
+		String sql = "UPDATE artikl SET nazivArtikla = ? , opis = ? , cijena = ? , slika = ? , vrijemePripreme = ?"
+				+ " WHERE idArtikl = ? AND idRestoran = ?";
+		int result= 2; 
+		
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB);
+			PreparedStatement prepSt = con.prepareStatement(sql)) {
+			
+			prepSt.setString(1, artikl.getNaziv());
+			prepSt.setString(2, artikl.getOpis());
+			prepSt.setFloat(3, artikl.getCijena());
+			// spremanje slike ?? ja bih to kratkim postupkom
+			prepSt.setInt(5, artikl.getVrijemePripravljanja());
+			prepSt.setInt(6, artikl.getIdArtikl());
+			prepSt.setInt(7, artikl.getRestoran().getId());
+		}
+		catch (SQLException sqlExc) {
+			System.out.println(sqlExc.getMessage());
+		}
+		return result;
+	}
+	
 }

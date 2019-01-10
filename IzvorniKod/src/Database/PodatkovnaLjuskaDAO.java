@@ -54,7 +54,7 @@ public class PodatkovnaLjuskaDAO { 		//Ivan: maknuta 'starost' i ispravljeni try
 	
 	public boolean korisnickoImePostoji (String korisnickoIme) {
 		
-		String sql = "SELECT * FROM korisnik WHERE korisnickoIme = ?";
+		String sql = "SELECT korisnik.* FROM korisnik WHERE korisnickoIme = ?";
 		
 		boolean result = false;
 		
@@ -154,7 +154,7 @@ public class PodatkovnaLjuskaDAO { 		//Ivan: maknuta 'starost' i ispravljeni try
 				String lozinka = rs.getString(16);
 				String ime = rs.getString(17);
 				String prezime = rs.getString(18);
-				String brMobitela = rs.getString(19);
+				String brMobitela = rs.getString(19);	// mozda bi bilo dobro ukloniti neke od tih dodatnih atributa koji nemamo neke koristi - LM
 				String email = rs.getString(20);
 				String uloga = rs.getString(21);
 				boolean online = rs.getBoolean(22);
@@ -168,7 +168,7 @@ public class PodatkovnaLjuskaDAO { 		//Ivan: maknuta 'starost' i ispravljeni try
 		            e.printStackTrace();
 		        }
 				
-				Restoran trenRestoran = new Restoran(idRestoran, imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, adresa);	// dodan i id restorana u restorane koji vec postoje i stvaraju se iz baze podataka -LM
+				Restoran trenRestoran = new Restoran(idRestoran, imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, oib, iban, ziroRac, adresa);	// dodan i id restorana u restorane koji vec postoje i stvaraju se iz baze podataka -LM
 				restorani.add(trenRestoran);
 			}
 			

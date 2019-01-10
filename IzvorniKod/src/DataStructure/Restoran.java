@@ -2,7 +2,7 @@ package DataStructure;
 
 import java.awt.image.BufferedImage;					//pogledat i dogovorit se
 import java.util.Set;
-import java.util.TreeSet;
+import Database.RestoranDAO;
 
 
 public class Restoran {
@@ -16,6 +16,9 @@ public class Restoran {
 	private BufferedImage slika;
 	private String telefon;     						//mora biti String za slucaj ako broj telefona pocinje s nulom ili plusom
 	private String fax;									//vrijedi gornja opaska
+	private int OIB;
+	private int IBAN;
+	private int ziroRacun;
 	private String adresa;
 	private Set<Artikl> meni;
 	
@@ -23,7 +26,7 @@ public class Restoran {
 	
 	
 	// konstruktor koristen prilikom predlaganja restorana (u tom slucaju, id treba biti generiran)
-	public Restoran (String ime, Korisnik vlasnik, GeoLokacija lokacija, String opis, BufferedImage slika, boolean odobren, String telefon, String fax, String adresa) {
+	public Restoran (String ime, Korisnik vlasnik, GeoLokacija lokacija, String opis, BufferedImage slika, boolean odobren, String telefon, String fax, int OIB, int IBAN, int ziroRacun, String adresa) {
 		
 		this.ime = ime;
 		this.vlasnik = vlasnik;
@@ -33,14 +36,16 @@ public class Restoran {
 		this.odobren = odobren;
 		this.telefon = telefon;
 		this.fax = fax;
+		this.OIB = OIB;
+		this.IBAN = IBAN;
+		this.ziroRacun = ziroRacun;
 		this.adresa = adresa;
 		
-		this.meni = new TreeSet<Artikl>();
 		this.pohraniBP();	// prijedlog treba  biti pohranjen u bazu podataka
 	}
 	
 	// konstruktor koristen prilikom dohvacanja iz baze podataka (u tom slucaju, id je vec odredjen i postoji)
-	public Restoran (int id, String ime, Korisnik vlasnik, GeoLokacija lokacija, String opis, BufferedImage slika, boolean odobren, String telefon, String fax, String adresa) {
+	public Restoran (int id, String ime, Korisnik vlasnik, GeoLokacija lokacija, String opis, BufferedImage slika, boolean odobren, String telefon, String fax, int OIB, int IBAN, int ziroRacun, String adresa) {
 		
 		this.id = id;
 		this.ime = ime;
@@ -51,9 +56,12 @@ public class Restoran {
 		this.odobren = odobren;
 		this.telefon = telefon;
 		this.fax = fax;
+		this.OIB = OIB;
+		this.IBAN = IBAN;
+		this.ziroRacun = ziroRacun;
 		this.adresa = adresa;
 		
-		this.meni = new TreeSet<Artikl>();
+		this.meni = this.napuniMeni();
 
 	}
 	
@@ -137,6 +145,48 @@ public class Restoran {
 		}	
 	}
 
+	public int getOIB () {
+		
+		return this.OIB;
+	}
+
+	public void setOIB (int noviOIB, Zastavice z, Korisnik trenutniKorisnik) {
+		
+		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
+			
+			this.OIB = noviOIB;
+			this.azurirajBP(); // promjene treba pohraniti u bazu podataka
+		}	
+	}
+
+	public int getIBAN () {
+		
+		return this.IBAN;
+	}
+
+	public void setIBAN (int noviIBAN, Zastavice z, Korisnik trenutniKorisnik) {
+		
+		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
+			
+			this.IBAN = noviIBAN;
+			this.azurirajBP(); // promjene treba pohraniti u bazu podataka
+		}	
+	}
+
+	public int getZiroRacun () {
+		
+		return this.ziroRacun;
+	}
+
+	public void setZiroRacun (int noviZiroRacun, Zastavice z, Korisnik trenutniKorisnik) {
+		
+		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
+			
+			this.ziroRacun = noviZiroRacun;
+			this.azurirajBP(); // promjene treba pohraniti u bazu podataka
+		}	
+	}
+
 	public String getOpis () {
 		
 		return this.opis;
@@ -161,7 +211,7 @@ public class Restoran {
 		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorisnik)) {
 			
 			this.meni.add(noviArtikl);
-			this.azurirajBP();	// promjene treba pohraniti u bazu podataka
+			this.dodajUMeni(noviArtikl);	// promjene treba pohraniti u bazu podataka
 		}
 	}
 	
@@ -170,7 +220,7 @@ public class Restoran {
 		if (z.isVlasnik() && this.vlasnik.equals(trenutniKorsnik)) {
 			
 			this.meni.remove(izbaciArtikl);
-			this.azurirajBP();	// promjene treba pohraniti u bazu podataka
+			this.skiniSMenija(izbaciArtikl);	// promjene treba pohraniti u bazu podataka
 		}	
 	}
 
@@ -201,18 +251,45 @@ public class Restoran {
 		}
 	}
 	
-	private void napuniMeni () {
+	private Set<Artikl> napuniMeni () {
 		
-		// iz baze podataka povuci meni restorana
+		// metoda koja ce iz baze podataka dohvatiti meni resotrana
+		
+		RestoranDAO dao = new RestoranDAO();
+		Set<Artikl> meni = dao.dohvatiMeni(this);
+		
+		return meni;
 	}
 	
 	private void pohraniBP () {
 		
 		// metoda koja ce restoran pohraniti u bazu podataka (potpuno novi restoran)
+		
+		RestoranDAO dao = new RestoranDAO();
+		dao.pohraniRestoran(this);
 	}
 	
 	private void azurirajBP () {
 		
 		// metoda koja ce restoran azurirati u bazi podataka nakon sto je isti azuriran na lokalnom racunalu
+		
+		RestoranDAO dao = new RestoranDAO();
+		dao.azurirajRestoran(this);
+	}
+	
+	private void dodajUMeni (Artikl noviArtikl) {
+		
+		// metoda koja ce u meni restorana u bazi podataka dodati novi artikl
+		
+		RestoranDAO dao = new RestoranDAO();
+		dao.dodajUMeni(noviArtikl);
+	}
+	
+	private void skiniSMenija (Artikl artikl) {
+		
+		// metoda koja ce s menija restorana u bazi podataka ukloniti artikl
+		
+		RestoranDAO dao = new RestoranDAO();
+		dao.skiniSMenija(artikl);
 	}
 }

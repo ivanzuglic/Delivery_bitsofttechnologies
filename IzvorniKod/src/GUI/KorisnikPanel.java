@@ -238,7 +238,7 @@ public class KorisnikPanel extends JPanel {
 				poruka.removeAll();
 				poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
 				poruka.revalidate();
-				window.switchToKlijent(new Klijent(korImeField.getText(), lozinkaField.getText(), imeField.getText(), prezField.getText(), mailField.getText(), Integer.parseInt(dobField.getText())));
+				window.switchToKlijent(new Klijent(korImeField.getText(), lozinkaField.getText(), imeField.getText(), prezField.getText(), mailField.getText()));
 				Timer timer = new Timer(1500, new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            	Registracija.dispatchEvent(new WindowEvent(Registracija, WindowEvent.WINDOW_CLOSING));
@@ -339,7 +339,7 @@ public class KorisnikPanel extends JPanel {
 				poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
 				poruka.revalidate();
 				//window.switchToKlijent(getUsr(imeField.getText(), lozinkaField.getText()));
-				window.switchToKlijent(new Klijent("NekiPti", "69696969", "Ivo", "Ivic", "NekiMail", 69));
+				window.switchToKlijent(new Klijent("NekiTip", "69696969", "Ivo", "Ivic", "NekiMail"));
 				Timer timer = new Timer(1500, new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            	Prijava.dispatchEvent(new WindowEvent(Prijava, WindowEvent.WINDOW_CLOSING));

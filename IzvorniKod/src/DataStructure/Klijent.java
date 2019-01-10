@@ -31,9 +31,9 @@ public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 		return lokacijaTrenutneNarudzbe;
 	}
 	
-	public void predloziRestoran (String ime, GeoLokacija lokacija, String opis, BufferedImage slika, String telefon, String fax, String adresa) {
+	public void predloziRestoran (String ime, GeoLokacija lokacija, String opis, BufferedImage slika, String telefon, String fax, int OIB, int IBAN, int ziroRacun, String adresa) {
 		
-		Restoran predlozeniRestoran = new Restoran(ime, this, lokacija, opis, slika, false, telefon, fax, adresa);
+		Restoran predlozeniRestoran = new Restoran(ime, this, lokacija, opis, slika, false, telefon, fax, OIB, IBAN, ziroRacun, adresa);
 	}
 	
 	public Narudzba getAktivnaNarudzba() {

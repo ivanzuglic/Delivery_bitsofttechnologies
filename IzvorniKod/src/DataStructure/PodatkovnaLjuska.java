@@ -4,17 +4,14 @@ import java.util.Set;
 
 import Database.PodatkovnaLjuskaDAO;
 
-public class PodatkovnaLjuska {					//Ivan: uklonjena starost
+public class PodatkovnaLjuska {
 
 	private Set<Restoran> restorani;
 	private Restoran trenutniRestoran = null;
 	private Korisnik trenutniKorisnik = null;
 	private Zastavice zastavice;
 	
-	private String korImeZaPrviPristup; 
-	private String lozinkaZaPrviPristup;
-	
-	
+
 	public PodatkovnaLjuska () {
 		
 		this.napuniSetRestorana();
@@ -140,7 +137,7 @@ public class PodatkovnaLjuska {					//Ivan: uklonjena starost
 	
 	private void postaviOnlineStatus (String korisnickoIme, boolean status) {
 		
-		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO(korImeZaPrviPristup, lozinkaZaPrviPristup);
+		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO();
 		dao.postaviOnlineStatus(korisnickoIme, status);
 	}
 	
@@ -148,7 +145,7 @@ public class PodatkovnaLjuska {					//Ivan: uklonjena starost
 		
 		// metoda koja ce iz baze podataka puniti set restorana
 		
-		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO(this.korImeZaPrviPristup, this.lozinkaZaPrviPristup);
+		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO();
 		this.restorani = dao.ucitajRestorane();
 	}
 	
@@ -158,7 +155,7 @@ public class PodatkovnaLjuska {					//Ivan: uklonjena starost
 		
 		boolean postoji = false;
 		
-		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO(this.korImeZaPrviPristup, this.lozinkaZaPrviPristup);
+		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO();
 		postoji = dao.korisnickoImePostoji(korisnickoIme);
 		
 		if (postoji) {
@@ -177,7 +174,7 @@ public class PodatkovnaLjuska {					//Ivan: uklonjena starost
 		boolean lozinkaIspravna = false;
 		boolean postoji = false;
 		
-		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO(this.korImeZaPrviPristup, this.lozinkaZaPrviPristup);
+		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO();
 		postoji = dao.korisnickoImePostoji(korisnickoIme);
 		
 		if (postoji) {
@@ -202,7 +199,7 @@ public class PodatkovnaLjuska {					//Ivan: uklonjena starost
 		
 		String vrsta;
 		
-		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO(this.korImeZaPrviPristup, this.lozinkaZaPrviPristup);
+		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO();
 		vrsta = dao.vrstaKorisnika(korisnickoIme);
 		
 		if (vrsta.equals(VrstaKorisnika.ADMIN.toString())) {

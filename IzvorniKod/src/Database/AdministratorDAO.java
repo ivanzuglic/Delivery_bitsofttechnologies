@@ -110,7 +110,7 @@ public class AdministratorDAO {
 		            e.printStackTrace();
 		        }
 				
-				Restoran trenRestoran = new Restoran(idRestoran, imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, adresa);	// dodan i id restorana u restorane koji vec postoje i stvaraju se iz baze podataka -LM
+				Restoran trenRestoran = new Restoran(idRestoran, imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, oib, iban, ziroRac, adresa);	// dodan i id restorana u restorane koji vec postoje i stvaraju se iz baze podataka -LM
 				restorani.add(trenRestoran);
 			}
 			

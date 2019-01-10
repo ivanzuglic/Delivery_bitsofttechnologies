@@ -202,14 +202,14 @@ public class KorisnikPanel extends JPanel {
 		podaci.add(prezPanel);
 		
 		//Definicija panela za dob korisnka
-		JPanel dobPanel = new JPanel();
-		dobPanel.setBackground(Color.white);
-		dobPanel.setLayout(new FlowLayout());
-		dobPanel.add(new JLabel("                        Dob: "));
-		JTextField dobField = new JTextField();
-		dobField.setColumns(15);
-		dobPanel.add(dobField);
-		podaci.add(dobPanel);
+		JPanel brMobPanel = new JPanel();
+		brMobPanel.setBackground(Color.white);
+		brMobPanel.setLayout(new FlowLayout());
+		brMobPanel.add(new JLabel("      Broj mobitela: "));
+		JTextField brMobField = new JTextField();
+		brMobField.setColumns(15);
+		brMobPanel.add(brMobField);
+		podaci.add(brMobPanel);
 		
 		//Definicija panela za unos email adrese
 		JPanel mailPanel = new JPanel();
@@ -234,11 +234,11 @@ public class KorisnikPanel extends JPanel {
 		
 		//Definicjia funkcionalnosti gumba za registraciju
 		ActionListener RegistracijaDialog = (actionEvent) -> {
-			if(registracijaProvjera(korImeField.getText(), lozinkaField.getText(), potvrdLozinkaField.getText(), imeField.getText(), prezField.getText(), dobField.getText(), mailField.getText())) {
+			if(registracijaProvjera(korImeField.getText(), lozinkaField.getText(), imeField.getText(), prezField.getText(), brMobField.getText(), mailField.getText())) {
 				poruka.removeAll();
 				poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
 				poruka.revalidate();
-				window.switchToKlijent(new Klijent(korImeField.getText(), lozinkaField.getText(), imeField.getText(), prezField.getText(), mailField.getText()));
+				window.switchToKlijent(new Klijent(korImeField.getText(), lozinkaField.getText(), imeField.getText(), prezField.getText(), brMobField.getText(), mailField.getText()));
 				Timer timer = new Timer(1500, new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            	Registracija.dispatchEvent(new WindowEvent(Registracija, WindowEvent.WINDOW_CLOSING));
@@ -284,10 +284,8 @@ public class KorisnikPanel extends JPanel {
 		
 	}
 
-	private boolean registracijaProvjera(String text, String text2, String text3, String text4, String text5, String text6,
-			String text7) {
-		return false; //Placeholder
-		// TODO Auto-generated method stub
+	private boolean registracijaProvjera(String korisnickoIme, String lozinka, String ime, String prezime, String brMob, String mail) {
+		return window.podLjuska.registracija(korisnickoIme, lozinka, ime, prezime, brMob, mail);
 		
 	}
 
@@ -339,7 +337,7 @@ public class KorisnikPanel extends JPanel {
 				poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
 				poruka.revalidate();
 				//window.switchToKlijent(getUsr(imeField.getText(), lozinkaField.getText()));
-				window.switchToKlijent(new Klijent("NekiTip", "69696969", "Ivo", "Ivic", "NekiMail"));
+				window.switchToKlijent(window.podLjuska.getTrenutniKorisnik());
 				Timer timer = new Timer(1500, new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            	Prijava.dispatchEvent(new WindowEvent(Prijava, WindowEvent.WINDOW_CLOSING));
@@ -384,9 +382,8 @@ public class KorisnikPanel extends JPanel {
 		Prijava.setVisible(true);
 	}
 
-	private boolean prijaviSeProvjera(String string, String string2) {
-		return true; //Placeholder
-		// TODO Auto-generated method stub
+	private boolean prijaviSeProvjera(String korisnickoIme, String lozinka) {
+		return window.podLjuska.prijava(korisnickoIme, lozinka);
 		
 	}
 

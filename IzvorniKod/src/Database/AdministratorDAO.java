@@ -101,7 +101,7 @@ public class AdministratorDAO {
 				String uloga = rs.getString(21);
 				boolean online = rs.getBoolean(22);
 				
-				Korisnik vlasnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, email);	// uloga umjesto starost?
+				Korisnik vlasnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, brMobitela, email);	// uloga umjesto starost?
 				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
 				BufferedImage slika = null;
 				try {
@@ -140,7 +140,7 @@ public class AdministratorDAO {
 				String uloga = rs.getString(8);
 				boolean online = rs.getBoolean(9);
 				
-				Korisnik trenKorisnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, email); //uloga potrebna
+				Korisnik trenKorisnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, brMobitela, email); //uloga potrebna
 				korisnici.add(trenKorisnik);
 			}
 						

@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneLayout;
 
 import DataStructure.Klijent;
+import DataStructure.Korisnik;
 
 /**
  * Razred koji definira izgled i funkcionalnosti za Klijente
@@ -45,19 +46,20 @@ public class KlijentPanel extends JPanel {
 	private ActionListener predloziListener;
 	private ActionListener odjavaListener;
 	private DefaultWindow window;
-	private Klijent trenutniKlijent;
+	private Korisnik trenutniKlijent;
 	
 	public Integer brojacChar = 180;
 	
 	
 	
-	public KlijentPanel(DefaultWindow window, Klijent klijent) {
+	public KlijentPanel(DefaultWindow window, Korisnik klijent) {
 		this.window = window;
 		this.trenutniKlijent = klijent;
 		setLayout(new BorderLayout());
 		
 		//Definicije listenera za 4 glavna gumba
 		odjavaListener = (actionEvent) -> {
+			window.podLjuska.odjava();
 			window.switchToKorisnikFromKlijent();
 		};
 		

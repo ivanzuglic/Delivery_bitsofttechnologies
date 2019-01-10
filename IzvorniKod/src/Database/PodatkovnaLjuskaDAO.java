@@ -32,7 +32,7 @@ public class PodatkovnaLjuskaDAO { 		//Ivan: maknuta 'starost' i ispravljeni try
 	
 	public String vrstaKorisnika (String korisnickoIme) {
 		
-		String sql = "SELECT vrsta FROM korisnik WHERE vrsta = ?";
+		String sql = "SELECT uloga FROM korisnik WHERE korisnickoIme = ?";
 		
 		String result = null;
 		
@@ -41,8 +41,10 @@ public class PodatkovnaLjuskaDAO { 		//Ivan: maknuta 'starost' i ispravljeni try
 			
 			prepSt.setString(1, korisnickoIme);
 			ResultSet rs = prepSt.executeQuery();
+			if (rs.next()) {
+				result = rs.getString(1);
+			}
 			
-			result = rs.getString(1);
 		} 
 		catch (SQLException sqlExc) {
 			
@@ -90,6 +92,7 @@ public class PodatkovnaLjuskaDAO { 		//Ivan: maknuta 'starost' i ispravljeni try
 			prepSt.setString(1, korisnickoIme);
 			ResultSet rs = prepSt.executeQuery();
 			
+			rs.next();
 			ucitanaLozinka = rs.getString(1);
 			
 			if (ucitanaLozinka.equals(lozinka)) {
@@ -150,23 +153,23 @@ public class PodatkovnaLjuskaDAO { 		//Ivan: maknuta 'starost' i ispravljeni try
 				String slikaPath = rs.getString(12);
 				boolean odobren = rs.getBoolean(13);	//popravi u DB (stavi na predzadnje mjesto)
 				
-				String korisnickoIme = rs.getString(15);
-				String lozinka = rs.getString(16);
-				String ime = rs.getString(17);
-				String prezime = rs.getString(18);
-				String brMobitela = rs.getString(19);	// mozda bi bilo dobro ukloniti neke od tih dodatnih atributa koji nemamo neke koristi - LM
-				String email = rs.getString(20);
-				String uloga = rs.getString(21);
-				boolean online = rs.getBoolean(22);
+				String korisnickoIme = rs.getString(16);
+				String lozinka = rs.getString(17);
+				String ime = rs.getString(18);
+				String prezime = rs.getString(19);
+				String brMobitela = rs.getString(20);	// mozda bi bilo dobro ukloniti neke od tih dodatnih atributa koji nemamo neke koristi - LM
+				String email = rs.getString(21);
+				String uloga = rs.getString(22);
+				boolean online = rs.getBoolean(23);
 				
-				Korisnik vlasnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, email);	// uloga umjesto starost?
+				Korisnik vlasnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, brMobitela, email);	// uloga umjesto starost?
 				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
 				BufferedImage slika = null;
-				try {
+				/*try {
 		        	slika = ImageIO.read(new File(slikaPath)); 			 //dodatno testirat
 		        } catch (IOException e){
 		            e.printStackTrace();
-		        }
+		        }*/
 				
 				Restoran trenRestoran = new Restoran(idRestoran, imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, oib, iban, ziroRac, adresa);	// dodan i id restorana u restorane koji vec postoje i stvaraju se iz baze podataka -LM
 				restorani.add(trenRestoran);

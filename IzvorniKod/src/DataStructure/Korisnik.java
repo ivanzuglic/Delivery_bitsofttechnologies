@@ -11,6 +11,7 @@ public class Korisnik {				// Ivan: maknut atribut 'starost' i njegovi konstrukt
 	private String ime;
 	private String prezime;
 	private String eMail;
+	private String brMobitela;
 	
 	
 	// konstruktor koji se koristi prilikom prijave
@@ -23,7 +24,7 @@ public class Korisnik {				// Ivan: maknut atribut 'starost' i njegovi konstrukt
 	}
 	
 	// konstruktor koji se koristi prilikom registracije
-	public Korisnik (String korisnickoIme, String lozinka, String ime, String prezime, String eMail) {
+	public Korisnik (String korisnickoIme, String lozinka, String ime, String prezime, String brMobitela, String eMail) {
 		
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
@@ -31,6 +32,7 @@ public class Korisnik {				// Ivan: maknut atribut 'starost' i njegovi konstrukt
 		this.prezime = prezime;
 		this.eMail = eMail;
 		this.uloga = "KLIJENT";
+		this.setBrMobitela(brMobitela);
 		
 		this.pohraniBP();
 		// i vrati idKor (ako se id generira automatski, tj. ne zadaje ga sam korisnik --> dogovorit se)
@@ -90,6 +92,17 @@ public class Korisnik {				// Ivan: maknut atribut 'starost' i njegovi konstrukt
 	public String geteMail () {
 		
 		return this.eMail;
+	}
+
+	public String getBrMobitela() {
+		
+		return brMobitela;
+	}
+
+	public void setBrMobitela(String brMobitela) {
+		
+		this.brMobitela = brMobitela;
+		this.azurirajBP();
 	}
 
 	public void seteMail (String eMail) {

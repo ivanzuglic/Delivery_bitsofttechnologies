@@ -61,7 +61,7 @@ public class Restoran {
 		this.ziroRacun = ziroRacun;
 		this.adresa = adresa;
 		
-		this.meni = this.napuniMeni();
+		//this.meni = this.napuniMeni();
 
 	}
 	

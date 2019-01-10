@@ -19,7 +19,7 @@ public class PodatkovnaLjuska {
 	}
 	
 	// metoda vraca true ako je registracija uspjesno provedena, vraca false ako korisnicko ime nije dostupno
-	public boolean registracija (String korisnickoIme, String lozinka, String ime, String prezime, String eMail) {
+	public boolean registracija (String korisnickoIme, String lozinka, String ime, String prezime, String brMobitela, String eMail) {
 		
 		boolean valjan = false;
 		
@@ -28,7 +28,7 @@ public class PodatkovnaLjuska {
 		
 		if (valjan) {
 			
-			this.trenutniKorisnik = new Klijent(korisnickoIme, lozinka, ime, prezime, eMail);
+			this.trenutniKorisnik = new Klijent(korisnickoIme, lozinka, ime, prezime, brMobitela, eMail);
 			this.postaviZastavice(VrstaKorisnika.KLIJENT);
 			this.postaviOnlineStatus(trenutniKorisnik.getKorisnickoIme(), true);
 			
@@ -201,8 +201,10 @@ public class PodatkovnaLjuska {
 		
 		PodatkovnaLjuskaDAO dao = new PodatkovnaLjuskaDAO();
 		vrsta = dao.vrstaKorisnika(korisnickoIme);
-		
-		if (vrsta.equals(VrstaKorisnika.ADMIN.toString())) {
+		if (vrsta == null) {
+			return null;
+		}
+		else if (vrsta.equals(VrstaKorisnika.ADMIN.toString())) {
 			return VrstaKorisnika.ADMIN;
 		}
 		else if (vrsta.equals(VrstaKorisnika.DISPECER.toString())) {

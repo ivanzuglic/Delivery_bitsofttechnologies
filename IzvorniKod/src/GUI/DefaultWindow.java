@@ -5,6 +5,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import DataStructure.Klijent;
+import DataStructure.Korisnik;
+import DataStructure.PodatkovnaLjuska;
 
 
 /**
@@ -17,6 +19,7 @@ import DataStructure.Klijent;
 public class DefaultWindow extends JFrame{
 	private KorisnikPanel korPanel;
 	private KlijentPanel klijentPanel;
+	protected PodatkovnaLjuska podLjuska = new PodatkovnaLjuska(); ;
 	
 	/**
 	 * Konstruktor koji inicijalizira program kao Korisnik
@@ -33,7 +36,7 @@ public class DefaultWindow extends JFrame{
 	/**
 	 * Metoda za promjenu panela sa Korisnika na KLijenta
 	 */
-	public void switchToKlijent(Klijent klijent) {
+	public void switchToKlijent(Korisnik klijent) {
 		remove(korPanel);
 		klijentPanel = new KlijentPanel(this, klijent);
 		add(klijentPanel);

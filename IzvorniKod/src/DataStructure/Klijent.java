@@ -9,9 +9,9 @@ public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 	
 	
 	// ovaj konstruktor se koristi prilikom registracije
-	public Klijent (String korisnickoIme, String lozinka, String ime, String prezime, String eMail) {
+	public Klijent (String korisnickoIme, String lozinka, String ime, String prezime, String brMobitela, String eMail) {
 		
-		super(korisnickoIme, lozinka, ime, prezime, eMail);
+		super(korisnickoIme, lozinka, ime, prezime, brMobitela, eMail);
 		this.kosarica = new Kosarica();
 	}
 	

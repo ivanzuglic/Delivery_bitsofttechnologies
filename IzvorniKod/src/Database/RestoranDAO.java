@@ -26,27 +26,26 @@ public class RestoranDAO {			//ispravljen try-catch i konstruktor
 	
 	public int pohraniRestoran (Restoran restoran) {
 		
-		String sql = "INSERT INTO restoran (idRestoran, imeRestoran, opis, adresa, geoDuzina, geoSirina, kontaktTelefon, fax, OIB, IBAN, ziroRacun, slika, idVlasnik, restoranOdobren)"
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO restoran (imeRestoran, opis, adresa, geoDuzina, geoSirina, kontaktTelefon, fax, OIB, IBAN, ziroRacun, slika, idVlasnik, restoranOdobren)"
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		int result = 2; // za testiranje
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
 			PreparedStatement prepSt = con.prepareStatement(sql)) {
 			
-			prepSt.setInt(1, 0);	// ne prihvaca null, stavil sam 0 - LM
-			prepSt.setString(2, restoran.getIme());
-			prepSt.setString(3, restoran.getOpis());
-			prepSt.setString(4, restoran.getAdresa());
-			prepSt.setFloat(5, restoran.getLokacija().getGeoDuziina());			// nisam sto posto siguran je li format i naziv tocan - LM
-			prepSt.setFloat(6, restoran.getLokacija().getGeoSirina());
-			prepSt.setString(7, restoran.getTelefon());
-			prepSt.setString(8, restoran.getFax());
+			prepSt.setString(1, restoran.getIme());
+			prepSt.setString(2, restoran.getOpis());
+			prepSt.setString(3, restoran.getAdresa());
+			prepSt.setFloat(4, restoran.getLokacija().getGeoDuziina());			// nisam sto posto siguran je li format i naziv tocan - LM
+			prepSt.setFloat(5, restoran.getLokacija().getGeoSirina());
+			prepSt.setString(6, restoran.getTelefon());
+			prepSt.setString(7, restoran.getFax());
 			prepSt.setInt(8, restoran.getOIB());
 			prepSt.setInt(9, restoran.getIBAN());
 			prepSt.setInt(10, restoran.getZiroRacun());
-			prepSt.setString(12, restoran.getSlika().toString());
-			prepSt.setInt(13, restoran.getVlasnik().getKorisnickiId());
-			prepSt.setBoolean(14, restoran.isOdobren());
+			prepSt.setString(11, restoran.getSlika().toString());
+			prepSt.setInt(12, restoran.getVlasnik().getKorisnickiId());
+			prepSt.setBoolean(13, restoran.isOdobren());
 			
 			result = prepSt.executeUpdate();
 			
@@ -59,7 +58,7 @@ public class RestoranDAO {			//ispravljen try-catch i konstruktor
 	
 	public int azurirajRestoran (Restoran restoran) {
 		
-		String sql = "UPDATE restoran SET imeRestoran = ?, opis = ?, adresa = ?, geoDuzina = ?, geoSirina = ?, kontaktTelefon = ?, fax = ?, OIB = ?, IBAN = ?, ziroRacun = ?, slika = ?, restoranOdobren = ?)";
+		String sql = "UPDATE restoran SET imeRestoran = ?, opis = ?, adresa = ?, geoDuzina = ?, geoSirina = ?, kontaktTelefon = ?, fax = ?, OIB = ?, IBAN = ?, ziroRacun = ?, slika = ?, restoranOdobren = ? WHERE idRestoran = ?";
 
 		int result = 2; // za testiranje
 		
@@ -77,7 +76,8 @@ public class RestoranDAO {			//ispravljen try-catch i konstruktor
 			prepSt.setInt(9, restoran.getIBAN());
 			prepSt.setInt(10, restoran.getZiroRacun());
 			prepSt.setString(11, restoran.getSlika().toString());
-			prepSt.setBoolean(13, restoran.isOdobren());
+			prepSt.setBoolean(12, restoran.isOdobren());
+			prepSt.setInt(13, restoran.getId());
 			
 			result = prepSt.executeUpdate();
 			

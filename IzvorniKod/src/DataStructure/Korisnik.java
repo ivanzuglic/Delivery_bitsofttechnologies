@@ -1,13 +1,14 @@
 package DataStructure;
 
-public class Korisnik {				// Ivan: maknut atribut 'starost' i njegovi konstruktori
+import Database.KorisnikDAO;
 
-	private int idKor;				 
-	private String uloga;			
-	
+public class Korisnik {
+
 	private String korisnickoIme;
 	private String lozinka;
 	
+	private int idKor;				 
+	private String uloga;			
 	private String ime;
 	private String prezime;
 	private String eMail;
@@ -20,7 +21,7 @@ public class Korisnik {				// Ivan: maknut atribut 'starost' i njegovi konstrukt
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
 		
-		this.dohvatiBP();
+		this.dohvatiBP(korisnickoIme);
 	}
 	
 	// konstruktor koji se koristi prilikom registracije
@@ -32,12 +33,10 @@ public class Korisnik {				// Ivan: maknut atribut 'starost' i njegovi konstrukt
 		this.prezime = prezime;
 		this.eMail = eMail;
 		this.uloga = "KLIJENT";
-		this.setBrMobitela(brMobitela);
+		this.brMobitela = brMobitela;
 		
 		this.pohraniBP();
-		// i vrati idKor (ako se id generira automatski, tj. ne zadaje ga sam korisnik --> dogovorit se)
-		
-		//this.idKor = pohraniKorisnika();
+		this.idKor = this.dohvatiKorId(korisnickoIme);
 	}
 	
 	public int getKorisnickiId () {
@@ -89,11 +88,6 @@ public class Korisnik {				// Ivan: maknut atribut 'starost' i njegovi konstrukt
 		this.azurirajBP();
 	}
 
-	public String geteMail () {
-		
-		return this.eMail;
-	}
-
 	public String getBrMobitela() {
 		
 		return brMobitela;
@@ -105,25 +99,60 @@ public class Korisnik {				// Ivan: maknut atribut 'starost' i njegovi konstrukt
 		this.azurirajBP();
 	}
 
-	public void seteMail (String eMail) {
+	public String getEMail () {
+		
+		return this.eMail;
+	}
+	
+	public void setEMail (String eMail) {
 	
 		this.eMail = eMail;
 		this.azurirajBP();
 	}
 
-	
+	public String getUloga () {
+		
+		return this.uloga;
+	}
+
 	private void pohraniBP () {
 		
 		// metoda koja ce novog korisnika pohranjivati u bazu podataka
+		
+		KorisnikDAO dao = new KorisnikDAO();
+		dao.pohraniKorisnika(this);
 	}
 	
 	private void azurirajBP () {
 		
 		// metoda koja ce promjene u korisniku pohranjivati u bazu podataka (UPDATE)
+		
+		KorisnikDAO dao = new KorisnikDAO();
+		dao.azurirajKorisnika(this);
 	}
 	
-	private void dohvatiBP () {
+	private void dohvatiBP (String korisnickoIme) {
 		
 		// metoda koja ce iz baze podataka dohvatiti preostale podatke prilikom prijave
+		
+		KorisnikDAO dao = new KorisnikDAO();
+		this.idKor = dao.dohvatiId(korisnickoIme);
+		this.uloga = dao.dohvatiUlogu(korisnickoIme);
+		this.ime = dao.dohvatiIme(korisnickoIme);
+		this.prezime = dao.dohvatiPrezime(korisnickoIme);
+		this.eMail = dao.dohvatiEMail(korisnickoIme);
+		this.brMobitela = dao.dohvatiMobitel(korisnickoIme);
+	}
+	
+	private int dohvatiKorId (String korisnickoIme) {
+		
+		// metoda koja iz baze podataka dohvaca korisnicki ID nakon  sto je on isti bio generiran u njoj
+		
+		int korId;
+		
+		KorisnikDAO dao = new KorisnikDAO();
+		korId = dao.dohvatiId(korisnickoIme);
+		
+		return korId;
 	}
 }

@@ -10,14 +10,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.imageio.ImageIO;
-
 import DataStructure.GeoLokacija;
 import DataStructure.Korisnik;
 import DataStructure.Restoran;
 
-public class PodatkovnaLjuskaDAO { 		//Ivan: maknuta 'starost' i ispravljeni try-catch blokovi i ispravljen konstruktor
+public class PodatkovnaLjuskaDAO {
 			
 	private String userDB;
 	private String passwDB;

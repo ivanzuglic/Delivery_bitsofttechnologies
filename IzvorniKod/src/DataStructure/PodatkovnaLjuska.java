@@ -141,7 +141,7 @@ public class PodatkovnaLjuska {
 		dao.postaviOnlineStatus(korisnickoIme, status);
 	}
 	
-	private void napuniSetRestorana () {
+	public void napuniSetRestorana () {
 		
 		// metoda koja ce iz baze podataka puniti set restorana
 		

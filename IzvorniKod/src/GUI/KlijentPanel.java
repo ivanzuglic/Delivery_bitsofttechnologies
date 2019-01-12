@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -25,6 +26,7 @@ import javax.swing.ScrollPaneLayout;
 
 import DataStructure.Klijent;
 import DataStructure.Korisnik;
+import DataStructure.Restoran;
 
 /**
  * Razred koji definira izgled i funkcionalnosti za Klijente
@@ -47,6 +49,7 @@ public class KlijentPanel extends JPanel {
 	private ActionListener odjavaListener;
 	private DefaultWindow window;
 	private Korisnik trenutniKlijent;
+	private Set<Restoran> listaRestorani;
 	
 	public Integer brojacChar = 180;
 	
@@ -164,6 +167,61 @@ public class KlijentPanel extends JPanel {
 		JPanel restorani = new JPanel();
 		restorani.setLayout(new BoxLayout(restorani, BoxLayout.PAGE_AXIS));
 		restorani.setBackground(Color.WHITE);
+		window.podLjuska.napuniSetRestorana();
+		listaRestorani = window.podLjuska.getRestorani();
+		
+		for (Restoran restoran : listaRestorani) {
+			JPanel restoranPanel = new JPanel();
+			restoranPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
+			restoranPanel.setMaximumSize(new Dimension(9000, 100));
+			restoranPanel.setLayout(new BorderLayout());
+			restoranPanel.add(new JLabel(new ImageIcon(restoran.getSlika())), BorderLayout.WEST);
+			restoranPanel.add(new JTextArea(restoran.getOpis()), BorderLayout.CENTER);
+			JButton naruci = new JButton("Naruci");
+					
+			ActionListener naruciListener = (actionEvent) -> {
+				JPanel naruciPanel = new JPanel();
+						
+			};
+					
+			naruci.addActionListener(naruciListener);
+			restoranPanel.add(new JButton("Naruci"), BorderLayout.EAST);
+			restorani.add(restoranPanel);
+					
+			JPanel filler = new JPanel();
+			filler.setMaximumSize(new Dimension(9000, 1));
+			filler.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+			restorani.add(filler);
+		}
+				
+		/*
+		//Primjer1
+		JPanel restoran = new JPanel();
+		restoran.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
+		restoran.setMaximumSize(new Dimension(9000, 100));
+		restoran.setLayout(new BorderLayout());
+		restoran.add(new JLabel(new ImageIcon(getClass().getResource("/images/DodajrestoranMini.png"))), BorderLayout.WEST);
+		restoran.add(new JTextArea("Nekakav opis za restoran"), BorderLayout.CENTER);
+		restoran.add(new JButton("Naruci"), BorderLayout.EAST);
+		restorani.add(restoran);
+				
+		//Filler
+		JPanel filler = new JPanel();
+		filler.setMaximumSize(new Dimension(9000, 1));
+		filler.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+		restorani.add(filler);
+				
+		//Primjer2
+		JPanel restoran2 = new JPanel();
+		restoran2.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
+		restoran2.setMaximumSize(new Dimension(9000, 100));
+		restoran2.setLayout(new BorderLayout());
+		restoran2.add(new JLabel(new ImageIcon(getClass().getResource("/images/DodajrestoranMini.png"))), BorderLayout.WEST);
+		restoran2.add(new JTextArea("\nNekakav opis za restoran"), BorderLayout.CENTER);
+		restoran2.add(new JButton("Naruci"), BorderLayout.EAST);
+		restorani.add(restoran2);
+		*/
+				
 		showScrollPane = new JScrollPane(restorani);
 		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
 		add(showScrollPane, BorderLayout.CENTER);
@@ -172,6 +230,7 @@ public class KlijentPanel extends JPanel {
 	private void preedloziWindow() {
 		//Kreiranje dialog prozora
 		JDialog Predlozi = new JDialog();
+		Predlozi.setTitle("Predlozi Restoran");
 		Predlozi.setLayout(new BorderLayout());
 		
 		

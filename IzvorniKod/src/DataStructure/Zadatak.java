@@ -1,5 +1,7 @@
 package DataStructure;
 
+import Database.ZadatakDAO;
+
 public class Zadatak {
 
 	private Narudzba narudzba;
@@ -14,6 +16,8 @@ public class Zadatak {
     	this.vrsta = vrsta;
     	this.gotov = gotov;
     	this.lokacija = null;
+    	
+    	this.porhaniDB();
     }
     
     public Zadatak (GeoLokacija lokacijaIdiNa, boolean gotov) {
@@ -22,6 +26,8 @@ public class Zadatak {
     	this.vrsta = VrsteZadataka.IDINALOKACIJU;
     	this.gotov = gotov;
     	this.lokacija = lokacijaIdiNa;
+    	
+    	this.porhaniDB();
     }
 
     public GeoLokacija dohvatiLokaciju () {
@@ -59,6 +65,17 @@ public class Zadatak {
     
     private void azurirajDB () {
     	
-    	// metoda koja ce zadatak u data bazi oznaciti gotovim
+    	// metoda koja u bazi podataka zadatak oznacava gotovim
+    	
+    	ZadatakDAO dao = new ZadatakDAO();
+    	dao.postaviZadGotov(this.narudzba.getId(), this.vrsta.toString());
+    }
+    
+    private void porhaniDB () {
+    	
+    	// metoda koja ce novi zadatak pohraniti u bazu podataka
+    	
+    	ZadatakDAO dao = new ZadatakDAO();
+    	dao.pohraniZadatak(this);
     }
 }

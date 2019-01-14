@@ -65,6 +65,11 @@ public class Narudzba {
 		return podaci;
 	}
 
+	public int getId () {
+		
+		return this.idNar;
+	}
+	
 	public Dostavljac getDostavljac () {
 		
 		return this.dostavljac;

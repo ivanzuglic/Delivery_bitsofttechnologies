@@ -23,15 +23,11 @@ public class Dispecer extends Korisnik {
 		
 		trenutnaNarudzba.setDostavljac(trenutniDostavljac, z);
 		Zadatak noviZadatak = new Zadatak(trenutnaNarudzba, vrstaZadatka, false);
-		
-		// spremi novi zadatak u bazu podataka
 	}
 	
 	public void posaljiNaLokaciju (GeoLokacija lokacija) {
 		
 		Zadatak noviZadatak = new Zadatak(lokacija, false);
-		
-		// spremi novi zadatak u bazu podataka
 	}
 	
 	public Narudzba getTrenutnaNarudzba() {
@@ -72,6 +68,7 @@ public class Dispecer extends Korisnik {
 	
 	private void napuniListuNerasporedjenihNarudzbi () {
 		
-		// metoda koja ce puniti listu nerasporedjenih narudzbi
+		DispecerDAO dao = new DispecerDAO();
+		this.listaNerasporedjenihNarudzbi = dao.dohvatiNerasporedjeneNarudzbe();
 	}
 }

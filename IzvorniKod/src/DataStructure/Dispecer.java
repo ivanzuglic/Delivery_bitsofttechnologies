@@ -2,9 +2,11 @@ package DataStructure;
 
 import java.util.List;
 
+import Database.DispecerDAO;
+
 public class Dispecer extends Korisnik {
 
-	private List<Dostavljac> listaAkrivnihDostavljaca;
+	private List<Korisnik> listaAkrivnihDostavljaca;
 	private List<Narudzba> listaNerasporedjenihNarudzbi;
 	private Narudzba trenutnaNarudzba = null;
 	private Dostavljac trenutniDostavljac = null;
@@ -34,37 +36,38 @@ public class Dispecer extends Korisnik {
 	
 	public Narudzba getTrenutnaNarudzba() {
 		
-		return trenutnaNarudzba;
+		return this.trenutnaNarudzba;
 	}
 
-	public void setTrenutnaNarudzba(Narudzba trenutnaNarudzba) {
+	public void setTrenutnaNarudzba(Narudzba novaTrenutnaNarudzba) {
 		
-		this.trenutnaNarudzba = trenutnaNarudzba;
+		this.trenutnaNarudzba = novaTrenutnaNarudzba;
 	}
 
 	public Dostavljac getTrenutniDostavljac() {
 		
-		return trenutniDostavljac;
+		return this.trenutniDostavljac;
 	}
 
-	public void setTrenutniDostavljac(Dostavljac trenutniDostavljac) {
+	public void setTrenutniDostavljac(Dostavljac noviTrenutniDostavljac) {
 		
-		this.trenutniDostavljac = trenutniDostavljac;
+		this.trenutniDostavljac = noviTrenutniDostavljac;
 	}
 
-	public List<Dostavljac> getListaAkrivnihDostavljaca() {
+	public List<Korisnik> getListaAkrivnihDostavljaca() {
 		
-		return listaAkrivnihDostavljaca;
+		return this.listaAkrivnihDostavljaca;
 	}
 
 	public List<Narudzba> getListaNerasporedjenihNarudzbi() {
 		
-		return listaNerasporedjenihNarudzbi;
+		return this.listaNerasporedjenihNarudzbi;
 	}
 	
 	private void napuniListuAktivnihDostavljaca () {
 		
-		// metoda koja ce puniti listu aktivnih dostavljaca
+		DispecerDAO dao = new DispecerDAO();
+		this.listaAkrivnihDostavljaca = dao.dohvatiAktivneDostavljace();
 	}
 	
 	private void napuniListuNerasporedjenihNarudzbi () {

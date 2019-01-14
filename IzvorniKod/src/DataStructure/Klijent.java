@@ -50,4 +50,9 @@ public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 		
 		return kosarica;
 	}
+	
+	private void dohvatiAktivnuNarudzbu () {
+		
+		
+	}
 }

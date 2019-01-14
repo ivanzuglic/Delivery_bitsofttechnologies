@@ -14,9 +14,11 @@ public class Narudzba {
 	private GeoLokacija lokacijaDostavljanja;
 	private Korisnik kupac;
 	private Dostavljac dostavljac = null;
+	
 	private Timestamp vrijemeStvaranja;
 	private Timestamp vrijemeSpremnosti;
 	private Timestamp vrijemeZavrsetka;
+	
 	private boolean aktivna= true;
 	
 	

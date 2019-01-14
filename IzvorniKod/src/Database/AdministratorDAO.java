@@ -92,6 +92,7 @@ public class AdministratorDAO {
 				String slikaPath = rs.getString(12);
 				boolean odobren = rs.getBoolean(13);	//popravi u DB (stavi na predzadnje mjesto)
 				
+				int idKorisnik = rs.getInt(14);
 				String korisnickoIme = rs.getString(15);
 				String lozinka = rs.getString(16);
 				String ime = rs.getString(17);
@@ -99,9 +100,8 @@ public class AdministratorDAO {
 				String brMobitela = rs.getString(19);
 				String email = rs.getString(20);
 				String uloga = rs.getString(21);
-				boolean online = rs.getBoolean(22);
 				
-				Korisnik vlasnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, brMobitela, email);	// uloga umjesto starost?
+				Korisnik vlasnik = new Korisnik(idKorisnik, korisnickoIme, lozinka, ime, prezime, brMobitela, email, uloga);	// promjenjen konstruktor
 				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
 				BufferedImage slika = null;
 				try {
@@ -131,6 +131,7 @@ public class AdministratorDAO {
 			ResultSet rs = prepSt.executeQuery();
 			
 			while(rs.next()) {
+				int idKor = rs.getInt(1);	// dodano
 				String korisnickoIme = rs.getString(2);
 				String lozinka = rs.getString(3);
 				String ime = rs.getString(4);
@@ -138,9 +139,8 @@ public class AdministratorDAO {
 				String brMobitela = rs.getString(6);
 				String email = rs.getString(7);
 				String uloga = rs.getString(8);
-				boolean online = rs.getBoolean(9);
-				
-				Korisnik trenKorisnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, brMobitela, email); //uloga potrebna
+
+				Korisnik trenKorisnik = new Korisnik(idKor, korisnickoIme, lozinka, ime, prezime, brMobitela, email, uloga);//promjenjen konstruktor
 				korisnici.add(trenKorisnik);
 			}
 						

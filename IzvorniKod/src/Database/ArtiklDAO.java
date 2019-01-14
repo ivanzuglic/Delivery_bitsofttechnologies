@@ -43,4 +43,26 @@ public class ArtiklDAO {
 		}
 		return result;
 	}
+	
+	public int azurirajArtikl(Artikl artikl) {
+		String sql = "UPDATE artikl SET nazivArtikla = ?, opis = ?, cijena = ?, vrijemePripreme = ? WHERE idArtikl = ?";
+		int result = 2; // za testiranje
+		
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB);
+			PreparedStatement prepSt = con.prepareStatement(sql)) {
+			
+			prepSt.setString(1, artikl.getNaziv());
+			prepSt.setString(2, artikl.getOpis());
+			prepSt.setFloat(3, artikl.getCijena());
+			prepSt.setInt(4, artikl.getVrijemePripravljanja());
+			prepSt.setInt(5, artikl.getIdArtikl());
+			
+			result = prepSt.executeUpdate();
+		}
+		
+		catch (SQLException sqlExc) {
+			System.out.println(sqlExc.getMessage());
+		}
+		return result;
+	}
 }

@@ -32,7 +32,7 @@ public class Dostavljac extends Korisnik{
 	
 	public List<Zadatak> getListaZadataka() {
 		
-		return listaZadataka;
+		return this.listaZadataka;
 	}
 	
 	private void napuniListuZadataka () {

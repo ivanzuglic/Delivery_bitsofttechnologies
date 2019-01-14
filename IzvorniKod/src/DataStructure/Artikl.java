@@ -39,13 +39,7 @@ public class Artikl {
 		
     	return this.idArtikl;
 	}
-
-	public void setIdArtikl(int idArtikl) {
-		
-		this.idArtikl = idArtikl;
-		this.azurirajDB();
-	}
-
+    
 	public String getNaziv () {
 
     	return this.naziv;
@@ -105,6 +99,7 @@ public class Artikl {
     
     private void azurirajDB () {
     	
-    	// metoda koja azurira podatke u bazi podataka
+    	ArtiklDAO dao = new ArtiklDAO();
+    	dao.azurirajArtikl(this);
     }
 }

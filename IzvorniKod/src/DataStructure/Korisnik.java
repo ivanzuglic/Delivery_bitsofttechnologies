@@ -39,6 +39,19 @@ public class Korisnik {
 		this.idKor = this.dohvatiKorId(korisnickoIme);
 	}
 	
+	//konstruktor koji se koristi kada stvaramo korisnika da ga spremimo u neku listu
+	public Korisnik (int idKor, String korisnickoIme, String lozinka, String ime, String prezime, String brMobitela, String eMail, String Uloga) {
+		
+		this.idKor = idKor;
+		this.korisnickoIme = korisnickoIme;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.brMobitela = brMobitela;
+		this.eMail = eMail;
+		this.uloga = Uloga;
+	}
+	
 	public int getKorisnickiId () {
 		
 		return this.idKor;

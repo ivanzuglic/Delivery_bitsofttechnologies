@@ -79,6 +79,9 @@ public class Narudzba {
 		}
 	}
 
+	public Timestamp getVrijemeStvaranja() {
+		return this.vrijemeStvaranja;
+	}
 
 	public Timestamp getVrijemeSpremnosti () {
 		

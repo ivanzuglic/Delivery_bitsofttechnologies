@@ -22,6 +22,7 @@ public class Korisnik {
 		this.lozinka = lozinka;
 		
 		this.dohvatiBP(korisnickoIme);
+		this.idKor = this.dohvatiKorId(korisnickoIme);
 	}
 	
 	// konstruktor koji se koristi prilikom registracije

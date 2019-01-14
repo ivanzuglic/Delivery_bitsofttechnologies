@@ -2,6 +2,8 @@ package DataStructure;
 
 import java.util.Set;
 
+import Database.VlasnikDAO;
+
 public class Vlasnik extends Klijent {
 
 	private Restoran vlastitiRestoran;
@@ -11,8 +13,7 @@ public class Vlasnik extends Klijent {
 	public Vlasnik (String korisnickoIme, String lozinka) {
 		
 		super(korisnickoIme, lozinka);
-		
-		// dohvati vlastitiRestoran iz Baze Podataka
+		this.DohvatiVlastitiRestoran();
 	}
 	
 	public void napuniAi2h () {
@@ -20,13 +21,19 @@ public class Vlasnik extends Klijent {
 		// metoda koja ce puniti set Ai2h iz baze podataka
 	}
 	
-	public Restoran getVlastitiRestoran() {
+	public Restoran getVlastitiRestoran () {
 		
 		return vlastitiRestoran;
 	}
 
-	public Set<Narudzba> getNarudzbeAi2h() {
+	public Set<Narudzba> getNarudzbeAi2h () {
 		
 		return narudzbeAi2h;
+	}
+	
+	private void DohvatiVlastitiRestoran () {
+		
+		VlasnikDAO dao = new VlasnikDAO();
+		vlastitiRestoran = dao.DohvatiVlastitiRestoran(this);
 	}
 }

@@ -14,5 +14,6 @@ public class KlijentDAO {
 	
 	public dohvatiAktivnuNarudzbu (String korisnickoIme) {
 		
+		
 	}
 }

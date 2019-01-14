@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import Database.NarudzbaDAO;
+
 public class Narudzba {
 	
 	private float cijena;
@@ -14,10 +16,14 @@ public class Narudzba {
 	private GeoLokacija lokacijaDostavljanja;
 	private Korisnik kupac;
 	private Dostavljac dostavljac = null;
+	
 	private Timestamp vrijemeStvaranja;
 	private Timestamp vrijemeSpremnosti;
 	private Timestamp vrijemeZavrsetka;
-	private boolean aktivna= true;
+	
+	private boolean aktivna = true;
+	
+	private int idNar;
 	
 	
 	public Narudzba (Kosarica izvorisnaKosarica, GeoLokacija lokacijaDostavljanja, Korisnik trenutniKorisnik) {
@@ -29,21 +35,23 @@ public class Narudzba {
 		this.lokacijaDostavljanja = lokacijaDostavljanja;
 		this.kupac = trenutniKorisnik;
 		this.vrijemeStvaranja = new Timestamp(System.currentTimeMillis());
-		this.izracunajVrijemeSpremnosti();
+		this.izracunajVrijemeSpremnosti();	
 		
-		// spremi narudzbu u bazu podataka
+		this.idNar = this.pohraniBP();
+		
 	}
-	
+
 	public void OznaciNarudzbuGotovom (Zastavice z) {
 		
 		if (z.isDostavljac()) {
 			this.vrijemeZavrsetka = new Timestamp(System.currentTimeMillis());
 			this.aktivna = false;
 			
-			// spremi u bazu podataka
+			this.oznaciGotovo();
 		}
 	}
 	
+
 	public PodaciKarte StvoriRutu () {
 		
 		List<GeoLokacija> listaZaRutu = new LinkedList<GeoLokacija>();
@@ -67,8 +75,10 @@ public class Narudzba {
 			this.dostavljac = dostavljac;
 			
 			// spremi u bazu podataka
+			this.postaviDostavljaca();
 		}
 	}
+
 
 	public Timestamp getVrijemeSpremnosti () {
 		
@@ -128,4 +138,31 @@ public class Narudzba {
 		duration = dodatnoVrijemeMin * 60 * 1000;
 		this.vrijemeSpremnosti = new Timestamp(this.vrijemeStvaranja.getTime() + duration); 
 	}
+	
+	
+	private int pohraniBP() {
+		NarudzbaDAO dao = new NarudzbaDAO();
+		return dao.pohraniNarudzbu(this);		
+		
+	}
+	
+	private void ucitajBP() {
+		NarudzbaDAO dao = new NarudzbaDAO();
+		//ucitavanje iz BP
+		
+	}
+	
+	private void postaviDostavljaca() {
+		NarudzbaDAO dao = new NarudzbaDAO();
+		dao.azurirajDostavljaca(this);
+		
+	}
+	
+	private void oznaciGotovo() {
+		NarudzbaDAO dao = new NarudzbaDAO();
+		dao.azurirajAktivnost(this);
+		
+	}
+
+	
 }

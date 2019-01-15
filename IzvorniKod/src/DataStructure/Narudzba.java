@@ -16,11 +16,10 @@ public class Narudzba {
 	private GeoLokacija lokacijaDostavljanja;
 	private Korisnik kupac;
 	private Dostavljac dostavljac = null;
-	
+
 	private Timestamp vrijemeStvaranja;
 	private Timestamp vrijemeSpremnosti;
 	private Timestamp vrijemeZavrsetka;
-	
 
 	private boolean aktivna = true;
 	private int idNar;
@@ -39,7 +38,6 @@ public class Narudzba {
 		this.izracunajVrijemeSpremnosti();	
 		
 		this.idNar = this.pohraniBP();
-		
 	}
 	
 	// za ucitavanje narudzbe
@@ -48,7 +46,6 @@ public class Narudzba {
 		this.idNar = idNarudzba;
 		this.ucitajBP();
 		this.izracunajVrijemeSpremnosti();
-		
 	}
 	
 	// pomocni konstruktor za stvaranje privremene klase Narudzba u NarudzbaDAO, a ciji se atributi prenose u gornji konstruktor pomocu ucitajBP()
@@ -65,13 +62,12 @@ public class Narudzba {
 		this.vrijemeStvaranja = vrijemeStvaranja;
 		this.vrijemeZavrsetka = vrijemeZavrsetka;
 		this.aktivna = aktivna;
-		
 	}
 	
-
 	public void OznaciNarudzbuGotovom (Zastavice z) {
 		
 		if (z.isDostavljac()) {
+			
 			this.vrijemeZavrsetka = new Timestamp(System.currentTimeMillis());
 			this.aktivna = false;
 			
@@ -79,7 +75,6 @@ public class Narudzba {
 		}
 	}
 	
-
 	public PodaciKarte StvoriRutu () {
 		
 		List<GeoLokacija> listaZaRutu = new LinkedList<GeoLokacija>();
@@ -179,14 +174,14 @@ public class Narudzba {
 		this.vrijemeSpremnosti = new Timestamp(this.vrijemeStvaranja.getTime() + duration); 
 	}
 	
-	
 	private int pohraniBP() {
+		
 		NarudzbaDAO dao = new NarudzbaDAO();
 		return dao.pohraniNarudzbu(this);		
-		
 	}
 	
 	private void ucitajBP() {
+		
 		NarudzbaDAO dao = new NarudzbaDAO();
 		Narudzba nar = dao.ucitajNarudzbu(this.idNar);
 		
@@ -200,21 +195,17 @@ public class Narudzba {
 		this.kupac = nar.getKupac();
 		this.dostavljac = nar.getDostavljac();
 		this.restoran = nar.getRestoran();
-		
-		
 	}
 	
 	private void postaviDostavljaca() {
+		
 		NarudzbaDAO dao = new NarudzbaDAO();
 		dao.azurirajDostavljaca(this);
-		
 	}
 	
 	private void oznaciGotovo() {
+		
 		NarudzbaDAO dao = new NarudzbaDAO();
 		dao.azurirajAktivnost(this);
-		
 	}
-
-	
 }

@@ -53,6 +53,7 @@ public class PodatkovnaLjuska {
 		vrsta = dohvatiVrstu(korisnickoIme);
 		
 		if (valjan) {
+			
 			if (vrsta == VrstaKorisnika.KLIJENT) {
 				this.trenutniKorisnik = new Klijent(korisnickoIme, lozinka);
 			}
@@ -68,6 +69,7 @@ public class PodatkovnaLjuska {
 			else if (vrsta == VrstaKorisnika.ADMIN) {
 				this.trenutniKorisnik = new Administrator(korisnickoIme, lozinka);
 			}
+			
 			this.postaviZastavice(vrsta);
 			this.postaviOnlineStatus(trenutniKorisnik.getKorisnickoIme(), true);
 			
@@ -164,7 +166,6 @@ public class PodatkovnaLjuska {
 		else {
 			return true;
 		}
-		
 	}
 	
 	private boolean imeILozinkaIspravni (String korisnickoIme, String lozinka) {

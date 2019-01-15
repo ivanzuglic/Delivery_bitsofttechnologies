@@ -1,7 +1,6 @@
 package DataStructure;
 
 import java.util.List;
-
 import Database.AdministratorDAO;
 
 public class Administrator extends Korisnik {   //ispravljeni konstruktori od AdminDAO
@@ -55,7 +54,6 @@ public class Administrator extends Korisnik {   //ispravljeni konstruktori od Ad
 		AdministratorDAO aDAO = new AdministratorDAO();
 		this.listaOdobrenihRestorana = aDAO.selectRestoraniPoOdobrenju(true);
 		this.listaNeodobrenihRestorana = aDAO.selectRestoraniPoOdobrenju(false);
-		
 	}
 	
 	private void napuniListuKorisnika () {

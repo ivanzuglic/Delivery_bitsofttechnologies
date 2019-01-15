@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import DataStructure.Korisnik;
 
 public class KorisnikDAO {
@@ -13,6 +12,7 @@ public class KorisnikDAO {
 	private String userDB;
 	private String passwDB;
 	private String host;
+	
 	
 	public KorisnikDAO () {
 		
@@ -36,11 +36,12 @@ public class KorisnikDAO {
 			}
 		} 
 		catch (SQLException sqlExc) {			
+			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;		
 	}
-	
 	
 	public String dohvatiUlogu (String korisnickoIme) {
 		
@@ -60,6 +61,7 @@ public class KorisnikDAO {
 			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;
 	}
 	
@@ -76,12 +78,12 @@ public class KorisnikDAO {
 			if (rs.next()) {
 				result = rs.getString(1);
 			}
-			
 		} 
 		catch (SQLException sqlExc) {
 			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;
 	}
 	
@@ -98,12 +100,12 @@ public class KorisnikDAO {
 			if (rs.next()) {
 				result = rs.getString(1);
 			}
-			
 		} 
 		catch (SQLException sqlExc) {
 			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;
 	}
 	
@@ -120,12 +122,12 @@ public class KorisnikDAO {
 			if (rs.next()) {
 				result = rs.getString(1);
 			}
-			
 		} 
 		catch (SQLException sqlExc) {
 			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;
 	}
 	
@@ -141,13 +143,13 @@ public class KorisnikDAO {
 			ResultSet rs = prepSt.executeQuery();
 			if (rs.next()) {
 				result = rs.getString(1);
-			}
-			
+			}	
 		} 
 		catch (SQLException sqlExc) {
 			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;
 	}
 	
@@ -165,12 +167,12 @@ public class KorisnikDAO {
 			if (rs.next()) {
 				result = rs.getInt(1);
 			}
-			
 		} 
 		catch (SQLException sqlExc) {
 			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;
 	}
 	
@@ -197,6 +199,7 @@ public class KorisnikDAO {
 			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;
 	}
 	
@@ -223,6 +226,7 @@ public class KorisnikDAO {
 			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;
 	}
 }

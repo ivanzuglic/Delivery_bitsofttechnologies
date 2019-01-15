@@ -21,6 +21,7 @@ public class PodatkovnaLjuskaDAO {
 	private String passwDB;
 	private String host;
 	
+	
 	public PodatkovnaLjuskaDAO () {
 		
 		this.userDB = "myuser";
@@ -42,7 +43,6 @@ public class PodatkovnaLjuskaDAO {
 			if (rs.next()) {
 				result = rs.getString(1);
 			}
-			
 		} 
 		catch (SQLException sqlExc) {
 			
@@ -67,7 +67,6 @@ public class PodatkovnaLjuskaDAO {
 			if (rs.next()) {
 				result = true;	// ako je upit nesto vratio, korisnicko ime postoji
 			}
-			
 		} 
 		catch (SQLException sqlExc) {
 			
@@ -96,7 +95,6 @@ public class PodatkovnaLjuskaDAO {
 			if (ucitanaLozinka.equals(lozinka)) {
 				result = true;
 			}
-			
 		} 
 		catch (SQLException sqlExc) {
 			
@@ -117,7 +115,6 @@ public class PodatkovnaLjuskaDAO {
 			prepSt.setString(2, korisnickoIme);
 			
 			prepSt.executeUpdate();
-			
 		} 
 		catch (SQLException sqlExc) {
 			
@@ -163,11 +160,11 @@ public class PodatkovnaLjuskaDAO {
 				Korisnik vlasnik = new Korisnik(korisnickoIme, lozinka, ime, prezime, brMobitela, email);	// uloga umjesto starost?
 				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
 				BufferedImage slika = null;
-				/*try {
+				try {
 		        	slika = ImageIO.read(new File(slikaPath)); 			 //dodatno testirat
 		        } catch (IOException e){
 		            e.printStackTrace();
-		        }*/
+		        }
 				
 				Restoran trenRestoran = new Restoran(idRestoran, imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, oib, iban, ziroRac, adresa);	// dodan i id restorana u restorane koji vec postoje i stvaraju se iz baze podataka -LM
 				restorani.add(trenRestoran);

@@ -1,6 +1,5 @@
 package Database;
 
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +11,6 @@ import DataStructure.GeoLokacija;
 import DataStructure.Korisnik;
 import DataStructure.Restoran;
 
-
 public class AdministratorDAO {
 	
 	private String userDB;
@@ -20,12 +18,14 @@ public class AdministratorDAO {
 	private String host;
 	
 	public AdministratorDAO () {
+		
 		this.userDB = "myuser";
 		this.passwDB = "abc";
 		this.host = "jdbc:mysql://localhost:3306/dostavljaona?useSSL=false&useLegacyDatetimeCode=false";
 	}
 	
 	public int setRestoranOdobren(int idRestoran) {
+		
 		String sql = "UPDATE restoran SET restoranOdobren = ? WHERE idRestoran = ?";
 		int result = 2; // za testiranje
 		
@@ -37,16 +37,17 @@ public class AdministratorDAO {
 			result = prepSt.executeUpdate();
 			
 		} catch (SQLException sqlExc) {
+			
 			System.out.println(sqlExc.getMessage());
 		}
 		
 		return result;
 	}
 	
-	
 	public int setRazinaPristupa(int idKor, String novaRazinaPristupa) {
-		int result = 2;
+		
 		String sql = "UPDATE korisnik SET uloga = ? WHERE idKor = ?";
+		int result = 2;
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
 			PreparedStatement prepSt = con.prepareStatement(sql)) {
@@ -56,16 +57,17 @@ public class AdministratorDAO {
 			result = prepSt.executeUpdate();
 			
 		} catch (SQLException sqlExc) {
+			
 			System.out.println(sqlExc.getMessage());
 		}
 				
 		return result;
 	}
 	
-	
 	public List<Restoran> selectRestoraniPoOdobrenju(boolean odobrenje) {
-		List<Restoran> restorani = new ArrayList<>();
+		
 		String sql = "SELECT restoran.*, korisnik.* FROM restoran NATURAL JOIN korisnik WHERE restoranOdobren = ?";
+		List<Restoran> restorani = new ArrayList<>();
 		
 		try (Connection con = DriverManager.getConnection(host, userDB, passwDB);
 			 PreparedStatement prepSt = con.prepareStatement(sql)) {
@@ -78,6 +80,7 @@ public class AdministratorDAO {
 			ResultSet rs = prepSt.executeQuery();
 			
 			while(rs.next()) {
+				
 				int idRestoran = rs.getInt(1);
 				String imeRestoran = rs.getString(2);
 				String opis = rs.getString(3);
@@ -115,6 +118,7 @@ public class AdministratorDAO {
 			}
 			
 		} catch (SQLException sqlExc) {
+			
 			System.out.println(sqlExc.getMessage());
 		}
 		
@@ -122,8 +126,9 @@ public class AdministratorDAO {
 	}
 	
 	public List<Korisnik> selectKorisnici(){
-		List<Korisnik> korisnici = new ArrayList<>();
+		
 		String sql = "SELECT * FROM korisnik";
+		List<Korisnik> korisnici = new ArrayList<>();
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB);
 			PreparedStatement prepSt = con.prepareStatement(sql)) {	
@@ -131,6 +136,7 @@ public class AdministratorDAO {
 			ResultSet rs = prepSt.executeQuery();
 			
 			while(rs.next()) {
+				
 				int idKor = rs.getInt(1);	// dodano
 				String korisnickoIme = rs.getString(2);
 				String lozinka = rs.getString(3);
@@ -145,10 +151,10 @@ public class AdministratorDAO {
 			}
 						
 		} catch (SQLException sqlExc) {
+			
 			System.out.println(sqlExc.getMessage());
 		}
 						
 		return korisnici;
 	}
-
 }

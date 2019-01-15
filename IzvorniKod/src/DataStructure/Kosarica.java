@@ -17,20 +17,23 @@ public class Kosarica {
     	this.odabraniProizvodi = new HashMap<Artikl, Integer>();
     }
     
-    public void dodajArtikl (Artikl noviArtikl, int kolicina) {
+    // metoda vraca 1 ako je artikl uspjesno dodan, ako nije, vraca -1
+    public int dodajArtikl (Artikl noviArtikl, int kolicina) {
     	
     	if (this.restoran.equals(null) || this.restoran.equals(noviArtikl.getRestoran())) {
+    		
     		this.odabraniProizvodi.put(noviArtikl, kolicina);
         	this.ukupnaCijena = this.izracunajCijenu();
         	
         	if (this.restoran.equals(null)) {
         		this.restoran = noviArtikl.getRestoran();
         	}
+        	
+        	return 1;
     	}
     	else {
     		
-    		// baci upozorenje
-    		
+    		return -1;
     	}
     }
 
@@ -86,13 +89,18 @@ public class Kosarica {
     	float cijena = 0;
     	
     	if (this.odabraniProizvodi.isEmpty()) {
+    		
     		return cijena;
     	}
     	else {
+    		
     		setArtikala = this.odabraniProizvodi.keySet();
+    		
     		for (Artikl artikl : setArtikala) {
+    			
     			cijena = cijena + (artikl.getCijena() * this.odabraniProizvodi.get(artikl));
     		}
+    		
     		return cijena;
     	}
     }

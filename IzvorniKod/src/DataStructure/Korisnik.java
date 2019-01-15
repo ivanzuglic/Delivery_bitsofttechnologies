@@ -25,7 +25,6 @@ public class Korisnik {
 		this.idKor = this.dohvatiKorId(korisnickoIme);
 	}
 	
-
 	// konstruktor koji se koristi prilikom registracije
 	public Korisnik (String korisnickoIme, String lozinka, String ime, String prezime, String brMobitela, String eMail) {
 		
@@ -41,7 +40,6 @@ public class Korisnik {
 		this.idKor = this.dohvatiKorId(korisnickoIme);
 	}
 	
-
 	//konstruktor koji se koristi kada stvaramo korisnika da ga spremimo u neku listu
 	public Korisnik (int idKor, String korisnickoIme, String lozinka, String ime, String prezime, String brMobitela, String eMail, String Uloga) {
 		
@@ -61,7 +59,6 @@ public class Korisnik {
 		this.dohvatiKorisnika(this.idKor);
 	}
 
-	
 	public int getKorisnickiId () {
 		
 		return this.idKor;
@@ -179,15 +176,11 @@ public class Korisnik {
 		return korId;
 	}
 	
-	
 	private void dohvatiKorisnika(int idKor) {
 		
 		KorisnikDAO dao = new KorisnikDAO();
 		this.korisnickoIme = dao.dohvatiKorisnickoIme(idKor);
 		
 		this.dohvatiBP(this.korisnickoIme);
-		
 	}
-	
-	
 }

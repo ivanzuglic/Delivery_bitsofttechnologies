@@ -1,13 +1,13 @@
 package DataStructure;
 
-import java.util.Set;
-
+import java.util.ArrayList;
+import java.util.List;
 import Database.VlasnikDAO;
 
 public class Vlasnik extends Klijent {
 
 	private Restoran vlastitiRestoran;
-	private Set<Narudzba> narudzbeAi2h;
+	private List<Narudzba> narudzbeAi2h;
 	
 	
 	public Vlasnik (String korisnickoIme, String lozinka) {
@@ -18,7 +18,7 @@ public class Vlasnik extends Klijent {
 	
 	public void napuniAi2h () {
 		
-		// metoda koja ce puniti set Ai2h iz baze podataka
+		this.narudzbeAi2h = this.dohvatiAi2h(this.getKorisnickiId());
 	}
 	
 	public Restoran getVlastitiRestoran () {
@@ -26,14 +26,35 @@ public class Vlasnik extends Klijent {
 		return vlastitiRestoran;
 	}
 
-	public Set<Narudzba> getNarudzbeAi2h () {
+	public List<Narudzba> getNarudzbeAi2h () {
 		
 		return narudzbeAi2h;
 	}
 	
-	private void DohvatiVlastitiRestoran () {
+	private Restoran DohvatiVlastitiRestoran () {
+		
+		Restoran restoran = null;
 		
 		VlasnikDAO dao = new VlasnikDAO();
-		vlastitiRestoran = dao.DohvatiVlastitiRestoran(this);
+		restoran = dao.DohvatiVlastitiRestoran(this);
+		
+		return restoran;
+	}
+	
+	private List<Narudzba> dohvatiAi2h (int korisnickiId) {
+		
+		List<Integer> idNarudzbi = null;
+		List<Narudzba> narudzbeAi2h = new ArrayList<>();
+	
+		VlasnikDAO dao = new VlasnikDAO();
+		idNarudzbi = dao.dohvatiAktivneI2H(korisnickiId);
+		
+		for (Integer id : idNarudzbi) {
+			
+			Narudzba narudzbaZaDodati = new Narudzba(id);
+			narudzbeAi2h.add(narudzbaZaDodati);
+		}
+		
+		return narudzbeAi2h;
 	}
 }

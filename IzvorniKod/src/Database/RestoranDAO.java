@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 import java.util.TreeSet;
-
 import DataStructure.Artikl;
 import DataStructure.Restoran;
 
@@ -16,6 +15,7 @@ public class RestoranDAO {			//ispravljen try-catch i konstruktor
 	private String userDB;
 	private String passwDB;
 	private String host;
+	
 	
 	public RestoranDAO () {
 		
@@ -53,6 +53,7 @@ public class RestoranDAO {			//ispravljen try-catch i konstruktor
 			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;
 	}
 	
@@ -85,6 +86,7 @@ public class RestoranDAO {			//ispravljen try-catch i konstruktor
 			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;
 	}
 
@@ -113,10 +115,8 @@ public class RestoranDAO {			//ispravljen try-catch i konstruktor
 				Artikl noviArtikl = new Artikl(idArtikl, naziv, cijena, vrijemePripravljanjaMin, restoranArtikla, opis);
 				    
 				rezultatMeni.add(noviArtikl);
-			}
-				
-		} 
-		catch (SQLException sqlExc) {
+			}	
+		} catch (SQLException sqlExc) {
 				
 			System.out.println(sqlExc.getMessage());
 		}
@@ -146,6 +146,7 @@ public class RestoranDAO {			//ispravljen try-catch i konstruktor
 			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;
 	}
 	

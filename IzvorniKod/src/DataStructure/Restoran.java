@@ -4,11 +4,9 @@ import java.awt.image.BufferedImage;					//pogledat i dogovorit se
 import java.util.Set;
 import Database.RestoranDAO;
 
-
 public class Restoran {
 	 
-	private int id;										//dodano za AdministratorDAO
-	
+	private int id;
 	private String ime;
 	private Korisnik vlasnik;
 	private GeoLokacija lokacija;
@@ -21,7 +19,6 @@ public class Restoran {
 	private int ziroRacun;
 	private String adresa;
 	private Set<Artikl> meni;
-	
 	private boolean odobren;
 	
 	
@@ -61,8 +58,7 @@ public class Restoran {
 		this.ziroRacun = ziroRacun;
 		this.adresa = adresa;
 		
-		//this.meni = this.napuniMeni();
-
+		this.meni = this.napuniMeni();
 	}
 	
 	public int getId () {   

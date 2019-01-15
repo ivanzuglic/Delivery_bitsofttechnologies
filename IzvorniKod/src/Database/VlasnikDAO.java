@@ -8,9 +8,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.imageio.ImageIO;
-
 import DataStructure.GeoLokacija;
 import DataStructure.Korisnik;
 import DataStructure.Restoran;
@@ -21,6 +21,7 @@ public class VlasnikDAO {
 	private String passwDB;
 	private String host;
 	
+	
 	public VlasnikDAO () {
 		this.userDB = "myuser";
 		this.passwDB = "abc";
@@ -30,7 +31,6 @@ public class VlasnikDAO {
 	public Restoran DohvatiVlastitiRestoran (Korisnik vlasnik) {
 		
 		String sql = "SELECT restoran.* FROM restoran WHERE idVlasnik = ?";
-		
 		Restoran restoran = null;
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
@@ -74,5 +74,30 @@ public class VlasnikDAO {
 		}
 		
 		return restoran;
+	}
+	
+	public List<Integer> dohvatiAktivneI2H (int korisnickiId) {
+		
+		String sql = "SELECT UNIQUE idNar FROM narudzba NATURAL JOIN artikl NATURAL JOIN restoran WHERE idVlasnik = ? AND (aktivna = true OR vrijemeZavrsetka + 2 HOURS > CURRENT_TIMESTAMP)";	// treba provjeriti SQL
+		List<Integer> idNarudzbi = new ArrayList<>();
+		
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
+				PreparedStatement prepSt = con.prepareStatement(sql)) {
+			
+			prepSt.setInt(1, korisnickiId);
+			ResultSet rs = prepSt.executeQuery();
+			
+			while (rs.next()) {
+				
+				int id = rs.getInt(1);
+				idNarudzbi.add(id);
+			}
+		}
+		catch (SQLException sqlExc) {
+			
+			System.out.println(sqlExc.getMessage());
+		}
+		
+		return idNarudzbi;
 	}
 }

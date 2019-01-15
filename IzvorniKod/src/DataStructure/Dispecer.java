@@ -2,7 +2,6 @@ package DataStructure;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import Database.DispecerDAO;
 
 public class Dispecer extends Korisnik {

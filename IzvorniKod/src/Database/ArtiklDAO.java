@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
 import DataStructure.Artikl;
 
 public class ArtiklDAO {
@@ -13,13 +12,16 @@ public class ArtiklDAO {
 	private String passwDB;
 	private String host;
 	
+	
 	public ArtiklDAO () {
+		
 		this.userDB = "myuser";
 		this.passwDB = "abc";
 		this.host = "jdbc:mysql://localhost:3306/dostavljaona?useSSL=false&useLegacyDatetimeCode=false";
 	}
 	
-	public int pohraniArtikl(Artikl artikl) {
+	public int pohraniArtikl (Artikl artikl) {
+		
 		String sql = "INSERT INTO artikl (idArtikl, idRestoran, nazivArtikla, opis, cijena, slika, vrijemePripreme)"
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 		int result = 2; // za testiranje
@@ -39,12 +41,15 @@ public class ArtiklDAO {
 		}
 		
 		catch (SQLException sqlExc) {
+			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;
 	}
 	
-	public int azurirajArtikl(Artikl artikl) {
+	public int azurirajArtikl (Artikl artikl) {
+		
 		String sql = "UPDATE artikl SET nazivArtikla = ?, opis = ?, cijena = ?, vrijemePripreme = ? WHERE idArtikl = ?";
 		int result = 2; // za testiranje
 		
@@ -61,8 +66,10 @@ public class ArtiklDAO {
 		}
 		
 		catch (SQLException sqlExc) {
+			
 			System.out.println(sqlExc.getMessage());
 		}
+		
 		return result;
 	}
 }

@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import DataStructure.Korisnik;
-import DataStructure.Narudzba;
 
 public class DispecerDAO {
 
@@ -16,7 +15,9 @@ public class DispecerDAO {
 	private String passwDB;
 	private String host;
 	
+	
 	public DispecerDAO () {
+		
 		this.userDB = "myuser";
 		this.passwDB = "abc";
 		this.host = "jdbc:mysql://localhost:3306/dostavljaona?useSSL=false&useLegacyDatetimeCode=false";
@@ -48,6 +49,7 @@ public class DispecerDAO {
 			}
 						
 		} catch (SQLException sqlExc) {
+			
 			System.out.println(sqlExc.getMessage());
 		}
 						
@@ -71,6 +73,7 @@ public class DispecerDAO {
 			}
 						
 		} catch (SQLException sqlExc) {
+			
 			System.out.println(sqlExc.getMessage());
 		}
 						

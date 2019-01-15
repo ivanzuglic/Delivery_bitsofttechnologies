@@ -21,6 +21,27 @@ public class KorisnikDAO {
 		this.host = "jdbc:mysql://localhost:3306/dostavljaona?useSSL=false&useLegacyDatetimeCode=false";
 	}
 	
+	public String dohvatiKorisnickoIme(int idKor) {
+		
+		String sql = "SELECT korisnickoIme FROM korisnik WHERE IdKor = ?";
+		String result = null;
+		
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
+			PreparedStatement prepSt = con.prepareStatement(sql)) {
+				
+			prepSt.setInt(1, idKor);
+			ResultSet rs = prepSt.executeQuery();
+			if (rs.next()) {
+				result = rs.getString(1);
+			}
+		} 
+		catch (SQLException sqlExc) {			
+			System.out.println(sqlExc.getMessage());
+		}
+		return result;		
+	}
+	
+	
 	public String dohvatiUlogu (String korisnickoIme) {
 		
 		String sql = "SELECT uloga FROM korisnik WHERE korisnickoIme = ?";

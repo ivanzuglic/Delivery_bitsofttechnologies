@@ -30,6 +30,7 @@ public class DostavljacDAO {
 		
 		List<Zadatak> zadaci = new ArrayList<>();
 		String sql = "SELECT narudzba.idNar, narudzba.istaNarudzba, zadatak.vrstaZad FROM zadatak NATURAL JOIN narudzba WHERE idDostavljac = ? AND zadGotov = false";
+		String sql2 = "SELECT zadatak.* FROM zadatak NATURAL JOIN narudzba WHERE idDostavljac = ? AND vrstaZad = ?";
 		
 		int[] idNarudzbi = new int[300];			// moze i neka druga struktura
 		String[] vrsteZadataka = new String[300];
@@ -57,10 +58,29 @@ public class DostavljacDAO {
 			
 			if(vrsta.equals(VrsteZadataka.OSTAVI)) {
 				lokacija = nar.getLokacijaDostavljanja();
+				
 			} else if(vrsta.equals(VrsteZadataka.POKUPI)){
 				lokacija = nar.getLokacijaPreuzimanja();
-			} else {
-				lokacija = nar.getLokacijaDostavljanja();    // ako je IDINALOKACIJU onda je u oba atributa upisana ista lokacija (da se bezveze ne dodaje jos jedan atribut za lokaciju)
+				
+			} else {											// zadatak je IDINALOKACIJU -> moramo dobiti lokaciju iz 'Zadatak' za danog dostavljaca
+				
+				try (Connection con = DriverManager.getConnection(host, userDB, passwDB);
+					PreparedStatement prepSt = con.prepareStatement(sql2)) {
+					
+					prepSt.setInt(1, idDostavljaca);		
+					prepSt.setString(2, "IDINALOKACIJU");	
+					ResultSet rs = prepSt.executeQuery();
+					
+					if(rs.next()) {
+						float geoSirinaIdiNaLokaciju = rs.getFloat(5);
+						float geoDuzinaIdiNaLokaciju= rs.getFloat(6);
+						lokacija = new GeoLokacija(geoSirinaIdiNaLokaciju, geoDuzinaIdiNaLokaciju, "Idi na lokaciju");
+					}
+					
+					
+				} catch (SQLException sqlExc) {
+					System.out.println(sqlExc.getMessage());
+				} 
 			} 
 			
 			Zadatak zadatak = new Zadatak(nar, vrsta, lokacija);

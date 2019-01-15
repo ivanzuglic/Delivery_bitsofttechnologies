@@ -26,7 +26,7 @@ public class Narudzba {
 	private int idNar;
 
 	
-	
+	// za stvaranje narudzbe
 	public Narudzba (Kosarica izvorisnaKosarica, GeoLokacija lokacijaDostavljanja, Korisnik trenutniKorisnik) {
 		
 		this.cijena = izvorisnaKosarica.getUkupnaCijena();
@@ -41,6 +41,33 @@ public class Narudzba {
 		this.idNar = this.pohraniBP();
 		
 	}
+	
+	// za ucitavanje narudzbe
+	public Narudzba(int idNarudzba) {
+		
+		this.idNar = idNarudzba;
+		this.ucitajBP();
+		this.izracunajVrijemeSpremnosti();
+		
+	}
+	
+	// pomocni konstruktor za stvaranje privremene klase Narudzba u NarudzbaDAO, a ciji se atributi prenose u gornji konstruktor pomocu ucitajBP()
+	public Narudzba(float cijena, Map<Artikl, Integer> odabraniProizvodi, Restoran restoran, GeoLokacija lokacijaPreuzimanja, GeoLokacija lokacijaDostavljanja,
+					Korisnik kupac, Dostavljac dostavljac, Timestamp vrijemeStvaranja, Timestamp vrijemeZavrsetka, boolean aktivna) {
+		
+		this.cijena = cijena;
+		this.odabraniProizvodi = odabraniProizvodi;
+		this.restoran = restoran;
+		this.lokacijaPreuzimanja = lokacijaPreuzimanja;
+		this.lokacijaDostavljanja = lokacijaDostavljanja;
+		this.kupac = kupac;
+		this.dostavljac = dostavljac;
+		this.vrijemeStvaranja = vrijemeStvaranja;
+		this.vrijemeZavrsetka = vrijemeZavrsetka;
+		this.aktivna = aktivna;
+		
+	}
+	
 
 	public void OznaciNarudzbuGotovom (Zastavice z) {
 		
@@ -83,6 +110,10 @@ public class Narudzba {
 			// spremi u bazu podataka
 			this.postaviDostavljaca();
 		}
+	}
+	
+	public int getIdNar() {
+		return this.idNar;
 	}
 
 	public Timestamp getVrijemeStvaranja() {
@@ -157,7 +188,19 @@ public class Narudzba {
 	
 	private void ucitajBP() {
 		NarudzbaDAO dao = new NarudzbaDAO();
-		//ucitavanje iz BP
+		Narudzba nar = dao.ucitajNarudzbu(this.idNar);
+		
+		this.odabraniProizvodi = nar.getOdabraniProizvodi();
+		this.cijena = nar.getCijena();
+		this.aktivna = nar.isAktivna();
+		this.lokacijaDostavljanja = nar.getLokacijaDostavljanja();
+		this.lokacijaPreuzimanja = nar.getLokacijaPreuzimanja();
+		this.vrijemeStvaranja = nar.getVrijemeStvaranja();
+		this.vrijemeZavrsetka = nar.getVrijemeZavrsetka();
+		this.kupac = nar.getKupac();
+		this.dostavljac = nar.getDostavljac();
+		this.restoran = nar.getRestoran();
+		
 		
 	}
 	

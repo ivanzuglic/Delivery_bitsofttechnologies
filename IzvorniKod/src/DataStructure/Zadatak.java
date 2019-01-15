@@ -29,6 +29,15 @@ public class Zadatak {
     	
     	this.porhaniDB();
     }
+    
+    // za DostavljacDAO da dobije listu neobavljenih zadataka
+    public Zadatak (Narudzba narudzba, VrsteZadataka vrsta, GeoLokacija lokacija) {
+    	this.narudzba = narudzba;
+    	this.vrsta = vrsta;
+    	this.gotov = false;
+    	this.lokacija = lokacija;
+    	
+    }
 
     public GeoLokacija dohvatiLokaciju () {
     	

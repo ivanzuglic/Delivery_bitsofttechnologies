@@ -3,6 +3,8 @@ package DataStructure;
 import java.util.LinkedList;
 import java.util.List;
 
+import Database.DostavljacDAO;
+
 public class Dostavljac extends Korisnik{
 
 	private List<Zadatak> listaZadataka;
@@ -37,6 +39,7 @@ public class Dostavljac extends Korisnik{
 	
 	private void napuniListuZadataka () {
 		
-		// metoda koja ce puniti listu zadataka iz baze podataka
+		DostavljacDAO dao = new DostavljacDAO();
+		this.listaZadataka = dao.dohvatiListuZadataka(this.getKorisnickiId());
 	}
 }

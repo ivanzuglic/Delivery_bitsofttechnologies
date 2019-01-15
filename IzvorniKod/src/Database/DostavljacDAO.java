@@ -1,8 +1,6 @@
 package Database;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,11 +9,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
 import DataStructure.GeoLokacija;
-import DataStructure.Korisnik;
-import DataStructure.Restoran;
+import DataStructure.Narudzba;
+import DataStructure.VrsteZadataka;
 import DataStructure.Zadatak;
 
 public class DostavljacDAO {
@@ -33,22 +29,42 @@ public class DostavljacDAO {
 	public List<Zadatak> dohvatiListuZadataka (int idDostavljaca) {
 		
 		List<Zadatak> zadaci = new ArrayList<>();
-		String sql = "SELECT narudzba.*, zadatak.vrstaZadatka FROM zadatak NATURAL JOIN narudzba WHERE idDostavljac = ? AND zadGotov = false";
+		String sql = "SELECT narudzba.idNar, narudzba.istaNarudzba, zadatak.vrstaZad FROM zadatak NATURAL JOIN narudzba WHERE idDostavljac = ? AND zadGotov = false";
+		
+		int[] idNarudzbi = new int[300];			// moze i neka druga struktura
+		String[] vrsteZadataka = new String[300];
 		
 		try (Connection con = DriverManager.getConnection(host, userDB, passwDB);
 			PreparedStatement prepSt = con.prepareStatement(sql)) {
-			prepSt.setInt(1, idDostavljaca);
 			
+			prepSt.setInt(1, idDostavljaca);			
 			ResultSet rs = prepSt.executeQuery();
 			
-			while(rs.next()) {
-				
-				// napisati
-				
+			int i = 0;
+			while(rs.next()) {				
+				idNarudzbi[i] = rs.getInt(1);
+				vrsteZadataka[i] = rs.getString(3);
 			}
 			
 		} catch (SQLException sqlExc) {
 			System.out.println(sqlExc.getMessage());
+		}
+		
+		for (int i = 0; i < idNarudzbi.length; i++) {
+			Narudzba nar = new Narudzba(idNarudzbi[i]);
+			VrsteZadataka vrsta = VrsteZadataka.valueOf(vrsteZadataka[i]);
+			GeoLokacija lokacija = null;
+			
+			if(vrsta.equals(VrsteZadataka.OSTAVI)) {
+				lokacija = nar.getLokacijaDostavljanja();
+			} else if(vrsta.equals(VrsteZadataka.POKUPI)){
+				lokacija = nar.getLokacijaPreuzimanja();
+			} else {
+				lokacija = nar.getLokacijaDostavljanja();    // ako je IDINALOKACIJU onda je u oba atributa upisana ista lokacija (da se bezveze ne dodaje jos jedan atribut za lokaciju)
+			} 
+			
+			Zadatak zadatak = new Zadatak(nar, vrsta, lokacija);
+			zadaci.add(zadatak);			
 		}
 		
 		return zadaci;

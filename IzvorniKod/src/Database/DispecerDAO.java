@@ -54,10 +54,10 @@ public class DispecerDAO {
 		return aktivniDostavljaci;
 	}
 	
-	public List<Narudzba> dohvatiNerasporedjeneNarudzbe () {
+	public List<Integer> dohvatiIdNerasporedjenihNarudzbi () {
 		
-		List<Narudzba> nerasporedjeneNarudzbe = new ArrayList<Narudzba>();
-		String sql = "SELECT korisnik.* FROM korisnik WHERE uloga = 'DOSTAVLJAC' AND online = true";
+		List<Integer> idNerasporedjenihNarudzbi = new ArrayList<Integer>();
+		String sql = "SELECT UNIQUE idNar FROM narudzba WHERE idDostavljac = null";
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB);
 			PreparedStatement prepSt = con.prepareStatement(sql)) {	
@@ -66,13 +66,14 @@ public class DispecerDAO {
 			
 			while(rs.next()) {
 				
-				// napisati
+				int idNar = rs.getInt(1);
+				idNerasporedjenihNarudzbi.add(idNar);
 			}
 						
 		} catch (SQLException sqlExc) {
 			System.out.println(sqlExc.getMessage());
 		}
 						
-		return nerasporedjeneNarudzbe;
+		return idNerasporedjenihNarudzbi;
 	}
 }

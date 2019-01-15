@@ -1,5 +1,6 @@
 package DataStructure;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Database.DispecerDAO;
@@ -68,7 +69,17 @@ public class Dispecer extends Korisnik {
 	
 	private void napuniListuNerasporedjenihNarudzbi () {
 		
+		List<Integer> idNerasporedjenihNarudzbi = new ArrayList<Integer>();
+		List<Narudzba> narudzbe = new ArrayList<>();
+		
 		DispecerDAO dao = new DispecerDAO();
-		this.listaNerasporedjenihNarudzbi = dao.dohvatiNerasporedjeneNarudzbe();
+		idNerasporedjenihNarudzbi = dao.dohvatiIdNerasporedjenihNarudzbi();
+		
+		for (Integer id : idNerasporedjenihNarudzbi) {
+			
+			narudzbe.add(new Narudzba(id));
+		}
+		
+		this.listaNerasporedjenihNarudzbi = narudzbe;
 	}
 }

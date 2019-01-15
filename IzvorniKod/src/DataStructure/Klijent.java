@@ -2,6 +2,8 @@ package DataStructure;
 
 import java.awt.image.BufferedImage;
 
+import Database.KlijentDAO;
+
 public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 
 	private Kosarica kosarica;
@@ -13,6 +15,7 @@ public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 		
 		super(korisnickoIme, lozinka, ime, prezime, brMobitela, eMail);
 		this.kosarica = new Kosarica();
+		this.aktivnaNarudzba = this.dohvatiAktivnuNarudzbu(this.getKorisnickiId());
 	}
 	
 	// ovaj konstruktor se koristi prilikom prijave
@@ -20,6 +23,7 @@ public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 		
 		super(korisnickoIme, lozinka);
 		this.kosarica = new Kosarica();
+		this.aktivnaNarudzba = this.dohvatiAktivnuNarudzbu(this.getKorisnickiId());
 	}
 
 	public PodaciKarte pratiPoziciju () {
@@ -51,8 +55,19 @@ public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 		return kosarica;
 	}
 	
-	private void dohvatiAktivnuNarudzbu () {
+	private Narudzba dohvatiAktivnuNarudzbu (int korisnickiId) {
 		
+		int idAktivneNarudzbe;
+		Narudzba aktivnaNarudzba = null;
 		
+		KlijentDAO dao = new KlijentDAO();
+		idAktivneNarudzbe = dao.dohvatiIdAktivneNarudzbe(korisnickiId);
+		
+		if (idAktivneNarudzbe != -1) {
+			
+			aktivnaNarudzba = new Narudzba(idAktivneNarudzbe);
+		}
+		
+		return aktivnaNarudzba;
 	}
 }

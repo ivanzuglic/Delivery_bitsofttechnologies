@@ -57,6 +57,7 @@ public class Kosarica {
         this.restoran = null;
     }
     
+    // pri finaliziranju narudzbe treba tu narudzbu postaviti za trenutnu narudzbu aktivnog klijenta
     public Narudzba finalizirajNarudzbu (GeoLokacija lokacijaDostave, Korisnik trenutniKorisnik) {
 
     	Narudzba finaliziranaNarudzba = new Narudzba(this, lokacijaDostave, trenutniKorisnik);

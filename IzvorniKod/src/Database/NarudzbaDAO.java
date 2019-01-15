@@ -57,7 +57,7 @@ public class NarudzbaDAO {
 			PreparedStatement prepSt = con.prepareStatement(sql)) {
 			
 			prepSt.setBoolean(1, narudzba.isAktivna());
-			prepSt.setInt(2, narudzba.getIdNar());
+			prepSt.setInt(2, narudzba.getId());
 
 			result = prepSt.executeUpdate();
 			

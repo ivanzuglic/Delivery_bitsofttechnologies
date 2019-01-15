@@ -20,6 +20,7 @@ public class Zadatak {
     	this.porhaniDB();
     }
     
+    // za dispecera
     public Zadatak (GeoLokacija lokacijaIdiNa, boolean gotov) {
     	
     	this.narudzba = null;

@@ -40,14 +40,17 @@ public class ZadatakDAO {
 	
 	public int pohraniZadatak (Zadatak zadatak) {
 		
-		String sql = "INSERT INTO zadatak (vrstaZad, zadGotov) VALUES (?, ?)";
+		String sql = "INSERT INTO zadatak (idNar, vrstaZad, zadGotov, geoSirinaIdiNaLok, geoDuzinaIdiNaLok) VALUES (?, ?, ?, ?, ?)";
 		int result = 2;
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
 			PreparedStatement prepSt = con.prepareStatement(sql)) {
 			
-			prepSt.setString(1, zadatak.getVrsta().toString());
-			prepSt.setBoolean(2, zadatak.getGotov());
+			prepSt.setInt(1, zadatak.getNarudzba().getId());
+			prepSt.setString(2, zadatak.getVrsta().toString());
+			prepSt.setBoolean(3, zadatak.getGotov());
+			prepSt.setFloat(4, zadatak.dohvatiLokaciju().getGeoSirina());
+			prepSt.setFloat(5, zadatak.dohvatiLokaciju().getGeoDuziina());
 			
 			result = prepSt.executeUpdate();
 			

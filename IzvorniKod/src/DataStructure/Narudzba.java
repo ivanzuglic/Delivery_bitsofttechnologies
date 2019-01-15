@@ -107,10 +107,6 @@ public class Narudzba {
 		}
 	}
 	
-	public int getIdNar() {
-		return this.idNar;
-	}
-
 	public Timestamp getVrijemeStvaranja() {
 		return this.vrijemeStvaranja;
 	}

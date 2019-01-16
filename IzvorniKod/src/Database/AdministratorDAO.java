@@ -33,7 +33,7 @@ public class AdministratorDAO {
 			PreparedStatement prepSt = con.prepareStatement(sql)) {
 			
 			prepSt.setBoolean(1, true);
-			prepSt.setInt(2, idRestoran); 		//u klasi 'Restoran' - ID se dobiva automatski ili vlasnik sam odreduje? -- Je li moguce generirati ID direktno u bazi podataka? -LM
+			prepSt.setInt(2, idRestoran); 		
 			result = prepSt.executeUpdate();
 			
 		} catch (SQLException sqlExc) {
@@ -64,9 +64,11 @@ public class AdministratorDAO {
 		return result;
 	}
 	
+	// zakomentiran je drugi nacin za isti dohvat
 	public List<Restoran> selectRestoraniPoOdobrenju(boolean odobrenje) {
 		
-		String sql = "SELECT restoran.*, korisnik.* FROM restoran NATURAL JOIN korisnik WHERE restoranOdobren = ?";
+		String sql = "SELECT restoran.* FROM restoran WHERE restoranOdobren = ?";
+	  //String sql1 = "SELECT restoran.*, korisnik.* FROM restoran NATURAL JOIN korisnik WHERE restoranOdobren = ?";
 		List<Restoran> restorani = new ArrayList<>();
 		
 		try (Connection con = DriverManager.getConnection(host, userDB, passwDB);
@@ -85,26 +87,26 @@ public class AdministratorDAO {
 				String imeRestoran = rs.getString(2);
 				String opis = rs.getString(3);
 				String adresa = rs.getString(4);
-				float lokacijaSirina = rs.getFloat(5);	//popravi u DB : tip Decimal(8,6)
-				float lokacijaDuzina = rs.getFloat(6);	//popravi u DB : tip Decimal(9,6) 
+				float lokacijaSirina = rs.getFloat(5);	
+				float lokacijaDuzina = rs.getFloat(6);	 
 				String telefon = rs.getString(7);
 				String fax = rs.getString(8);
-				int oib = rs.getInt(9);					// prepravi u string u DB
-				int iban = rs.getInt(10);				//
-				int ziroRac = rs.getInt(11);			//
+				int oib = rs.getInt(9);					
+				int iban = rs.getInt(10);				
+				int ziroRac = rs.getInt(11);			
 				String slikaPath = rs.getString(12);
-				boolean odobren = rs.getBoolean(13);	//popravi u DB (stavi na predzadnje mjesto)
+				boolean odobren = rs.getBoolean(13);	
 				
-				int idKorisnik = rs.getInt(14);
-				String korisnickoIme = rs.getString(15);
+				int idVlasnik = rs.getInt(14);
+			  /*String korisnickoIme = rs.getString(15);
 				String lozinka = rs.getString(16);
 				String ime = rs.getString(17);
 				String prezime = rs.getString(18);
 				String brMobitela = rs.getString(19);
 				String email = rs.getString(20);
-				String uloga = rs.getString(21);
+				String uloga = rs.getString(21);*/
 				
-				Korisnik vlasnik = new Korisnik(idKorisnik, korisnickoIme, lozinka, ime, prezime, brMobitela, email, uloga);	// promjenjen konstruktor
+				//Korisnik vlasnik = new Korisnik(idVlasnik, korisnickoIme, lozinka, ime, prezime, brMobitela, email, uloga);	
 				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
 				BufferedImage slika = null;
 				try {
@@ -113,6 +115,7 @@ public class AdministratorDAO {
 		            e.printStackTrace();
 		        }
 				
+				Korisnik vlasnik = new Korisnik (idVlasnik);
 				Restoran trenRestoran = new Restoran(idRestoran, imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, oib, iban, ziroRac, adresa);	// dodan i id restorana u restorane koji vec postoje i stvaraju se iz baze podataka -LM
 				restorani.add(trenRestoran);
 			}

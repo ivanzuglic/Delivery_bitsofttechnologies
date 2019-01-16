@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import DataStructure.Artikl;
-import DataStructure.Dostavljac;
 import DataStructure.GeoLokacija;
 import DataStructure.Korisnik;
 import DataStructure.Narudzba;
@@ -157,8 +156,33 @@ public class NarudzbaDAO {
 	private Map<Artikl, Integer> getArtikleNarudzbe(int idNar){
 		
 		String sql = "SELECT narudzba.idArtikl, narudzba.kolicina, artikl.* FROM narudzba NATURAL JOIN artikl WHERE idNar = ?";
+		String sql2 = "SELECT artikl.* FROM narudzba NATURAL JOIN artikl WHERE idNar = ?";
 		Map<Artikl, Integer> artikliNarudzbe = new HashMap<>();		
+		Restoran restoran = null;
+		int idRestoran = 0;
 		
+		// dohvat restorana koji ide u objekte tipa Artikl
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
+				PreparedStatement prepSt = con.prepareStatement(sql2)) {
+					
+				prepSt.setInt(1, idNar);				
+				ResultSet rs = prepSt.executeQuery();
+				
+				if(rs.next()) {					
+					idRestoran = rs.getInt(2);  
+										
+				}												
+					
+			} catch (SQLException sqlExc) {
+				
+				System.out.println(sqlExc.getMessage());
+			}
+		
+		if(idRestoran != 0) {
+			restoran = new Restoran(idRestoran);
+		}
+						
+		// dohvat ostatka artikla
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
 			PreparedStatement prepSt = con.prepareStatement(sql)) {
 				
@@ -169,17 +193,13 @@ public class NarudzbaDAO {
 			while(rs.next()) {
 				
 				int idArtikl = rs.getInt(1);
-				int idRestoran = rs.getInt(2);
-				String nazivArtikla = rs.getString(3);
-				String opis = rs.getString(4);
-				float cijena = rs.getFloat(5);
-				int vrijemePripremeMin = rs.getInt(6);
-				int kolicina = rs.getInt(7);			//pogledati natural join
-				
-				Restoran restoran = null;
-				// treba Restoran.ucitajRestoran(idRestoran) jer konstruktor od Artikl mora imati restoran
-				// dogovor
-				
+				int kolicina = rs.getInt(2);		    //
+				//int idRestoran = rs.getInt(3);        // pogledati natural join
+				String nazivArtikla = rs.getString(4);
+				String opis = rs.getString(5);
+				float cijena = rs.getFloat(6);
+				int vrijemePripremeMin = rs.getInt(7);
+		
 				Artikl artikl = new Artikl(idArtikl, nazivArtikla, cijena, vrijemePripremeMin, restoran, opis);
 				artikliNarudzbe.put(artikl, kolicina);
 			}												

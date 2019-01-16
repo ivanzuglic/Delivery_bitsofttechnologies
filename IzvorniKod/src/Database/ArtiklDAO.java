@@ -3,6 +3,7 @@ package Database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import DataStructure.Artikl;
 
@@ -71,5 +72,32 @@ public class ArtiklDAO {
 		}
 		
 		return result;
+	}
+	
+	// vraca -1 ako je nuspjelo, = ako id ne postoji i id ako postoji
+	public int dohvatiIdArtikla (Artikl artikl) {
+		
+		String sql = "SELECT idArtikl FROM artikl WHERE idRestoran = ? AND nazivArtikla = ?";
+		int id = -1;
+		
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB);
+				PreparedStatement prepSt = con.prepareStatement(sql)) {
+				
+				prepSt.setInt(1, artikl.getRestoran().getId());
+				prepSt.setString(2, artikl.getNaziv());
+				
+				ResultSet rs = prepSt.executeQuery();
+				
+				if (rs.next()) {
+					id = rs.getInt(1);
+				}
+			}
+			
+		catch (SQLException sqlExc) {
+				
+			System.out.println(sqlExc.getMessage());
+		}
+			
+		return id;
 	}
 }

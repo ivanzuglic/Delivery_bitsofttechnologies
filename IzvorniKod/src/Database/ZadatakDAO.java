@@ -3,7 +3,10 @@ package Database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import DataStructure.Artikl;
 import DataStructure.Zadatak;
 
 public class ZadatakDAO {
@@ -59,5 +62,32 @@ public class ZadatakDAO {
 			System.out.println(sqlExc.getMessage());
 		}
 		return result;
+	}
+	
+	// vraca -1 ako je nuspjelo, = ako id ne postoji i id ako postoji
+	public int dohvatiIdZadatka (Zadatak zadatak) {
+		
+		String sql = "SELECT idZad FROM zadatak WHERE idNar = ? AND vrstaZad = ?";
+		int id = -1;
+		
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB);
+				PreparedStatement prepSt = con.prepareStatement(sql)) {
+				
+				prepSt.setInt(1, zadatak.getNarudzba().getId());
+				prepSt.setString(2, zadatak.getVrsta().toString());
+				
+				ResultSet rs = prepSt.executeQuery();
+				
+				if (rs.next()) {
+					id = rs.getInt(1);
+				}
+			}
+			
+		catch (SQLException sqlExc) {
+				
+			System.out.println(sqlExc.getMessage());
+		}
+			
+		return id;
 	}
 }

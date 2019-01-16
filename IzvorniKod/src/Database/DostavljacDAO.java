@@ -1,6 +1,5 @@
 package Database;
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import DataStructure.GeoLokacija;
 import DataStructure.Narudzba;
 import DataStructure.VrsteZadataka;
@@ -20,7 +18,9 @@ public class DostavljacDAO {
 	private String passwDB;
 	private String host;
 	
+	
 	public DostavljacDAO () {
+		
 		this.userDB = "myuser";
 		this.passwDB = "abc";
 		this.host = "jdbc:mysql://localhost:3306/dostavljaona?useSSL=false&useLegacyDatetimeCode=false";
@@ -48,6 +48,7 @@ public class DostavljacDAO {
 			}
 			
 		} catch (SQLException sqlExc) {
+			
 			System.out.println(sqlExc.getMessage());
 		}
 		
@@ -57,9 +58,11 @@ public class DostavljacDAO {
 			GeoLokacija lokacija = null;
 			
 			if(vrsta.equals(VrsteZadataka.OSTAVI)) {
+				
 				lokacija = nar.getLokacijaDostavljanja();
 				
 			} else if(vrsta.equals(VrsteZadataka.POKUPI)){
+				
 				lokacija = nar.getLokacijaPreuzimanja();
 				
 			} else {											// zadatak je IDINALOKACIJU -> moramo dobiti lokaciju iz 'Zadatak' za danog dostavljaca
@@ -79,6 +82,7 @@ public class DostavljacDAO {
 					
 					
 				} catch (SQLException sqlExc) {
+					
 					System.out.println(sqlExc.getMessage());
 				} 
 			} 

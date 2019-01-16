@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import Database.NarudzbaDAO;
 
 public class Narudzba {
@@ -15,7 +14,7 @@ public class Narudzba {
 	private GeoLokacija lokacijaPreuzimanja;
 	private GeoLokacija lokacijaDostavljanja;
 	private Korisnik kupac;
-	private Dostavljac dostavljac = null;
+	private Korisnik dostavljac = null;
 
 	private Timestamp vrijemeStvaranja;
 	private Timestamp vrijemeSpremnosti;
@@ -50,7 +49,7 @@ public class Narudzba {
 	
 	// pomocni konstruktor za stvaranje privremene klase Narudzba u NarudzbaDAO, a ciji se atributi prenose u gornji konstruktor pomocu ucitajBP()
 	public Narudzba(float cijena, Map<Artikl, Integer> odabraniProizvodi, Restoran restoran, GeoLokacija lokacijaPreuzimanja, GeoLokacija lokacijaDostavljanja,
-					Korisnik kupac, Dostavljac dostavljac, Timestamp vrijemeStvaranja, Timestamp vrijemeZavrsetka, boolean aktivna) {
+					Korisnik kupac, Korisnik dostavljac, Timestamp vrijemeStvaranja, Timestamp vrijemeZavrsetka, boolean aktivna) {
 		
 		this.cijena = cijena;
 		this.odabraniProizvodi = odabraniProizvodi;
@@ -92,7 +91,7 @@ public class Narudzba {
 		return this.idNar;
 	}
 	
-	public Dostavljac getDostavljac () {
+	public Korisnik getDostavljac () {
 		
 		return this.dostavljac;
 	}

@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import DataStructure.Artikl;
 import DataStructure.Zadatak;
 
 public class ZadatakDAO {

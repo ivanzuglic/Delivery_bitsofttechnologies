@@ -20,9 +20,6 @@ public class Artikl {
     	this.vrijemePripravljanjaMin = vrijemePripravljanja;
     	this.restoran = restoran;
     	this.opis= opis;
-    	
-    	this.pohraniDB();
-    	this.dohvatiId();
     }
 	
 	// konstruktor koji se koristi kada se artikl ucitava iz baze podataka
@@ -35,6 +32,12 @@ public class Artikl {
     	this.restoran = restoran;
     	this.opis= opis;
     }
+	
+	public Artikl (int idArtikl) {
+		
+		this.idArtikl = idArtikl;
+		this.ucitajDB();
+	}
 
     public int getIdArtikl() {
 		
@@ -79,6 +82,10 @@ public class Artikl {
     	return this.restoran;
     }
     
+    public void setRestoran(Restoran restoran) {    // dodani za ArtiklDAO.ucitajArtikl
+    	this.restoran = restoran;
+    }
+    
     public String getOpis () {
 		
     	return this.opis;
@@ -90,12 +97,19 @@ public class Artikl {
 		this.azurirajDB();
 	}
 	
-    private void pohraniDB () {
+    private void ucitajDB () {
     	
-    	// metoda koja pohranjuje novi artikl u bazu podataka
+    	// metoda koja dohvaca artikl za dani idArtikl
     	
-    	ArtiklDAO dao = new ArtiklDAO();	// od kuda da povlacimo user i password?
-    	dao.pohraniArtikl(this);
+    	ArtiklDAO dao = new ArtiklDAO();	
+    	Artikl art = dao.ucitajArtikl(this.idArtikl);
+    	
+    	this.naziv = art.getNaziv();
+    	this.cijena = art.getCijena();
+    	this.vrijemePripravljanjaMin = art.getVrijemePripravljanja();
+    	this.restoran = art.getRestoran();
+    	this.opis= art.getOpis();  	
+    	
     }
     
     private void azurirajDB () {

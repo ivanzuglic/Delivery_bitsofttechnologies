@@ -1,6 +1,6 @@
 package DataStructure;
 
-import java.awt.image.BufferedImage;					//pogledat i dogovorit se
+import java.awt.image.BufferedImage;					
 import java.util.Set;
 import Database.RestoranDAO;
 
@@ -12,8 +12,8 @@ public class Restoran {
 	private GeoLokacija lokacija;
 	private String opis;
 	private BufferedImage slika;
-	private String telefon;     						//mora biti String za slucaj ako broj telefona pocinje s nulom ili plusom
-	private String fax;									//vrijedi gornja opaska
+	private String telefon;     						
+	private String fax;									
 	private int OIB;
 	private int IBAN;
 	private int ziroRacun;
@@ -30,18 +30,18 @@ public class Restoran {
 		this.lokacija = lokacija;
 		this.opis = opis;
 		this.slika = slika;
-		this.odobren = odobren;
 		this.telefon = telefon;
 		this.fax = fax;
 		this.OIB = OIB;
 		this.IBAN = IBAN;
 		this.ziroRacun = ziroRacun;
 		this.adresa = adresa;
+		this.odobren = odobren;
 		
-		this.pohraniBP();	// prijedlog treba  biti pohranjen u bazu podataka
+		this.id = this.pohraniBP();	// prijedlog treba  biti pohranjen u bazu podataka
 	}
 	
-	// konstruktor koristen prilikom dohvacanja iz baze podataka (u tom slucaju, id je vec odredjen i postoji)
+	// konstruktor koristen prilikom dohvacanja iz baze podataka za AdministratorDAO i RestoranDAO
 	public Restoran (int id, String ime, Korisnik vlasnik, GeoLokacija lokacija, String opis, BufferedImage slika, boolean odobren, String telefon, String fax, int OIB, int IBAN, int ziroRacun, String adresa) {
 		
 		this.id = id;
@@ -50,17 +50,25 @@ public class Restoran {
 		this.lokacija = lokacija;
 		this.opis = opis;
 		this.slika = slika;
-		this.odobren = odobren;
 		this.telefon = telefon;
 		this.fax = fax;
 		this.OIB = OIB;
 		this.IBAN = IBAN;
 		this.ziroRacun = ziroRacun;
 		this.adresa = adresa;
+		this.odobren = odobren;
 		
 		this.meni = this.napuniMeni();
 	}
 	
+	public Restoran (int id) {
+		
+		this.id = id;
+		this.ucitajBP();
+		this.meni = this.napuniMeni();
+	}
+	
+
 	public int getId () {   
 		
 		return this.id;
@@ -257,12 +265,12 @@ public class Restoran {
 		return meni;
 	}
 	
-	private void pohraniBP () {
+	private int pohraniBP () {
 		
 		// metoda koja ce restoran pohraniti u bazu podataka (potpuno novi restoran)
 		
 		RestoranDAO dao = new RestoranDAO();
-		dao.pohraniRestoran(this);
+		return dao.pohraniRestoran(this);
 	}
 	
 	private void azurirajBP () {
@@ -271,6 +279,28 @@ public class Restoran {
 		
 		RestoranDAO dao = new RestoranDAO();
 		dao.azurirajRestoran(this);
+	}
+	
+	private void ucitajBP() {
+		
+		// metoda koja ucitava restoran za zadan ID
+		
+		RestoranDAO dao = new RestoranDAO();
+		Restoran rest = dao.ucitajRestoran(this.id);
+		
+		this.ime = rest.getIme();
+		this.vlasnik = rest.getVlasnik();
+		this.lokacija = rest.getLokacija();
+		this.opis = rest.getOpis();
+		this.slika = rest.getSlika();
+		this.telefon = rest.getTelefon();
+		this.fax = rest.getFax();
+		this.OIB = rest.getOIB();
+		this.IBAN = rest.getIBAN();
+		this.ziroRacun = rest.getZiroRacun();
+		this.adresa = rest.getAdresa();
+		this.odobren = rest.isOdobren();
+		
 	}
 	
 	private void dodajUMeni (Artikl noviArtikl) {

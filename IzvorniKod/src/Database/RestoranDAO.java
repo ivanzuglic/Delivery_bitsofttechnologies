@@ -194,18 +194,17 @@ public class RestoranDAO {
 	
 	public int dodajUMeni (Artikl noviArtikl) {
 		
-		String sql = "INSERT INTO artikl (idArtikl, idRestoran, nazivArtikla, opis, cijena, vrijemePripreme)"	// maknuli bi sliku sa artikla - LM
+		String sql = "INSERT INTO artikl (idRestoran, nazivArtikla, opis, cijena, vrijemePripreme)"	// maknuli bi sliku sa artikla - LM
 				+ "VALUES (?, ?, ?, ?, ?, ?)";
 		int result = 2; // za testiranje
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
 			PreparedStatement prepSt = con.prepareStatement(sql)) {
-			
-			prepSt.setInt(1, 0);	// ne prihvaca null, stavil sam 0 - LM
-			prepSt.setInt(2, noviArtikl.getRestoran().getId());
-			prepSt.setString(3, noviArtikl.getNaziv());
-			prepSt.setString(4, noviArtikl.getOpis());
-			prepSt.setFloat(5, noviArtikl.getCijena());
+				
+			prepSt.setInt(1, noviArtikl.getRestoran().getId());
+			prepSt.setString(2, noviArtikl.getNaziv());
+			prepSt.setString(3, noviArtikl.getOpis());
+			prepSt.setFloat(4, noviArtikl.getCijena());
 			prepSt.setInt(5, noviArtikl.getVrijemePripravljanja());
 			
 			result = prepSt.executeUpdate();

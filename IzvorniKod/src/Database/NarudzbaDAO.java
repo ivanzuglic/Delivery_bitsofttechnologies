@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import DataStructure.Artikl;
-import DataStructure.Dostavljac;
 import DataStructure.GeoLokacija;
 import DataStructure.Korisnik;
 import DataStructure.Narudzba;
@@ -162,6 +161,7 @@ public class NarudzbaDAO {
 		Restoran restoran = null;
 		int idRestoran = 0;
 		
+		// dohvat restorana koji ide u objekte tipa Artikl
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
 				PreparedStatement prepSt = con.prepareStatement(sql2)) {
 					
@@ -182,7 +182,7 @@ public class NarudzbaDAO {
 			restoran = new Restoran(idRestoran);
 		}
 						
-		
+		// dohvat ostatka artikla
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
 			PreparedStatement prepSt = con.prepareStatement(sql)) {
 				

@@ -3,8 +3,10 @@ package Database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import DataStructure.Artikl;
+import DataStructure.Restoran;
 
 public class ArtiklDAO {
 	
@@ -20,24 +22,28 @@ public class ArtiklDAO {
 		this.host = "jdbc:mysql://localhost:3306/dostavljaona?useSSL=false&useLegacyDatetimeCode=false";
 	}
 	
-	public int pohraniArtikl (Artikl artikl) {
+	public Artikl ucitajArtikl (int idArtikl) {
 		
-		String sql = "INSERT INTO artikl (idArtikl, idRestoran, nazivArtikla, opis, cijena, slika, vrijemePripreme)"
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
-		int result = 2; // za testiranje
+		String sql = "SELECT artikl.* FROM artikl WHERE idArtikl = ?";
+		Artikl artikl = null;
+		int idRestoran = 0;
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB);
 			PreparedStatement prepSt = con.prepareStatement(sql)) {
 			
-			prepSt.setInt(1, artikl.getIdArtikl());
-			prepSt.setInt(2, artikl.getRestoran().getId());
-			prepSt.setString(3, artikl.getNaziv());
-			prepSt.setString(4, artikl.getOpis());
-			prepSt.setFloat(5, artikl.getCijena());
-			// slika ?? kako spremiti u BP ---> treba u Artikl napraviti implementaciju BufferedImage i uzeti path kao string
-			prepSt.setInt(7, artikl.getVrijemePripravljanja());
+			prepSt.setInt(1, idArtikl);
+			ResultSet rs = prepSt.executeQuery();
 			
-			result = prepSt.executeUpdate();
+			if(rs.next()) {
+				
+				idRestoran = rs.getInt(2);
+				String nazivArtikla = rs.getString(3);
+				String opis = rs.getString(4);
+				float cijena = rs.getFloat(5);
+				int vrijemePripremeMin = rs.getInt(6);
+				
+				artikl = new Artikl(idArtikl, nazivArtikla, cijena, vrijemePripremeMin, null, opis);
+			}			
 		}
 		
 		catch (SQLException sqlExc) {
@@ -45,7 +51,12 @@ public class ArtiklDAO {
 			System.out.println(sqlExc.getMessage());
 		}
 		
-		return result;
+		if(idRestoran != 0) {
+			Restoran restoran = new Restoran(idRestoran);
+			artikl.setRestoran(restoran);
+		}
+				
+		return artikl;
 	}
 	
 	public int azurirajArtikl (Artikl artikl) {

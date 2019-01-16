@@ -20,8 +20,6 @@ public class Artikl {
     	this.vrijemePripravljanjaMin = vrijemePripravljanja;
     	this.restoran = restoran;
     	this.opis= opis;
-    	
-    	this.dohvatiId();
     }
 	
 	// konstruktor koji se koristi kada se artikl ucitava iz baze podataka

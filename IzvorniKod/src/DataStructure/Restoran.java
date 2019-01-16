@@ -62,6 +62,7 @@ public class Restoran {
 	}
 	
 	public Restoran (int id) {
+		
 		this.id = id;
 		this.ucitajBP();
 		this.meni = this.napuniMeni();

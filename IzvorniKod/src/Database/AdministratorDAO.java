@@ -64,11 +64,10 @@ public class AdministratorDAO {
 		return result;
 	}
 	
-	// zakomentiran je drugi nacin za isti dohvat
+
 	public List<Restoran> selectRestoraniPoOdobrenju(boolean odobrenje) {
 		
 		String sql = "SELECT restoran.* FROM restoran WHERE restoranOdobren = ?";
-	  //String sql1 = "SELECT restoran.*, korisnik.* FROM restoran NATURAL JOIN korisnik WHERE restoranOdobren = ?";
 		List<Restoran> restorani = new ArrayList<>();
 		
 		try (Connection con = DriverManager.getConnection(host, userDB, passwDB);
@@ -96,21 +95,12 @@ public class AdministratorDAO {
 				int ziroRac = rs.getInt(11);			
 				String slikaPath = rs.getString(12);
 				boolean odobren = rs.getBoolean(13);	
-				
 				int idVlasnik = rs.getInt(14);
-			  /*String korisnickoIme = rs.getString(15);
-				String lozinka = rs.getString(16);
-				String ime = rs.getString(17);
-				String prezime = rs.getString(18);
-				String brMobitela = rs.getString(19);
-				String email = rs.getString(20);
-				String uloga = rs.getString(21);*/
 				
-				//Korisnik vlasnik = new Korisnik(idVlasnik, korisnickoIme, lozinka, ime, prezime, brMobitela, email, uloga);	
 				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
 				BufferedImage slika = null;
-				try {
-		        	slika = ImageIO.read(new File(slikaPath)); 			 //dodatno testirat
+				try {													//dodatno testirat
+		        	slika = ImageIO.read(new File(slikaPath));
 		        } catch (IOException e){
 		            e.printStackTrace();
 		        }

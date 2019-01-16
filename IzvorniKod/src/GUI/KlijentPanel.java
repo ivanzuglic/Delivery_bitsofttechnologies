@@ -234,9 +234,12 @@ public class KlijentPanel extends JPanel {
 		
 		kosaricaButtonPanel.setLayout(new FlowLayout());
 		JButton odaberiAdr = new JButton("Adresa za dostavu");
+		odaberiAdr.addActionListener(adrListener);
 		kosaricaButtonPanel.add(odaberiAdr);
 		JButton naruci = new JButton("Naruci");
+		naruci.addActionListener(naruciListener);
 		kosaricaButtonPanel.add(naruci);
+		kosaricaPanelMain.add(kosaricaButtonPanel, BorderLayout.SOUTH);
 		
 		showScrollPane = new JScrollPane(kosaricaPanelMain);
 		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));

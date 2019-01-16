@@ -411,7 +411,30 @@ public class KorisnikPanel extends JPanel {
 				poruka.removeAll();
 				poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
 				poruka.revalidate();
-				window.switchToKlijent(window.podLjuska.getTrenutniKorisnik());
+				
+				if (window.podLjuska.getZastavice().isAdministrator()) {
+					window.switchToAdmin(window.podLjuska.getTrenutniKorisnik());
+				}
+				
+				if (window.podLjuska.getZastavice().isDispecer()) {
+					window.switchToDispecer(window.podLjuska.getTrenutniKorisnik());
+				}
+
+				
+				if (window.podLjuska.getZastavice().isDostavljac()) {
+					window.switchToDostavljac(window.podLjuska.getTrenutniKorisnik());
+				}
+
+				
+				if (window.podLjuska.getZastavice().isKlijent()) {
+					window.switchToKlijent(window.podLjuska.getTrenutniKorisnik());
+				}
+
+				
+				if (window.podLjuska.getZastavice().isVlasnik()) {
+					window.switchToVlasnik(window.podLjuska.getTrenutniKorisnik());
+				}
+
 				Timer timer = new Timer(1500, new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            	Prijava.dispatchEvent(new WindowEvent(Prijava, WindowEvent.WINDOW_CLOSING));

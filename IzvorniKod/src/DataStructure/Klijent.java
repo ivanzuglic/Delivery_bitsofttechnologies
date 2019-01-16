@@ -1,6 +1,7 @@
 package DataStructure;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import Database.KlijentDAO;
 
@@ -29,8 +30,20 @@ public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 	public PodaciKarte pratiPoziciju () {
 		
 		PodaciKarte lokacijaTrenutneNarudzbe = null;
+		GeoLokacija lokacija = null;
+		
+		// prije dohvacanja pozicije updateamo aktivnu narudzbu da osiguramo azurnost informacija
+		this.aktivnaNarudzba = this.dohvatiAktivnuNarudzbu(this.getKorisnickiId());
 		
 		// dohvati podatke karte iz baze podataka
+		lokacija = this.dohvatiLokacijuTrNarudzbe(this.aktivnaNarudzba);
+		
+		if (lokacija != null) {
+			
+			lokacijaTrenutneNarudzbe = new PodaciKarte(new ArrayList<GeoLokacija>(), false);
+			lokacijaTrenutneNarudzbe.dodajUListuLokacija(lokacija);
+			
+		}
 		
 		return lokacijaTrenutneNarudzbe;
 	}
@@ -55,6 +68,7 @@ public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 		return kosarica;
 	}
 	
+	// vraca aktivnu narudzbu ako ona postoji, inace vraca null
 	private Narudzba dohvatiAktivnuNarudzbu (int korisnickiId) {
 		
 		int idAktivneNarudzbe;
@@ -69,5 +83,36 @@ public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 		}
 		
 		return aktivnaNarudzba;
+	}
+	
+	// vraca lokaciju ili null, vraca null ako je doslo do greske - lokacija nije dostupna
+	private GeoLokacija dohvatiLokacijuTrNarudzbe (Narudzba aktivnaNarudzba) {
+		
+		GeoLokacija lokacija = null;
+		int idDostavljaca;
+		boolean narudzbaPreuzeta;
+		
+		KlijentDAO dao = new KlijentDAO();
+		idDostavljaca = dao.dohvatiIdDostavljaca(aktivnaNarudzba);
+		
+		if (idDostavljaca == 0) {
+			
+			lokacija = aktivnaNarudzba.getLokacijaPreuzimanja();
+		}
+		else {
+			
+			narudzbaPreuzeta = dao.narudzbaPreuzeta(aktivnaNarudzba);
+			
+			if (narudzbaPreuzeta) {
+				
+				lokacija = dao.lokacijaDostavljaca(aktivnaNarudzba);
+			}
+			else {
+				
+				lokacija = aktivnaNarudzba.getLokacijaPreuzimanja();
+			}
+		}
+		
+		return lokacija;
 	}
 }

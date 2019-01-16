@@ -119,7 +119,7 @@ public class NarudzbaDAO {
 		
 		Map<Artikl, Integer> artikliNarudzbe = this.getArtikleNarudzbe(idNar);
 		Korisnik kupac = this.getKupacDostavljac(idNar, "kupac");  
-		Dostavljac dostavljac = (Dostavljac) this.getKupacDostavljac(idNar, "dostavljac");
+		Korisnik dostavljac = this.getKupacDostavljac(idNar, "dostavljac");
 		Restoran restoran = this.getRestoran(artikliNarudzbe);
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
@@ -202,7 +202,7 @@ public class NarudzbaDAO {
 		
 		int idKor = 0;
 		Korisnik kupac = null;
-		Dostavljac dostavljac = null;
+		Korisnik dostavljac = null;
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
 			PreparedStatement prepSt = con.prepareStatement(sql)) {
@@ -225,8 +225,7 @@ public class NarudzbaDAO {
 			return kupac;
 		} else if(idKor != 0 && uloga == "dostavljac") {
 			
-			Korisnik pom = new Korisnik(idKor);
-			dostavljac = new Dostavljac(pom.getKorisnickoIme(), pom.getLozinka());   // jos poraditi na Dostavljac
+			dostavljac = new Korisnik(idKor);
 			return dostavljac;
 		} else {
 			

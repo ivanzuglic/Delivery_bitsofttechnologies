@@ -2,7 +2,6 @@ package DataStructure;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import Database.DostavljacDAO;
 
 public class Dostavljac extends Korisnik{

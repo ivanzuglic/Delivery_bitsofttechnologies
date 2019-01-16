@@ -28,8 +28,12 @@ public class DefaultWindow extends JFrame{
 		setSize(1024, 720);
 	    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	    setTitle("Dostavljaona!");
-	    korPanel = new KorisnikPanel(this);
-	    add(korPanel);
+	    
+	    klijentPanel = new KlijentPanel(this, new Korisnik("ime", "prezime"));
+	    add(klijentPanel);
+	    
+	    //korPanel = new KorisnikPanel(this);
+	    //add(korPanel);
 	}
 	
 	

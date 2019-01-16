@@ -125,6 +125,11 @@ public class KorisnikPanel extends JPanel {
 		listaRestorani = window.podLjuska.getRestorani();
 		
 		for (Restoran restoran : listaRestorani) {
+			JPanel filler1 = new JPanel();
+			filler1.setMaximumSize(new Dimension(9000, 1));
+			filler1.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+			restorani.add(filler1);
+			
 			JPanel restoranPanel = new JPanel();
 			restoranPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
 			restoranPanel.setMaximumSize(new Dimension(9000, 100));
@@ -169,10 +174,10 @@ public class KorisnikPanel extends JPanel {
 			restoranPanel.add(new JButton("Naruci"), BorderLayout.EAST);
 			restorani.add(restoranPanel);
 			
-			JPanel filler = new JPanel();
-			filler.setMaximumSize(new Dimension(9000, 1));
-			filler.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-			restorani.add(filler);
+			JPanel filler2 = new JPanel();
+			filler2.setMaximumSize(new Dimension(9000, 1));
+			filler2.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+			restorani.add(filler2);
 		}
 		
 		

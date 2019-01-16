@@ -13,8 +13,8 @@ public class Administrator extends Korisnik {   //ispravljeni konstruktori od Ad
 	public Administrator (String korisnickoIme, String lozinka) {
 		
 		super(korisnickoIme, lozinka);
-		this.napuniListeRestorana();
-		this.napuniListuKorisnika();
+		this.napuniListeRestorana();       
+		this.napuniListuKorisnika();		  
 	}
 	
 	public void odobriRestoran (Restoran restoran, Zastavice z) {	//dodana implementacija AdministratorDAO klase	

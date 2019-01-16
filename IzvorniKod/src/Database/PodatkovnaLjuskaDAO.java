@@ -25,7 +25,7 @@ public class PodatkovnaLjuskaDAO {
 	public PodatkovnaLjuskaDAO () {
 		
 		this.userDB = "myuser";
-		this.passwDB = "abc";
+		this.passwDB = "abcd";
 		this.host = "jdbc:mysql://localhost:3306/dostavljaona?useSSL=false&useLegacyDatetimeCode=false";
 	}
 	
@@ -151,11 +151,11 @@ public class PodatkovnaLjuskaDAO {
 				
 				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
 				BufferedImage slika = null;
-				try {													//dodatno testirat
+				/*try {													//dodatno testirat
 		        	slika = ImageIO.read(new File(slikaPath));
 		        } catch (IOException e){
 		            e.printStackTrace();
-		        }
+		        }*/
 				
 				Korisnik vlasnik = new Korisnik (idVlasnik);
 				Restoran trenRestoran = new Restoran(idRestoran, imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, oib, iban, ziroRac, adresa);	// dodan i id restorana u restorane koji vec postoje i stvaraju se iz baze podataka -LM

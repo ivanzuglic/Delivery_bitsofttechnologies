@@ -1,16 +1,25 @@
 package Database;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Set;
 import java.util.TreeSet;
+
+import javax.imageio.ImageIO;
+
 import DataStructure.Artikl;
+import DataStructure.GeoLokacija;
+import DataStructure.Korisnik;
 import DataStructure.Restoran;
 
-public class RestoranDAO {			//ispravljen try-catch i konstruktor
+public class RestoranDAO {			
 	
 	private String userDB;
 	private String passwDB;
@@ -26,12 +35,12 @@ public class RestoranDAO {			//ispravljen try-catch i konstruktor
 	
 	public int pohraniRestoran (Restoran restoran) {
 		
-		String sql = "INSERT INTO restoran (imeRestoran, opis, adresa, geoDuzina, geoSirina, kontaktTelefon, fax, OIB, IBAN, ziroRacun, slika, idVlasnik, restoranOdobren)"
+		String sql = "INSERT INTO restoran (imeRestoran, opis, adresa, lokacijaSirina, lokacijaDuzina, kontaktTelefon, fax, OIB, IBAN, ziroRacun, slika, restoranOdobren, idVlasnik)"
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		int result = 2; // za testiranje
+		int idRestoran = 0;
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
-			PreparedStatement prepSt = con.prepareStatement(sql)) {
+			PreparedStatement prepSt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			
 			prepSt.setString(1, restoran.getIme());
 			prepSt.setString(2, restoran.getOpis());
@@ -44,17 +53,25 @@ public class RestoranDAO {			//ispravljen try-catch i konstruktor
 			prepSt.setInt(9, restoran.getIBAN());
 			prepSt.setInt(10, restoran.getZiroRacun());
 			prepSt.setString(11, restoran.getSlika().toString());
-			prepSt.setInt(12, restoran.getVlasnik().getKorisnickiId());
-			prepSt.setBoolean(13, restoran.isOdobren());
+			prepSt.setBoolean(12, restoran.isOdobren());
+			prepSt.setInt(13, restoran.getVlasnik().getKorisnickiId());
 			
-			result = prepSt.executeUpdate();
+			
+			prepSt.executeUpdate();
+			
+			ResultSet rs = prepSt.getGeneratedKeys();
+			
+			if(rs.next()) {
+				idRestoran = rs.getInt(1);
+			}
+				
 			
 		} catch (SQLException sqlExc) {
 			
 			System.out.println(sqlExc.getMessage());
 		}
 		
-		return result;
+		return idRestoran;
 	}
 	
 	public int azurirajRestoran (Restoran restoran) {
@@ -89,6 +106,57 @@ public class RestoranDAO {			//ispravljen try-catch i konstruktor
 		
 		return result;
 	}
+	
+	public Restoran ucitajRestoran(int idRestoran) {
+		
+		String sql = "SELECT restoran.* FROM restoran WHERE idRestoran = ?";
+		
+		Restoran restoran = null;
+		
+		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
+			PreparedStatement prepSt = con.prepareStatement(sql)) {
+			
+			prepSt.setInt(1, idRestoran);
+			
+			ResultSet rs = prepSt.executeQuery();
+			
+			if(rs.next()) {
+				
+				String imeRestoran = rs.getString(2);
+				String opis = rs.getString(3);
+				String adresa = rs.getString(4);
+				float lokacijaSirina = rs.getFloat(5);	
+				float lokacijaDuzina = rs.getFloat(6);	 
+				String telefon = rs.getString(7);
+				String fax = rs.getString(8);
+				int oib = rs.getInt(9);					
+				int iban = rs.getInt(10);				
+				int ziroRac = rs.getInt(11);			
+				String slikaPath = rs.getString(12);
+				boolean odobren = rs.getBoolean(13);	
+				
+				int idVlasnik = rs.getInt(14);
+				
+				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
+				BufferedImage slika = null;
+				try {
+		        	slika = ImageIO.read(new File(slikaPath)); 			 //dodatno testirat
+		        } catch (IOException e){
+		            e.printStackTrace();
+		        }
+				
+				Korisnik vlasnik = new Korisnik (idVlasnik);
+				restoran = new Restoran(idRestoran, imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, oib, iban, ziroRac, adresa);
+			
+			}	
+		} catch (SQLException sqlExc) {
+			
+			System.out.println(sqlExc.getMessage());
+		}
+		
+		return restoran;
+	}
+	
 
 	public Set<Artikl> dohvatiMeni (Restoran restoran) {
 		

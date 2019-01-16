@@ -40,5 +40,7 @@ public class Dostavljac extends Korisnik{
 		
 		DostavljacDAO dao = new DostavljacDAO();
 		this.listaZadataka = dao.dohvatiListuZadataka(this.getKorisnickiId());
+		
+		// listu zadataka treba sortirati po idZadatka takoosiguravamo da se izvode istim redom kao što su i zadani;
 	}
 }

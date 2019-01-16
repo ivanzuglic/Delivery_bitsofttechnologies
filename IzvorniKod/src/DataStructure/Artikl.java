@@ -22,6 +22,7 @@ public class Artikl {
     	this.opis= opis;
     	
     	this.pohraniDB();
+    	this.dohvatiId();
     }
 	
 	// konstruktor koji se koristi kada se artikl ucitava iz baze podataka
@@ -101,5 +102,17 @@ public class Artikl {
     	
     	ArtiklDAO dao = new ArtiklDAO();
     	dao.azurirajArtikl(this);
+    }
+    
+    private void dohvatiId () {
+    	
+    	int id;
+    	ArtiklDAO dao = new ArtiklDAO();
+    	id = dao.dohvatiIdArtikla(this);
+    	
+    	if (id > 0) {
+    		
+    		this.idArtikl = id;
+    	}
     }
 }

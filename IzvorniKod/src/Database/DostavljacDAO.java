@@ -29,11 +29,13 @@ public class DostavljacDAO {
 	public List<Zadatak> dohvatiListuZadataka (int idDostavljaca) {
 		
 		List<Zadatak> zadaci = new ArrayList<>();
-		String sql = "SELECT narudzba.idNar, narudzba.istaNarudzba, zadatak.vrstaZad FROM zadatak NATURAL JOIN narudzba WHERE idDostavljac = ? AND zadGotov = false";
+		String sql = "SELECT narudzba.idNar, narudzba.istaNarudzba, zadatak.vrstaZad, zadatak.idZad FROM zadatak NATURAL JOIN narudzba WHERE idDostavljac = ? AND zadGotov = false";
 		String sql2 = "SELECT zadatak.* FROM zadatak NATURAL JOIN narudzba WHERE idDostavljac = ? AND vrstaZad = ?";
 		
 		int[] idNarudzbi = new int[300];			// moze i neka druga struktura
+		int[] idZadatka = new int[300];				// mozda promijeniti u liste - LM
 		String[] vrsteZadataka = new String[300];
+		
 		
 		try (Connection con = DriverManager.getConnection(host, userDB, passwDB);
 			PreparedStatement prepSt = con.prepareStatement(sql)) {
@@ -43,8 +45,12 @@ public class DostavljacDAO {
 			
 			int i = 0;
 			while(rs.next()) {				
+				
 				idNarudzbi[i] = rs.getInt(1);
 				vrsteZadataka[i] = rs.getString(3);
+				idZadatka[i] = rs.getInt(4);
+				
+				i++;	// falila je inkrementacija
 			}
 			
 		} catch (SQLException sqlExc) {
@@ -53,6 +59,7 @@ public class DostavljacDAO {
 		}
 		
 		for (int i = 0; i < idNarudzbi.length; i++) {
+			
 			Narudzba nar = new Narudzba(idNarudzbi[i]);
 			VrsteZadataka vrsta = VrsteZadataka.valueOf(vrsteZadataka[i]);
 			GeoLokacija lokacija = null;
@@ -65,7 +72,7 @@ public class DostavljacDAO {
 				
 				lokacija = nar.getLokacijaPreuzimanja();
 				
-			} else {											// zadatak je IDINALOKACIJU -> moramo dobiti lokaciju iz 'Zadatak' za danog dostavljaca
+			} else {	// zadatak je IDINALOKACIJU -> moramo dobiti lokaciju iz 'Zadatak' za danog dostavljaca
 				
 				try (Connection con = DriverManager.getConnection(host, userDB, passwDB);
 					PreparedStatement prepSt = con.prepareStatement(sql2)) {
@@ -75,11 +82,11 @@ public class DostavljacDAO {
 					ResultSet rs = prepSt.executeQuery();
 					
 					if(rs.next()) {
+
 						float geoSirinaIdiNaLokaciju = rs.getFloat(5);
 						float geoDuzinaIdiNaLokaciju= rs.getFloat(6);
 						lokacija = new GeoLokacija(geoSirinaIdiNaLokaciju, geoDuzinaIdiNaLokaciju, "Idi na lokaciju");
 					}
-					
 					
 				} catch (SQLException sqlExc) {
 					
@@ -87,8 +94,8 @@ public class DostavljacDAO {
 				} 
 			} 
 			
-			Zadatak zadatak = new Zadatak(nar, vrsta, lokacija);
-			zadaci.add(zadatak);			
+			Zadatak zadatak = new Zadatak(idZadatka[i], nar, vrsta, lokacija);	// dodao sam i id zadatka da mozemo sortirati listu zadataka koje dostavljac ima
+			zadaci.add(zadatak);		
 		}
 		
 		return zadaci;

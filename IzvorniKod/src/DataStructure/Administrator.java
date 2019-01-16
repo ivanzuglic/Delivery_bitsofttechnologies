@@ -20,10 +20,11 @@ public class Administrator extends Korisnik {   //ispravljeni konstruktori od Ad
 	public void odobriRestoran (Restoran restoran, Zastavice z) {	//dodana implementacija AdministratorDAO klase	
 		
 		restoran.setOdobren(true, z);	// dodano da se automatski azurira i lokalni objekt - LM
+		
 		AdministratorDAO aDAO = new AdministratorDAO();
 		int rezultat = aDAO.setRestoranOdobren(restoran.getId());
 		
-		System.out.println("Uspjesnost upita: " + rezultat); 		
+		// System.out.println("Uspjesnost upita: " + rezultat); 		
 	}
 	
 	public void promijeniRazinuPristupa (Korisnik korisnik, VrstaKorisnika novaRazinaPristupa) {	//dodana implementacija AdministratorDAO klase
@@ -31,7 +32,7 @@ public class Administrator extends Korisnik {   //ispravljeni konstruktori od Ad
 		AdministratorDAO aDAO = new AdministratorDAO();
 		int rezultat = aDAO.setRazinaPristupa(korisnik.getKorisnickiId(), novaRazinaPristupa.toString());
 		
-		System.out.println("Uspjesnost upita: " + rezultat); 	
+		// System.out.println("Uspjesnost upita: " + rezultat); 	
 	}
 
 	public List<Restoran> getListaOdobrenihRestorana () {	

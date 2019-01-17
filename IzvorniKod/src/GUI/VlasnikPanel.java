@@ -30,6 +30,7 @@ import DataStructure.Korisnik;
 import DataStructure.Kosarica;
 import DataStructure.Restoran;
 import DataStructure.Vlasnik;
+import jdk.nashorn.internal.codegen.OptimisticTypesPersistence;
 
 public class VlasnikPanel extends JPanel {
 
@@ -39,6 +40,7 @@ public class VlasnikPanel extends JPanel {
 	private JPanel logoPanel;
 	private JPanel northPanel;
 	private JPanel usrInfoPanel;
+	private JPanel centerPanel;
 	private ActionListener listaListener;
 	private ActionListener kosaricaListener;
 	private ActionListener pratiListener;
@@ -57,7 +59,12 @@ public class VlasnikPanel extends JPanel {
 	public VlasnikPanel(DefaultWindow window, Vlasnik klijent) {
 		this.window = window;
 		this.trenutniKlijent = klijent;
+		
 		setLayout(new BorderLayout());
+		centerPanel = new JPanel();
+		centerPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
+		centerPanel.setBackground(Color.white);
+		add(centerPanel, BorderLayout.CENTER);
 		
 		//Definicije listenera za 4 glavna gumba
 		odjavaListener = (actionEvent) -> {
@@ -175,14 +182,16 @@ public class VlasnikPanel extends JPanel {
 	}
 
 	private void kosaricaPanelSwitch() {
-		JPanel kosaricaPanelMain = new JPanel();
-		kosaricaPanelMain.setLayout(new BorderLayout());
+		//JPanel kosaricaPanelMain = new JPanel();
+		//kosaricaPanelMain.setLayout(new BorderLayout());
+		
+		centerPanel.removeAll();
+		centerPanel.setLayout(new BorderLayout());
 		
 		JPanel kosaricaSadrzaj = new JPanel();
 		kosaricaSadrzaj.setLayout(new BorderLayout());
 		kosaricaSadrzaj.setLayout(new BoxLayout(kosaricaSadrzaj, BoxLayout.PAGE_AXIS));
 		kosaricaSadrzaj.setBackground(Color.WHITE);
-		kosaricaPanelMain.add(kosaricaSadrzaj, BorderLayout.CENTER);
 		
 		JPanel opisKosaricaPanel = new JPanel();
 		opisKosaricaPanel.setBackground(Color.white);
@@ -190,7 +199,7 @@ public class VlasnikPanel extends JPanel {
 		opisKosarica.setText("Trenutni sadrzaj kosarice: ");
 		opisKosarica.setForeground(new Color(0, 153, 255));
 		opisKosaricaPanel.add(opisKosarica);
-		kosaricaPanelMain.add(opisKosaricaPanel, BorderLayout.NORTH);
+		centerPanel.add(opisKosaricaPanel, BorderLayout.NORTH);
 		
 		//trenKosarica = window.podLjuska.getKosarica;
 		puniKosaricu(kosaricaSadrzaj);
@@ -208,13 +217,11 @@ public class VlasnikPanel extends JPanel {
 		
 		ActionListener naruciListener = (actionListener) -> {
 			trenKosarica.finalizirajNarudzbu(lokacijaDostave, trenutniKlijent);
-		};
-		
-		ActionListener adrListener = (actionListener) -> {
 			lokacijaDostave = new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), labelField.getText());
 		};
 		
 		JPanel kosaricaButtonPanel = new JPanel();
+		kosaricaButtonPanel.setLayout(new FlowLayout());
 		
 		kosaricaButtonPanel.add(unosAdr1);
 		kosaricaButtonPanel.add(unosAdr2);
@@ -224,18 +231,16 @@ public class VlasnikPanel extends JPanel {
 		kosaricaButtonPanel.add(unosAdr4);
 		kosaricaButtonPanel.add(labelField);
 		
-		kosaricaButtonPanel.setLayout(new FlowLayout());
-		JButton odaberiAdr = new JButton("Adresa za dostavu");
-		odaberiAdr.addActionListener(adrListener);
-		kosaricaButtonPanel.add(odaberiAdr);
 		JButton naruci = new JButton("Naruci");
 		naruci.addActionListener(naruciListener);
 		kosaricaButtonPanel.add(naruci);
-		kosaricaPanelMain.add(kosaricaButtonPanel, BorderLayout.SOUTH);
+		kosaricaButtonPanel.setBackground(Color.WHITE);
+		centerPanel.add(kosaricaButtonPanel, BorderLayout.SOUTH);
 		
-		showScrollPane = new JScrollPane(kosaricaPanelMain);
-		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
-		add(showScrollPane, BorderLayout.CENTER);
+		showScrollPane = new JScrollPane(kosaricaSadrzaj);
+		centerPanel.add(showScrollPane, BorderLayout.CENTER);
+		add(centerPanel, BorderLayout.CENTER);
+		centerPanel.revalidate();
 		revalidate();
 	}
 	
@@ -283,8 +288,7 @@ public class VlasnikPanel extends JPanel {
 	}
 
 	private void showPanelfill() {
-		//Nepotpuna definicija panela sa listom restorana
-		//Potrebno dalje istraziti kako radi JScrollPane
+		centerPanel.removeAll();
 		JPanel restorani = new JPanel();
 		restorani.setLayout(new BoxLayout(restorani, BoxLayout.PAGE_AXIS));
 		restorani.setBackground(Color.WHITE);
@@ -380,22 +384,21 @@ public class VlasnikPanel extends JPanel {
 		
 		showScrollPane = new JScrollPane(restorani);
 		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
-		add(showScrollPane, BorderLayout.CENTER);
+		centerPanel.add(showScrollPane, BorderLayout.CENTER);
 		revalidate();
 		
 	}
 	
 	private void urediPanel() {
-		JPanel urediRestoran = new JPanel();
-		urediRestoran.setLayout(new BorderLayout());
-		JScrollPane meni = new JScrollPane();
-		urediRestoran.add(meni, BorderLayout.CENTER);
+		//JPanel urediRestoran = new JPanel();
+		centerPanel.removeAll();
+		centerPanel.setLayout(new BorderLayout());
 				
 		JPanel menuSadrzaj = new JPanel();
-		menuSadrzaj.setLayout(new BorderLayout());
 		menuSadrzaj.setLayout(new BoxLayout(menuSadrzaj, BoxLayout.PAGE_AXIS));
 		menuSadrzaj.setBackground(Color.WHITE);
-		urediRestoran.add(menuSadrzaj, BorderLayout.CENTER);
+		
+		dohvatiMenu(menuSadrzaj);
 		
 		JPanel opisPanel = new JPanel();
 		opisPanel.setBackground(Color.white);
@@ -403,50 +406,44 @@ public class VlasnikPanel extends JPanel {
 		opis.setText("Trenutni sadrzaj menu-a vaseg restorana: ");
 		opis.setForeground(new Color(0, 153, 255));
 		opisPanel.add(opis);
-		urediRestoran.add(opisPanel, BorderLayout.NORTH);
 		
-		//trenKosarica = window.podLjuska.getKosarica;
-		puniKosaricu(menuSadrzaj);
-		
-		JLabel unosAdr1 = new JLabel("Informacije o adresi: ");
-		JLabel unosAdr2 = new JLabel("X: ");
-		JTextField xField = new JTextField();
-		xField.setColumns(7);
-		JLabel unosAdr3 = new JLabel("Y: ");
-		JTextField yField = new JTextField();
-		yField.setColumns(7);
-		JLabel unosAdr4 = new JLabel("Labela: ");
-		JTextField labelField = new JTextField();
-		labelField.setColumns(14);
+		JLabel unosAdr1 = new JLabel("Naziv artikla: ");
+		JTextField nazivField = new JTextField();
+		nazivField.setColumns(14);
+		JLabel unosAdr2 = new JLabel("Cijena artikla: ");
+		JTextField cijenaField = new JTextField();
+		cijenaField.setColumns(8);
 		
 		ActionListener dodajListener = (actionListener) -> {
 			//Napraviti		
 		};
 		
-		JPanel kosaricaButtonPanel = new JPanel();
+		JPanel urediButtonPanel = new JPanel();
+		urediButtonPanel.setBackground(Color.white);
 		
-		kosaricaButtonPanel.add(unosAdr1);
-		kosaricaButtonPanel.add(unosAdr2);
-		kosaricaButtonPanel.add(xField);
-		kosaricaButtonPanel.add(unosAdr3);
-		kosaricaButtonPanel.add(yField);
-		kosaricaButtonPanel.add(unosAdr4);
-		kosaricaButtonPanel.add(labelField);
+		urediButtonPanel.add(unosAdr1);
+		urediButtonPanel.add(nazivField);
+		urediButtonPanel.add(unosAdr2);
+		urediButtonPanel.add(cijenaField);
 		
-		kosaricaButtonPanel.setLayout(new FlowLayout());
-		JButton odaberiAdr = new JButton("Adresa za dostavu");
-		kosaricaButtonPanel.add(odaberiAdr);
-		JButton naruci = new JButton("Naruci");
-		kosaricaButtonPanel.add(naruci);
+		urediButtonPanel.setLayout(new FlowLayout());
+		JButton dodaj = new JButton("Dodaj artikl");
+		dodaj.addActionListener(dodajListener);
+		urediButtonPanel.add(dodaj);
 		
-		showScrollPane = new JScrollPane(urediRestoran);
-		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
-		add(showScrollPane, BorderLayout.CENTER);
+		showScrollPane = new JScrollPane(menuSadrzaj);
+		
+		centerPanel.add(opisPanel, BorderLayout.NORTH);
+		centerPanel.add(showScrollPane, BorderLayout.CENTER);
+		centerPanel.add(urediButtonPanel, BorderLayout.SOUTH);
+		
+		add(centerPanel, BorderLayout.CENTER);
+		centerPanel.revalidate();
 		revalidate();
 		
 	}
 
-	private void puniShowPanel() {
+	private void dohvatiMenu(JPanel menuSadrzaj) {
 		// TODO Auto-generated method stub
 		
 	}

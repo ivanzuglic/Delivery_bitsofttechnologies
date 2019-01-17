@@ -313,7 +313,32 @@ public class KorisnikPanel extends JPanel {
 				poruka.removeAll();
 				poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
 				poruka.revalidate();
-				window.switchToKlijent(new Klijent(korImeField.getText(), lozinkaField.getText(), imeField.getText(), prezField.getText(), brMobField.getText(), mailField.getText()));
+				
+				// dodano isto kao i u prijavi - LM
+				if (window.podLjuska.getZastavice().isAdministrator()) {
+					window.switchToAdmin(window.podLjuska.getTrenutniAdministrator());
+				}
+				
+				if (window.podLjuska.getZastavice().isDispecer()) {
+					window.switchToDispecer(window.podLjuska.getTrenutniDispecer());
+				}
+
+				
+				if (window.podLjuska.getZastavice().isDostavljac()) {
+					window.switchToDostavljac(window.podLjuska.getTrenutniDostavljac());
+				}
+
+				
+				if (window.podLjuska.getZastavice().isKlijent()) {
+					window.switchToKlijent(window.podLjuska.getTrenutniKlijent());
+				}
+
+				
+				if (window.podLjuska.getZastavice().isVlasnik()) {
+					window.switchToVlasnik(window.podLjuska.getTrenutniVlasnik());
+				}
+				
+				
 				Timer timer = new Timer(1500, new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            	Registracija.dispatchEvent(new WindowEvent(Registracija, WindowEvent.WINDOW_CLOSING));

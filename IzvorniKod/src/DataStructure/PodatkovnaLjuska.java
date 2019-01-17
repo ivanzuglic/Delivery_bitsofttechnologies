@@ -27,6 +27,11 @@ public class PodatkovnaLjuska {
 	// metoda vraca true ako je registracija uspjesno provedena, vraca false ako korisnicko ime nije dostupno
 	public boolean registracija (String korisnickoIme, String lozinka, String ime, String prezime, String brMobitela, String eMail) {
 		
+		if (korisnickoIme.equals("") || lozinka.equals("") || ime.equals("") || prezime.equals("") || brMobitela.equals("") || eMail.equals("")) {
+			
+			return false;
+		}
+		
 		boolean valjan = false;
 		
 		// provjeri dostupnost korisnickog imena u bazi podataka - ako je korisnicko ime dostupno postavi valjan u true

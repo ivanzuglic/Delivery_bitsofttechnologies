@@ -25,7 +25,7 @@ public class NarudzbaDAO {
 	public NarudzbaDAO() {
 		
 		this.userDB = "myuser";
-		this.passwDB = "abc";
+		this.passwDB = "abcd";
 		this.host = "jdbc:mysql://localhost:3306/dostavljaona?allowPublicKeyRetrieval=true&useSSL=false&useLegacyDatetimeCode=false";
 	}
 	

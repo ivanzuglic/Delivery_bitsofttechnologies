@@ -15,10 +15,12 @@ public class KlijentDAO {
 	private String passwDB;
 	private String host;
 	
+	
 	public KlijentDAO () {
+		
 		this.userDB = "myuser";
-		this.passwDB = "abc";
-		this.host = "jdbc:mysql://localhost:3306/dostavljaona?useSSL=false&useLegacyDatetimeCode=false";
+		this.passwDB = "abcd";
+		this.host = "jdbc:mysql://localhost:3306/dostavljaona?allowPublicKeyRetrieval=true&useSSL=false&useLegacyDatetimeCode=false";
 	}
 	
 	// metoda vraca -1 ako nema aktivnih narudzbi za trenutnog korisnika

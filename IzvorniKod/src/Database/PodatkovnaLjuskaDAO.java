@@ -26,7 +26,7 @@ public class PodatkovnaLjuskaDAO {
 		
 		this.userDB = "myuser";
 		this.passwDB = "abcd";
-		this.host = "jdbc:mysql://localhost:3306/dostavljaona?useSSL=false&useLegacyDatetimeCode=false";
+		this.host = "jdbc:mysql://localhost:3306/dostavljaona?allowPublicKeyRetrieval=true&useSSL=false&useLegacyDatetimeCode=false";
 	}
 	
 	public String vrstaKorisnika (String korisnickoIme) {

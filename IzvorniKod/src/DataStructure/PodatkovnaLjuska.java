@@ -8,7 +8,13 @@ public class PodatkovnaLjuska {
 
 	private Set<Restoran> restorani;
 	private Restoran trenutniRestoran = null;
-	private Korisnik trenutniKorisnik = null;
+	
+	private Klijent trenutniKlijent = null;
+	private Vlasnik trenutniVlasnik = null;
+	private Dostavljac trenutniDostavljac = null;
+	private Dispecer trenutniDispecer = null;
+	private Administrator trenutniAdministrator = null;
+	
 	private Zastavice zastavice;
 	
 
@@ -28,9 +34,9 @@ public class PodatkovnaLjuska {
 		
 		if (valjan) {
 			
-			this.trenutniKorisnik = new Klijent(korisnickoIme, lozinka, ime, prezime, brMobitela, eMail);
+			this.trenutniKlijent = new Klijent(korisnickoIme, lozinka, ime, prezime, brMobitela, eMail);
 			this.postaviZastavice(VrstaKorisnika.KLIJENT);
-			this.postaviOnlineStatus(trenutniKorisnik.getKorisnickoIme(), true);
+			this.postaviOnlineStatus(korisnickoIme, true);
 			
 			return true;
 		}
@@ -55,23 +61,23 @@ public class PodatkovnaLjuska {
 		if (valjan) {
 			
 			if (vrsta == VrstaKorisnika.KLIJENT) {
-				this.trenutniKorisnik = new Klijent(korisnickoIme, lozinka);
+				this.trenutniKlijent = new Klijent(korisnickoIme, lozinka);
 			}
 			else if (vrsta == VrstaKorisnika.VLASNIK) {
-				this.trenutniKorisnik = new Vlasnik(korisnickoIme, lozinka);
+				this.trenutniVlasnik = new Vlasnik(korisnickoIme, lozinka);
 			}
 			else if (vrsta == VrstaKorisnika.DISPECER) {
-				this.trenutniKorisnik = new Dispecer(korisnickoIme, lozinka);
+				this.trenutniDispecer = new Dispecer(korisnickoIme, lozinka);
 			}
 			else if (vrsta == VrstaKorisnika.DOSTAVLJAC) {
-				this.trenutniKorisnik = new Dostavljac(korisnickoIme, lozinka);
+				this.trenutniDostavljac = new Dostavljac(korisnickoIme, lozinka);
 			}
 			else if (vrsta == VrstaKorisnika.ADMIN) {
-				this.trenutniKorisnik = new Administrator(korisnickoIme, lozinka);
+				this.trenutniAdministrator = new Administrator(korisnickoIme, lozinka);
 			}
 			
 			this.postaviZastavice(vrsta);
-			this.postaviOnlineStatus(trenutniKorisnik.getKorisnickoIme(), true);
+			this.postaviOnlineStatus(korisnickoIme, true);
 			
 			return true;
 		}
@@ -83,9 +89,29 @@ public class PodatkovnaLjuska {
 	
 	public void odjava () {
 		
-		this.postaviOnlineStatus(trenutniKorisnik.getKorisnickoIme(), false);
+		if(this.zastavice.isKlijent()) {
+			this.postaviOnlineStatus(this.trenutniKlijent.getKorisnickoIme(), false);
+		}
+		if(this.zastavice.isVlasnik()) {
+			this.postaviOnlineStatus(this.trenutniVlasnik.getKorisnickoIme(), false);
+		}
+		if(this.zastavice.isDostavljac()) {
+			this.postaviOnlineStatus(this.trenutniDostavljac.getKorisnickoIme(), false);
+		}
+		if(this.zastavice.isDispecer()) {
+			this.postaviOnlineStatus(this.trenutniDispecer.getKorisnickoIme(), false);
+		}
+		if(this.zastavice.isAdministrator()) {
+			this.postaviOnlineStatus(this.trenutniAdministrator.getKorisnickoIme(), false);
+		}
+		
 		this.zastavice.resetirajZastavice();
-		this.trenutniKorisnik = null;
+		
+		this.trenutniKlijent = null;
+		this.trenutniVlasnik = null;
+		this.trenutniDostavljac = null;
+		this.trenutniDispecer = null;
+		this.trenutniAdministrator = null;
 	}
 	
 
@@ -106,12 +132,30 @@ public class PodatkovnaLjuska {
 		return restorani;
 	}
 	
-
-	public Korisnik getTrenutniKorisnik() {
+	public Klijent getTrenutniKlijent() {
 		
-		return trenutniKorisnik;
+		return this.trenutniKlijent;
 	}
 	
+	public Vlasnik getTrenutniVlasnik() {
+		
+		return this.trenutniVlasnik;
+	}
+	
+	public Dostavljac getTrenutniDostavljac() {
+		
+		return this.trenutniDostavljac;
+	}
+	
+	public Dispecer getTrenutniDispecer() {
+		
+		return this.trenutniDispecer;
+	}
+	
+	public Administrator getTrenutniAdministrator() {
+		
+		return this.trenutniAdministrator;
+	}
 
 	public Zastavice getZastavice() {
 		

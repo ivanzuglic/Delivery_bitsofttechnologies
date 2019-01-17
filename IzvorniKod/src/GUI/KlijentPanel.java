@@ -10,6 +10,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -23,8 +26,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneLayout;
 
+import DataStructure.Artikl;
+import DataStructure.GeoLokacija;
 import DataStructure.Klijent;
 import DataStructure.Korisnik;
+import DataStructure.Kosarica;
+import DataStructure.Restoran;
 
 /**
  * Razred koji definira izgled i funkcionalnosti za Klijente
@@ -35,18 +42,21 @@ import DataStructure.Korisnik;
 public class KlijentPanel extends JPanel {
 	
 	private JPanel buttonsPanel1;
-	private JPanel buttonsPanel2;
 	private JPanel toolbar;
 	private JScrollPane showScrollPane;
 	private JPanel logoPanel;
 	private JPanel northPanel;
 	private JPanel usrInfoPanel;
+	private ActionListener listaListener;
 	private ActionListener kosaricaListener;
 	private ActionListener pratiListener;
 	private ActionListener predloziListener;
 	private ActionListener odjavaListener;
 	private DefaultWindow window;
 	private Korisnik trenutniKlijent;
+	private Set<Restoran> listaRestorani;
+	private Kosarica trenKosarica;
+	private GeoLokacija lokacijaDostave;
 	
 	public Integer brojacChar = 180;
 	
@@ -63,8 +73,16 @@ public class KlijentPanel extends JPanel {
 			window.switchToKorisnikFromKlijent();
 		};
 		
+		kosaricaListener = (actionEvent) -> {
+			kosaricaPanelSwitch();
+		};
+		
 		predloziListener = (actionEvent) -> {
 			preedloziWindow();
+		};
+		
+		listaListener = (actionEvent) -> {
+			showPanelfill();
 		};
 		
 		//Definicija Toolbar-a
@@ -76,6 +94,14 @@ public class KlijentPanel extends JPanel {
 		buttonsPanel1.setLayout(new BoxLayout(buttonsPanel1, BoxLayout.Y_AXIS));
 		buttonsPanel1.setBackground(Color.white);
 		
+		//Definicija gumba za listu restorana
+		JButton listaRestorana = new JButton();
+		listaRestorana.setMaximumSize(new Dimension(120, 120));
+		listaRestorana.addActionListener(listaListener);
+		ImageIcon listaImg = new ImageIcon(getClass().getResource("/images/listaMini.png"));
+		listaRestorana.setIcon(listaImg);
+		listaRestorana.setBackground(Color.white);
+				
 		//Definicija gumba za kosaricu
 		JButton kosarica = new JButton();
 		kosarica.setMaximumSize(new Dimension(120, 120));
@@ -83,7 +109,7 @@ public class KlijentPanel extends JPanel {
 		ImageIcon kosaricaImg = new ImageIcon(getClass().getResource("/images/KosaricaMini.png"));
 		kosarica.setIcon(kosaricaImg);
 		kosarica.setBackground(Color.white);
-		
+				
 		//Definicija gumba za mapu
 		JButton pratiNarudzbu = new JButton();
 		pratiNarudzbu.setMaximumSize(new Dimension(120, 120));
@@ -91,18 +117,7 @@ public class KlijentPanel extends JPanel {
 		ImageIcon mapaImg = new ImageIcon(getClass().getResource("/images/MapMini.png"));
 		pratiNarudzbu.setIcon(mapaImg);
 		pratiNarudzbu.setBackground(Color.white);
-		
-		//dodavanje gumbova u prvi (gornji) panel
-		buttonsPanel1.add(kosarica);
-		buttonsPanel1.add(pratiNarudzbu);
-		buttonsPanel1.setPreferredSize(new Dimension(125, 280));
-		toolbar.add(buttonsPanel1, BorderLayout.NORTH);
-		
-		//Definicija drugog (donjeg) panela sa gumbovima koji ide u istocni panel
-		buttonsPanel2 = new JPanel();
-		buttonsPanel2.setBackground(Color.white);
-		buttonsPanel2.setLayout(new BoxLayout(buttonsPanel2, BoxLayout.Y_AXIS));
-		
+				
 		//Definicija gumba za predlaganje restorana
 		JButton predlozi = new JButton("Predlozi restoran");
 		predlozi.setMaximumSize(new Dimension(120, 120));
@@ -110,7 +125,7 @@ public class KlijentPanel extends JPanel {
 		ImageIcon restoranImg = new ImageIcon(getClass().getResource("/images/DodajrestoranMini.png"));
 		predlozi.setIcon(restoranImg);
 		predlozi.setBackground(Color.white);
-		
+				
 		//Definicija gumba za odjavu
 		JButton odjaviSe = new JButton("Odjavi se");
 		odjaviSe.setMaximumSize(new Dimension(120, 120));
@@ -118,14 +133,18 @@ public class KlijentPanel extends JPanel {
 		ImageIcon odjavaImg = new ImageIcon(getClass().getResource("/images/OdjaviSeLogoMini.png"));
 		odjaviSe.setIcon(odjavaImg);
 		odjaviSe.setBackground(Color.white);
-		
-		//Dodavanje gumba u drugi (donji) panel
-		buttonsPanel2.setPreferredSize(new Dimension(125, 275));
-		buttonsPanel2.add(predlozi);
-		buttonsPanel2.add(odjaviSe);
-		toolbar.add(buttonsPanel2, BorderLayout.SOUTH);
-		
-		//Dodavanje gornjeg i donjeg panela s gumbovima u toolbar
+				
+		//dodavanje gumbova u panel
+		buttonsPanel1.add(listaRestorana);
+		buttonsPanel1.add(kosarica);
+		buttonsPanel1.add(pratiNarudzbu);
+		buttonsPanel1.add(predlozi);
+		buttonsPanel1.add(odjaviSe);
+		buttonsPanel1.setPreferredSize(new Dimension(125, 3000));
+		toolbar.add(buttonsPanel1, BorderLayout.NORTH);
+				
+				
+		//Dodavanje panela s gumbovima u toolbar
 		toolbar.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
 		toolbar.setPreferredSize(new Dimension(120, 500));
 		toolbar.setBackground(Color.white);
@@ -159,19 +178,225 @@ public class KlijentPanel extends JPanel {
 		usrInfoPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
 		northPanel.add(usrInfoPanel, BorderLayout.EAST);
 		
+		showPanelfill();
+
+	}
+
+	private void kosaricaPanelSwitch() {
+		JPanel kosaricaPanelMain = new JPanel();
+		kosaricaPanelMain.setLayout(new BorderLayout());
+		
+		JPanel kosaricaSadrzaj = new JPanel();
+		kosaricaSadrzaj.setLayout(new BorderLayout());
+		kosaricaSadrzaj.setLayout(new BoxLayout(kosaricaSadrzaj, BoxLayout.PAGE_AXIS));
+		kosaricaSadrzaj.setBackground(Color.WHITE);
+		kosaricaPanelMain.add(kosaricaSadrzaj, BorderLayout.CENTER);
+		
+		JPanel opisKosaricaPanel = new JPanel();
+		opisKosaricaPanel.setBackground(Color.white);
+		JLabel opisKosarica = new JLabel();
+		opisKosarica.setText("Trenutni sadrzaj kosarice: ");
+		opisKosarica.setForeground(new Color(0, 153, 255));
+		opisKosaricaPanel.add(opisKosarica);
+		kosaricaPanelMain.add(opisKosaricaPanel, BorderLayout.NORTH);
+		
+		//trenKosarica = window.podLjuska.getKosarica;
+		puniKosaricu(kosaricaSadrzaj);
+		
+		JLabel unosAdr1 = new JLabel("Informacije o adresi: ");
+		JLabel unosAdr2 = new JLabel("X: ");
+		JTextField xField = new JTextField();
+		xField.setColumns(7);
+		JLabel unosAdr3 = new JLabel("Y: ");
+		JTextField yField = new JTextField();
+		yField.setColumns(7);
+		JLabel unosAdr4 = new JLabel("Labela: ");
+		JTextField labelField = new JTextField();
+		labelField.setColumns(14);
+		
+		ActionListener naruciListener = (actionListener) -> {
+			trenKosarica.finalizirajNarudzbu(lokacijaDostave, trenutniKlijent);
+		};
+		
+		ActionListener adrListener = (actionListener) -> {
+			lokacijaDostave = new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), labelField.getText());
+		};
+		
+		JPanel kosaricaButtonPanel = new JPanel();
+		
+		kosaricaButtonPanel.add(unosAdr1);
+		kosaricaButtonPanel.add(unosAdr2);
+		kosaricaButtonPanel.add(xField);
+		kosaricaButtonPanel.add(unosAdr3);
+		kosaricaButtonPanel.add(yField);
+		kosaricaButtonPanel.add(unosAdr4);
+		kosaricaButtonPanel.add(labelField);
+		
+		kosaricaButtonPanel.setLayout(new FlowLayout());
+		JButton odaberiAdr = new JButton("Adresa za dostavu");
+		odaberiAdr.addActionListener(adrListener);
+		kosaricaButtonPanel.add(odaberiAdr);
+		JButton naruci = new JButton("Naruci");
+		naruci.addActionListener(naruciListener);
+		kosaricaButtonPanel.add(naruci);
+		kosaricaPanelMain.add(kosaricaButtonPanel, BorderLayout.SOUTH);
+		
+		showScrollPane = new JScrollPane(kosaricaPanelMain);
+		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
+		add(showScrollPane, BorderLayout.CENTER);
+		revalidate();
+	}
+	
+	private void puniKosaricu(JPanel sadrzaj) {
+		Map<Artikl, Integer> artikli = new HashMap<Artikl, Integer>();
+		for(Map.Entry<Artikl, Integer> artikl : artikli.entrySet()) {
+			JPanel artiklPanel = new JPanel();
+			artiklPanel.setLayout(new BorderLayout());
+			JPanel artiklInfo = new JPanel();
+			artiklInfo.setLayout(new FlowLayout());
+			artiklInfo.add(new JLabel(artikl.toString()));
+			artiklInfo.add(new JLabel(artikl.getValue().toString()));
+			
+			JPanel artiklKol = new JPanel();
+			artiklKol.setLayout(new FlowLayout());
+			
+			JButton plus = new JButton(" + ");
+			ActionListener plusListener = (actionListener) -> {
+				Integer kolicina = artikl.getValue();
+				trenKosarica.promijeniKolicinu(artikl.getKey(), ++kolicina);
+				puniKosaricu(sadrzaj);
+			};
+			plus.addActionListener(plusListener);
+			
+			
+			JButton minus = new JButton(" - ");
+			ActionListener minusListener = (actionListener) -> {
+				Integer kolicina = artikl.getValue();
+				trenKosarica.promijeniKolicinu(artikl.getKey(), --kolicina);
+				puniKosaricu(sadrzaj);
+			};
+			minus.addActionListener(minusListener);
+			
+			JLabel kolicinaLabel = new JLabel(" " + artikl.getValue().toString() + " ");
+			
+			artiklKol.add(plus);
+			artiklKol.add(kolicinaLabel);
+			artiklKol.add(minus);
+			
+			artiklPanel.add(artiklInfo, BorderLayout.CENTER);
+			artiklPanel.add(artiklInfo, BorderLayout.WEST);
+			sadrzaj.add(artiklPanel);
+			revalidate();
+		}
+	}
+
+	private void showPanelfill() {
 		//Nepotpuna definicija panela sa listom restorana
 		//Potrebno dalje istraziti kako radi JScrollPane
 		JPanel restorani = new JPanel();
 		restorani.setLayout(new BoxLayout(restorani, BoxLayout.PAGE_AXIS));
 		restorani.setBackground(Color.WHITE);
+		window.podLjuska.napuniSetRestorana();
+		listaRestorani = window.podLjuska.getRestorani();
+		
+		for (Restoran restoran : listaRestorani) {
+			JPanel filler1 = new JPanel();
+			filler1.setMaximumSize(new Dimension(9000, 1));
+			filler1.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+			restorani.add(filler1);
+			
+			JPanel restoranPanel = new JPanel();
+			restoranPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
+			restoranPanel.setMaximumSize(new Dimension(9000, 100));
+			restoranPanel.setLayout(new BorderLayout());
+			restoranPanel.add(new JLabel(new ImageIcon(restoran.getSlika())), BorderLayout.WEST);
+			restoranPanel.add(new JTextArea(restoran.getOpis()), BorderLayout.CENTER);
+			JButton naruci = new JButton("Naruci");
+			
+			ActionListener naruciListener = (actionEvent) -> {
+				JDialog regPopUp = new JDialog();
+				regPopUp.setTitle("Informacija");
+				regPopUp.setLayout(new BorderLayout());
+				
+				ActionListener infoDialog = (actionEvent2) -> {
+					regPopUp.dispatchEvent(new WindowEvent(regPopUp, WindowEvent.WINDOW_CLOSING));
+				};
+				
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.setBackground(Color.white);
+				buttonPanel.setLayout(new FlowLayout());
+				JButton OK = new JButton("OK");
+				OK.addActionListener(infoDialog);
+				buttonPanel.add(OK);
+				regPopUp.add(buttonPanel, BorderLayout.SOUTH);
+				
+				JPanel text = new JPanel();
+				text.setBackground(Color.white);
+				JTextArea area = new JTextArea();
+				area.setText("\nMorate se prijavati kako\nbiste izvrsili tu akciju");
+				area.setForeground(new Color(0, 153, 255));
+				area.setEditable(false);
+				text.add(area);
+				regPopUp.add(text, BorderLayout.CENTER);
+				regPopUp.setResizable(false);
+				regPopUp.setSize(200, 130);
+				regPopUp.setLocation(window.getX()+10, window.getY()+8);
+				regPopUp.setModal(true);
+				regPopUp.setVisible(true);
+			};
+			
+			naruci.addActionListener(naruciListener);
+			restoranPanel.add(new JButton("Naruci"), BorderLayout.EAST);
+			restorani.add(restoranPanel);
+			
+			JPanel filler2 = new JPanel();
+			filler2.setMaximumSize(new Dimension(9000, 1));
+			filler2.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+			restorani.add(filler2);
+		}
+		
+		
+		/*
+		//Primjer1
+		JPanel restoran = new JPanel();
+		restoran.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
+		restoran.setMaximumSize(new Dimension(9000, 100));
+		restoran.setLayout(new BorderLayout());
+		restoran.add(new JLabel(new ImageIcon(getClass().getResource("/images/DodajrestoranMini.png"))), BorderLayout.WEST);
+		restoran.add(new JTextArea("Nekakav opis za restoran"), BorderLayout.CENTER);
+		JButton tempButton = new JButton("Naruci");
+		//tempButton.addActionListener(naruciListener);
+		restoran.add(tempButton, BorderLayout.EAST);
+		restorani.add(restoran);
+		
+		//Filler
+		JPanel filler = new JPanel();
+		filler.setMaximumSize(new Dimension(9000, 1));
+		filler.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+		restorani.add(filler);
+		
+		//Primjer2
+		JPanel restoran2 = new JPanel();
+		restoran2.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
+		restoran2.setMaximumSize(new Dimension(9000, 100));
+		restoran2.setLayout(new BorderLayout());
+		restoran2.add(new JLabel(new ImageIcon(getClass().getResource("/images/DodajrestoranMini.png"))), BorderLayout.WEST);
+		restoran2.add(new JTextArea("\nNekakav opis za restoran"), BorderLayout.CENTER);
+		restoran2.add(new JButton("Naruci"), BorderLayout.EAST);
+		restorani.add(restoran2);
+		*/
+		
 		showScrollPane = new JScrollPane(restorani);
 		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
 		add(showScrollPane, BorderLayout.CENTER);
+		revalidate();
+		
 	}
 
 	private void preedloziWindow() {
 		//Kreiranje dialog prozora
 		JDialog Predlozi = new JDialog();
+		Predlozi.setTitle("Predlozi Restoran");
 		Predlozi.setLayout(new BorderLayout());
 		
 		

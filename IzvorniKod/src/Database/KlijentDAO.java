@@ -27,7 +27,7 @@ public class KlijentDAO {
 	public int dohvatiIdAktivneNarudzbe (int  korisnickiId) {
 		
 		int idNarudzbe = -1;
-		String sql = "SELECT idNar FROM narudzba WHERE idKlijent = ? AND aktivna = true";	// bilo bi pametnije da je aktivna boolean
+		String sql = "SELECT idNar FROM narudzba WHERE idKlijent = ? AND aktivnostNar = true";	// bilo bi pametnije da je aktivna boolean
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB);
 			PreparedStatement prepSt = con.prepareStatement(sql)) {	

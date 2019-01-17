@@ -73,9 +73,19 @@ public class DefaultWindow extends JFrame{
 	  }
 
 
-	public void switchToVlasnik(Korisnik trenutniKorisnik) {
-		// TODO Auto-generated method stub
+	public void switchToVlasnik(Vlasnik trenutniVlasnk) {
 		
+		remove(korPanel);
+		vlasnikPanel = new VlasnikPanel(this, trenutniVlasnk);
+		add(vlasnikPanel);
+		revalidate();
+	}
+	
+	public void switchToKorisnikFromVlasnik() {
+		remove(vlasnikPanel);
+		korPanel = new KorisnikPanel(this);
+		add(korPanel);
+		revalidate();
 	}
 
 

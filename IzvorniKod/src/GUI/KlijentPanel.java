@@ -309,7 +309,7 @@ public class KlijentPanel extends JPanel {
 			restoranPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
 			restoranPanel.setMaximumSize(new Dimension(9000, 100));
 			restoranPanel.setLayout(new BorderLayout());
-			restoranPanel.add(new JLabel(new ImageIcon(restoran.getSlika())), BorderLayout.WEST);
+			//restoranPanel.add(new JLabel(new ImageIcon(restoran.getSlika())), BorderLayout.WEST);
 			restoranPanel.add(new JTextArea(restoran.getOpis()), BorderLayout.CENTER);
 			JButton naruci = new JButton("Naruci");
 			

@@ -47,6 +47,7 @@ public class KlijentPanel extends JPanel {
 	private JPanel logoPanel;
 	private JPanel northPanel;
 	private JPanel usrInfoPanel;
+	private JPanel centerPanel;
 	private ActionListener listaListener;
 	private ActionListener kosaricaListener;
 	private ActionListener pratiListener;
@@ -65,7 +66,13 @@ public class KlijentPanel extends JPanel {
 	public KlijentPanel(DefaultWindow window, Korisnik klijent) {
 		this.window = window;
 		this.trenutniKlijent = klijent;
+		this.showScrollPane = new JScrollPane();
 		setLayout(new BorderLayout());
+		
+		centerPanel = new JPanel();
+		centerPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
+		centerPanel.setBackground(Color.white);
+		add(centerPanel, BorderLayout.CENTER);
 		
 		//Definicije listenera za 4 glavna gumba
 		odjavaListener = (actionEvent) -> {
@@ -183,14 +190,17 @@ public class KlijentPanel extends JPanel {
 	}
 
 	private void kosaricaPanelSwitch() {
-		JPanel kosaricaPanelMain = new JPanel();
-		kosaricaPanelMain.setLayout(new BorderLayout());
+		//JPanel kosaricaPanelMain = new JPanel();
+		//kosaricaPanelMain.setLayout(new BorderLayout());
+		
+		centerPanel.removeAll();
+		showScrollPane.removeAll();
+		centerPanel.setLayout(new BorderLayout());
 		
 		JPanel kosaricaSadrzaj = new JPanel();
 		kosaricaSadrzaj.setLayout(new BorderLayout());
 		kosaricaSadrzaj.setLayout(new BoxLayout(kosaricaSadrzaj, BoxLayout.PAGE_AXIS));
 		kosaricaSadrzaj.setBackground(Color.WHITE);
-		kosaricaPanelMain.add(kosaricaSadrzaj, BorderLayout.CENTER);
 		
 		JPanel opisKosaricaPanel = new JPanel();
 		opisKosaricaPanel.setBackground(Color.white);
@@ -198,7 +208,7 @@ public class KlijentPanel extends JPanel {
 		opisKosarica.setText("Trenutni sadrzaj kosarice: ");
 		opisKosarica.setForeground(new Color(0, 153, 255));
 		opisKosaricaPanel.add(opisKosarica);
-		kosaricaPanelMain.add(opisKosaricaPanel, BorderLayout.NORTH);
+		centerPanel.add(opisKosaricaPanel, BorderLayout.NORTH);
 		
 		//trenKosarica = window.podLjuska.getKosarica;
 		puniKosaricu(kosaricaSadrzaj);
@@ -216,13 +226,11 @@ public class KlijentPanel extends JPanel {
 		
 		ActionListener naruciListener = (actionListener) -> {
 			trenKosarica.finalizirajNarudzbu(lokacijaDostave, trenutniKlijent);
-		};
-		
-		ActionListener adrListener = (actionListener) -> {
 			lokacijaDostave = new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), labelField.getText());
 		};
 		
 		JPanel kosaricaButtonPanel = new JPanel();
+		kosaricaButtonPanel.setLayout(new FlowLayout());
 		
 		kosaricaButtonPanel.add(unosAdr1);
 		kosaricaButtonPanel.add(unosAdr2);
@@ -232,18 +240,16 @@ public class KlijentPanel extends JPanel {
 		kosaricaButtonPanel.add(unosAdr4);
 		kosaricaButtonPanel.add(labelField);
 		
-		kosaricaButtonPanel.setLayout(new FlowLayout());
-		JButton odaberiAdr = new JButton("Adresa za dostavu");
-		odaberiAdr.addActionListener(adrListener);
-		kosaricaButtonPanel.add(odaberiAdr);
 		JButton naruci = new JButton("Naruci");
 		naruci.addActionListener(naruciListener);
 		kosaricaButtonPanel.add(naruci);
-		kosaricaPanelMain.add(kosaricaButtonPanel, BorderLayout.SOUTH);
+		kosaricaButtonPanel.setBackground(Color.WHITE);
+		centerPanel.add(kosaricaButtonPanel, BorderLayout.SOUTH);
 		
-		showScrollPane = new JScrollPane(kosaricaPanelMain);
-		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
-		add(showScrollPane, BorderLayout.CENTER);
+		showScrollPane = new JScrollPane(kosaricaSadrzaj);
+		centerPanel.add(showScrollPane, BorderLayout.CENTER);
+		add(centerPanel, BorderLayout.CENTER);
+		centerPanel.revalidate();
 		revalidate();
 	}
 	
@@ -291,8 +297,8 @@ public class KlijentPanel extends JPanel {
 	}
 
 	private void showPanelfill() {
-		//Nepotpuna definicija panela sa listom restorana
-		//Potrebno dalje istraziti kako radi JScrollPane
+		centerPanel.removeAll();
+		showScrollPane.removeAll();
 		JPanel restorani = new JPanel();
 		restorani.setLayout(new BoxLayout(restorani, BoxLayout.PAGE_AXIS));
 		restorani.setBackground(Color.WHITE);
@@ -546,8 +552,9 @@ public class KlijentPanel extends JPanel {
 		
 		//Definicjia funkcionalnosti gumba predlozi
 		ActionListener PredloziDialog = actionevent -> {
-			//Popuni ME!
+			
 		};
+		
 		JButton OK = new JButton("Predlozi restoran");
 		OK.addActionListener(PredloziDialog);
 		

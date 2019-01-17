@@ -47,10 +47,11 @@ public class VlasnikPanel extends JPanel {
 	private ActionListener urediListener;
 	private ActionListener odjavaListener;
 	private DefaultWindow window;
-	private Vlasnik trenutniKlijent;
+	private Vlasnik trenutniVlasnik;
 	private Set<Restoran> listaRestorani;
 	private Kosarica trenKosarica;
 	private GeoLokacija lokacijaDostave;
+	private Restoran trenRestoran;
 	
 	public Integer brojacChar = 180;
 	
@@ -58,7 +59,9 @@ public class VlasnikPanel extends JPanel {
 	
 	public VlasnikPanel(DefaultWindow window, Vlasnik klijent) {
 		this.window = window;
-		this.trenutniKlijent = klijent;
+		this.trenutniVlasnik = klijent;
+		this.trenRestoran = klijent.getVlastitiRestoran();
+		this.showScrollPane = new JScrollPane();
 		
 		setLayout(new BorderLayout());
 		centerPanel = new JPanel();
@@ -170,7 +173,7 @@ public class VlasnikPanel extends JPanel {
 		usrName.setForeground(new Color(0, 153, 255));
 		usrName.setEditable(false);
 		usrName.setFont(new Font("Arial", 0, 14));
-		usrName.setText("\n Prijavljen kao:\n " + trenutniKlijent.getKorisnickoIme());
+		usrName.setText("\n Prijavljen kao:\n " + trenutniVlasnik.getKorisnickoIme());
 		usrInfoPanel.add(usrName, BorderLayout.CENTER);
 		usrInfoPanel.setPreferredSize(new Dimension(120, 75));
 		usrInfoPanel.setBackground(Color.white);
@@ -186,6 +189,7 @@ public class VlasnikPanel extends JPanel {
 		//kosaricaPanelMain.setLayout(new BorderLayout());
 		
 		centerPanel.removeAll();
+		showScrollPane.removeAll();
 		centerPanel.setLayout(new BorderLayout());
 		
 		JPanel kosaricaSadrzaj = new JPanel();
@@ -216,7 +220,7 @@ public class VlasnikPanel extends JPanel {
 		labelField.setColumns(14);
 		
 		ActionListener naruciListener = (actionListener) -> {
-			trenKosarica.finalizirajNarudzbu(lokacijaDostave, trenutniKlijent);
+			trenKosarica.finalizirajNarudzbu(lokacijaDostave, trenutniVlasnik);
 			lokacijaDostave = new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), labelField.getText());
 		};
 		
@@ -289,6 +293,7 @@ public class VlasnikPanel extends JPanel {
 
 	private void showPanelfill() {
 		centerPanel.removeAll();
+		showScrollPane.removeAll();
 		JPanel restorani = new JPanel();
 		restorani.setLayout(new BoxLayout(restorani, BoxLayout.PAGE_AXIS));
 		restorani.setBackground(Color.WHITE);
@@ -384,7 +389,7 @@ public class VlasnikPanel extends JPanel {
 		
 		showScrollPane = new JScrollPane(restorani);
 		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
-		centerPanel.add(showScrollPane, BorderLayout.CENTER);
+		add(showScrollPane, BorderLayout.CENTER);
 		revalidate();
 		
 	}
@@ -392,6 +397,7 @@ public class VlasnikPanel extends JPanel {
 	private void urediPanel() {
 		//JPanel urediRestoran = new JPanel();
 		centerPanel.removeAll();
+		showScrollPane.removeAll();
 		centerPanel.setLayout(new BorderLayout());
 				
 		JPanel menuSadrzaj = new JPanel();
@@ -413,9 +419,20 @@ public class VlasnikPanel extends JPanel {
 		JLabel unosAdr2 = new JLabel("Cijena artikla: ");
 		JTextField cijenaField = new JTextField();
 		cijenaField.setColumns(8);
+		JLabel unosAdr3 = new JLabel("Opis artikla: ");
+		JTextField opisField = new JTextField();
+		cijenaField.setColumns(20);
+		JLabel unosAdr4 = new JLabel("Vrijeme pripravljanja artikla u minutama: ");
+		JTextField vrijemeField = new JTextField();
+		cijenaField.setColumns(4);
 		
 		ActionListener dodajListener = (actionListener) -> {
-			//Napraviti		
+				String naziv = nazivField.getText();
+				float cijena = Float.parseFloat(cijenaField.getText());
+				String opisArt = opisField.getText();
+				int vrijeme = Integer.parseInt(vrijemeField.getText());
+				trenRestoran.AddMeni(new Artikl(naziv, cijena, vrijeme, trenRestoran, opisArt), window.podLjuska.getZastavice(), trenutniVlasnik);
+				urediPanel();
 		};
 		
 		JPanel urediButtonPanel = new JPanel();
@@ -425,6 +442,10 @@ public class VlasnikPanel extends JPanel {
 		urediButtonPanel.add(nazivField);
 		urediButtonPanel.add(unosAdr2);
 		urediButtonPanel.add(cijenaField);
+		urediButtonPanel.add(unosAdr3);
+		urediButtonPanel.add(opisField);
+		urediButtonPanel.add(unosAdr4);
+		urediButtonPanel.add(vrijemeField);
 		
 		urediButtonPanel.setLayout(new FlowLayout());
 		JButton dodaj = new JButton("Dodaj artikl");
@@ -444,8 +465,29 @@ public class VlasnikPanel extends JPanel {
 	}
 
 	private void dohvatiMenu(JPanel menuSadrzaj) {
-		// TODO Auto-generated method stub
-		
+		Set<Artikl> menu = trenRestoran.getMeni();
+		for(Artikl temp : menu) {
+			JPanel artiklInfo = new JPanel();
+			Float cijena = temp.getCijena();
+			Integer vrijemePripravljanja = temp.getVrijemePripravljanja();
+			artiklInfo.setLayout(new FlowLayout());
+			artiklInfo.add(new JLabel(temp.getNaziv()));
+			artiklInfo.add(new JLabel(cijena.toString()));
+			artiklInfo.add(new JLabel("Vrijeme pripravljanja: " + vrijemePripravljanja.toString() + "'"));
+			artiklInfo.add(new JLabel("Opis: " + temp.getOpis()));
+			
+			ActionListener ukloniListener = (actionEvent) -> {
+				trenRestoran.RemoveMeni(temp, window.podLjuska.getZastavice(), trenutniVlasnik);
+				urediPanel();
+			};
+			
+			JButton ukloni = new JButton("Ukloni");
+			ukloni.addActionListener(ukloniListener);
+			artiklInfo.add(ukloni);
+			
+			menuSadrzaj.add(artiklInfo);
+			
+		}
 	}
 
 }

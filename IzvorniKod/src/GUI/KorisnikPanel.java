@@ -337,7 +337,7 @@ public class KorisnikPanel extends JPanel {
 				poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
 				poruka.revalidate();
 				//window.switchToKlijent(getUsr(imeField.getText(), lozinkaField.getText()));
-				window.switchToKlijent(window.podLjuska.getTrenutniKorisnik());
+				window.switchToKlijent(window.podLjuska.getTrenutniKlijent());
 				Timer timer = new Timer(1500, new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            	Prijava.dispatchEvent(new WindowEvent(Prijava, WindowEvent.WINDOW_CLOSING));

@@ -27,7 +27,7 @@ public class DefaultWindow extends JFrame{
 	 * Konstruktor koji inicijalizira program kao Korisnik
 	 */
 	public DefaultWindow() {
-		setSize(1024, 720);
+		setSize(1024, 730);
 	    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	    setTitle("Dostavljaona!");
 	    

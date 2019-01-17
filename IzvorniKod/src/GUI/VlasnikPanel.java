@@ -67,7 +67,6 @@ public class VlasnikPanel extends JPanel {
 		centerPanel = new JPanel();
 		centerPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
 		centerPanel.setBackground(Color.white);
-		add(centerPanel, BorderLayout.CENTER);
 		
 		//Definicije listenera za 4 glavna gumba
 		odjavaListener = (actionEvent) -> {
@@ -187,6 +186,8 @@ public class VlasnikPanel extends JPanel {
 	private void kosaricaPanelSwitch() {
 		//JPanel kosaricaPanelMain = new JPanel();
 		//kosaricaPanelMain.setLayout(new BorderLayout());
+		remove(showScrollPane);
+		remove(centerPanel);
 		
 		centerPanel.removeAll();
 		showScrollPane.removeAll();
@@ -292,11 +293,13 @@ public class VlasnikPanel extends JPanel {
 	}
 
 	private void showPanelfill() {
+		remove(showScrollPane);
+		remove(centerPanel);
 		centerPanel.removeAll();
 		showScrollPane.removeAll();
-		JPanel restorani = new JPanel();
-		restorani.setLayout(new BoxLayout(restorani, BoxLayout.PAGE_AXIS));
-		restorani.setBackground(Color.WHITE);
+		//JPanel restorani = new JPanel();
+		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
+		centerPanel.setBackground(Color.WHITE);
 		window.podLjuska.napuniSetRestorana();
 		listaRestorani = window.podLjuska.getRestorani();
 		
@@ -304,7 +307,7 @@ public class VlasnikPanel extends JPanel {
 			JPanel filler1 = new JPanel();
 			filler1.setMaximumSize(new Dimension(9000, 1));
 			filler1.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-			restorani.add(filler1);
+			centerPanel.add(filler1);
 			
 			JPanel restoranPanel = new JPanel();
 			restoranPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
@@ -348,12 +351,12 @@ public class VlasnikPanel extends JPanel {
 			
 			naruci.addActionListener(naruciListener);
 			restoranPanel.add(new JButton("Naruci"), BorderLayout.EAST);
-			restorani.add(restoranPanel);
+			centerPanel.add(restoranPanel);
 			
 			JPanel filler2 = new JPanel();
 			filler2.setMaximumSize(new Dimension(9000, 1));
 			filler2.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-			restorani.add(filler2);
+			centerPanel.add(filler2);
 		}
 		
 		
@@ -387,24 +390,25 @@ public class VlasnikPanel extends JPanel {
 		restorani.add(restoran2);
 		*/
 		
-		showScrollPane = new JScrollPane(restorani);
+		showScrollPane = new JScrollPane(centerPanel);
 		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
 		add(showScrollPane, BorderLayout.CENTER);
+		centerPanel.revalidate();
+		showScrollPane.revalidate();
 		revalidate();
 		
 	}
 	
 	private void urediPanel() {
-		//JPanel urediRestoran = new JPanel();
-		centerPanel.removeAll();
-		showScrollPane.removeAll();
+		remove(showScrollPane);
+		remove(centerPanel);
 		centerPanel.setLayout(new BorderLayout());
 				
 		JPanel menuSadrzaj = new JPanel();
 		menuSadrzaj.setLayout(new BoxLayout(menuSadrzaj, BoxLayout.PAGE_AXIS));
 		menuSadrzaj.setBackground(Color.WHITE);
 		
-		dohvatiMenu(menuSadrzaj);
+		//dohvatiMenu(menuSadrzaj);
 		
 		JPanel opisPanel = new JPanel();
 		opisPanel.setBackground(Color.white);
@@ -454,6 +458,9 @@ public class VlasnikPanel extends JPanel {
 		
 		showScrollPane = new JScrollPane(menuSadrzaj);
 		
+		centerPanel.removeAll();
+		showScrollPane.removeAll();
+		showScrollPane.setBackground(Color.white);
 		centerPanel.add(opisPanel, BorderLayout.NORTH);
 		centerPanel.add(showScrollPane, BorderLayout.CENTER);
 		centerPanel.add(urediButtonPanel, BorderLayout.SOUTH);

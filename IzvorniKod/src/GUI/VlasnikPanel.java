@@ -419,16 +419,16 @@ public class VlasnikPanel extends JPanel {
 		
 		JLabel unosAdr1 = new JLabel("Naziv artikla: ");
 		JTextField nazivField = new JTextField();
-		nazivField.setColumns(14);
+		nazivField.setColumns(8);
 		JLabel unosAdr2 = new JLabel("Cijena artikla: ");
 		JTextField cijenaField = new JTextField();
 		cijenaField.setColumns(8);
 		JLabel unosAdr3 = new JLabel("Opis artikla: ");
 		JTextField opisField = new JTextField();
-		cijenaField.setColumns(20);
+		opisField.setColumns(28);
 		JLabel unosAdr4 = new JLabel("Vrijeme pripravljanja artikla u minutama: ");
 		JTextField vrijemeField = new JTextField();
-		cijenaField.setColumns(4);
+		vrijemeField.setColumns(4);
 		
 		ActionListener dodajListener = (actionListener) -> {
 				String naziv = nazivField.getText();
@@ -441,6 +441,10 @@ public class VlasnikPanel extends JPanel {
 		
 		JPanel urediButtonPanel = new JPanel();
 		urediButtonPanel.setBackground(Color.white);
+		urediButtonPanel.setPreferredSize(new Dimension(3000, 60));
+		
+		//JPanel urediButtonPanel2 = new JPanel();
+		//urediButtonPanel2.setBackground(Color.white);
 		
 		urediButtonPanel.add(unosAdr1);
 		urediButtonPanel.add(nazivField);

@@ -192,6 +192,8 @@ public class KlijentPanel extends JPanel {
 	private void kosaricaPanelSwitch() {
 		//JPanel kosaricaPanelMain = new JPanel();
 		//kosaricaPanelMain.setLayout(new BorderLayout());
+		remove(showScrollPane);
+		remove(centerPanel);
 		
 		centerPanel.removeAll();
 		showScrollPane.removeAll();
@@ -297,11 +299,13 @@ public class KlijentPanel extends JPanel {
 	}
 
 	private void showPanelfill() {
+		remove(showScrollPane);
+		remove(centerPanel);
 		centerPanel.removeAll();
 		showScrollPane.removeAll();
-		JPanel restorani = new JPanel();
-		restorani.setLayout(new BoxLayout(restorani, BoxLayout.PAGE_AXIS));
-		restorani.setBackground(Color.WHITE);
+		//JPanel restorani = new JPanel();
+		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
+		centerPanel.setBackground(Color.WHITE);
 		window.podLjuska.napuniSetRestorana();
 		listaRestorani = window.podLjuska.getRestorani();
 		
@@ -309,7 +313,7 @@ public class KlijentPanel extends JPanel {
 			JPanel filler1 = new JPanel();
 			filler1.setMaximumSize(new Dimension(9000, 1));
 			filler1.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-			restorani.add(filler1);
+			centerPanel.add(filler1);
 			
 			JPanel restoranPanel = new JPanel();
 			restoranPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
@@ -353,12 +357,12 @@ public class KlijentPanel extends JPanel {
 			
 			naruci.addActionListener(naruciListener);
 			restoranPanel.add(new JButton("Naruci"), BorderLayout.EAST);
-			restorani.add(restoranPanel);
+			centerPanel.add(restoranPanel);
 			
 			JPanel filler2 = new JPanel();
 			filler2.setMaximumSize(new Dimension(9000, 1));
 			filler2.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-			restorani.add(filler2);
+			centerPanel.add(filler2);
 		}
 		
 		
@@ -392,9 +396,11 @@ public class KlijentPanel extends JPanel {
 		restorani.add(restoran2);
 		*/
 		
-		showScrollPane = new JScrollPane(restorani);
+		showScrollPane = new JScrollPane(centerPanel);
 		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
 		add(showScrollPane, BorderLayout.CENTER);
+		centerPanel.revalidate();
+		showScrollPane.revalidate();
 		revalidate();
 		
 	}

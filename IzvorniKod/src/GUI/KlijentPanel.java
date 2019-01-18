@@ -608,7 +608,7 @@ public class KlijentPanel extends JPanel {
 			window.podLjuska.getTrenutniKlijent().predloziRestoran(restImeField.getText(), new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), restImeField.getText()), 
 																	opisField.getText(), null, telefonTextField.getText(), faksTextField.getText(), Integer.parseInt(OIBTextField.getText()), 0, 0, AdresaTextField.getText());	
 				
-			Timer timer = new Timer(1500, new ActionListener() {
+			Timer timer = new Timer(500, new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 		            Predlozi.dispatchEvent(new WindowEvent(Predlozi, WindowEvent.WINDOW_CLOSING));
 				}

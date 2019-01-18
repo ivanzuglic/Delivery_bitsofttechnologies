@@ -339,7 +339,7 @@ public class KorisnikPanel extends JPanel {
 				}
 				
 				
-				Timer timer = new Timer(1500, new ActionListener() {
+				Timer timer = new Timer(500, new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            	Registracija.dispatchEvent(new WindowEvent(Registracija, WindowEvent.WINDOW_CLOSING));
 		            }
@@ -464,7 +464,7 @@ public class KorisnikPanel extends JPanel {
 					window.switchToVlasnik(window.podLjuska.getTrenutniVlasnik());
 				}
 
-				Timer timer = new Timer(1500, new ActionListener() {
+				Timer timer = new Timer(500, new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            	Prijava.dispatchEvent(new WindowEvent(Prijava, WindowEvent.WINDOW_CLOSING));
 		            }

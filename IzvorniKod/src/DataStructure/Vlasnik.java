@@ -13,7 +13,7 @@ public class Vlasnik extends Klijent {
 	public Vlasnik (String korisnickoIme, String lozinka) {
 		
 		super(korisnickoIme, lozinka);
-		this.DohvatiVlastitiRestoran();
+		this.vlastitiRestoran = this.DohvatiVlastitiRestoran();
 	}
 	
 	public void napuniAi2h () {

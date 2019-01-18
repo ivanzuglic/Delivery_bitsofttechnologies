@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -25,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.Timer;
 
 import DataStructure.Artikl;
 import DataStructure.GeoLokacija;
@@ -427,6 +429,38 @@ public class KlijentPanel extends JPanel {
 		restImePanel.add(restImeField);
 		podaci.add(restImePanel);
 		
+		
+		//Definicija panela za OIB
+		JPanel OIBPanel = new JPanel();
+		OIBPanel.setBackground(Color.white);
+		OIBPanel.setLayout(new FlowLayout());
+		OIBPanel.add(new JLabel("    OIB restorana: "));
+		JTextField OIBTextField = new JTextField();
+		OIBTextField.setColumns(15);
+		OIBPanel.add(OIBTextField);
+		podaci.add(OIBPanel);
+		
+		//Definicija panela za telefon
+		JPanel telefonPanel = new JPanel();
+		telefonPanel.setBackground(Color.white);
+		telefonPanel.setLayout(new FlowLayout());
+		telefonPanel.add(new JLabel("                 Telefon: "));
+		JTextField telefonTextField = new JTextField();
+		telefonTextField.setColumns(15);
+		telefonPanel.add(telefonTextField);
+		podaci.add(telefonPanel);
+				
+		//Definicija panela za faks
+		JPanel faksPanel = new JPanel();
+		faksPanel.setBackground(Color.white);
+		faksPanel.setLayout(new FlowLayout());
+		faksPanel.add(new JLabel("                      Faks: "));
+		JTextField faksTextField = new JTextField();
+		faksTextField.setColumns(15);
+		faksPanel.add(faksTextField);
+		podaci.add(faksPanel);
+				
+		
 		//Definicija panela za opsi restorana
 		JPanel opisPanel = new JPanel();
 		opisPanel.setBackground(Color.white);
@@ -537,6 +571,16 @@ public class KlijentPanel extends JPanel {
 		
 		podaci.add(geo);
 		
+		//Definicija panela za adresu
+		JPanel AdresaPanel = new JPanel();
+		AdresaPanel.setBackground(Color.white);
+		AdresaPanel.setLayout(new FlowLayout());
+		AdresaPanel.add(new JLabel("                 Adresa: "));
+		JTextField AdresaTextField = new JTextField();
+		AdresaTextField.setColumns(15);
+		AdresaPanel.add(AdresaTextField);
+		podaci.add(AdresaPanel);
+		
 		//Definicija info panela
 		JPanel info2 = new JPanel();
 		info2.setBackground(Color.WHITE);
@@ -559,6 +603,18 @@ public class KlijentPanel extends JPanel {
 		//Definicjia funkcionalnosti gumba predlozi
 		ActionListener PredloziDialog = actionevent -> {
 			
+			// Ovo sam ja dodal - slobodno se promijeni - takodjer, trebalo bi dodati u taj panel jos par elemenata kao sto su telefon, OIB, adresa(bas adresa, ne samo koordinate)
+			
+			window.podLjuska.getTrenutniKlijent().predloziRestoran(restImeField.getText(), new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), restImeField.getText()), 
+																	opisField.getText(), null, telefonTextField.getText(), faksTextField.getText(), Integer.parseInt(OIBTextField.getText()), 0, 0, AdresaTextField.getText());	
+				
+			Timer timer = new Timer(1500, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+		            Predlozi.dispatchEvent(new WindowEvent(Predlozi, WindowEvent.WINDOW_CLOSING));
+				}
+			});
+			timer.setRepeats(false);
+			timer.start();
 		};
 		
 		JButton OK = new JButton("Predlozi restoran");
@@ -584,7 +640,7 @@ public class KlijentPanel extends JPanel {
 		Predlozi.add(podaci, BorderLayout.CENTER);
 		Predlozi.setTitle("Predlozi");
 		Predlozi.setResizable(false);
-		Predlozi.setSize(330, 500);
+		Predlozi.setSize(330, 630);
 		Predlozi.setLocation(window.getX()+10, window.getY()+8);
 		Predlozi.setModal(true);
 		Predlozi.setVisible(true);

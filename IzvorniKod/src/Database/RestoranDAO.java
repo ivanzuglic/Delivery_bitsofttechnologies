@@ -35,8 +35,10 @@ public class RestoranDAO {
 	
 	public int pohraniRestoran (Restoran restoran) {
 		
-		String sql = "INSERT INTO restoran (imeRestoran, opis, adresa, lokacijaSirina, lokacijaDuzina, kontaktTelefon, fax, OIB, IBAN, ziroRacun, slika, restoranOdobren, idVlasnik)"
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		// privremeno uklonjena slika
+		
+		String sql = "INSERT INTO restoran (imeRestoran, opis, adresa, lokacijaSirina, lokacijaDuzina, kontaktTelefon, fax, OIB, IBAN, ziroRacun, restoranOdobren, idVlasnik)"
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		int idRestoran = 0;
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
@@ -52,9 +54,9 @@ public class RestoranDAO {
 			prepSt.setInt(8, restoran.getOIB());
 			prepSt.setInt(9, restoran.getIBAN());
 			prepSt.setInt(10, restoran.getZiroRacun());
-			prepSt.setString(11, restoran.getSlika().toString());
-			prepSt.setBoolean(12, restoran.isOdobren());
-			prepSt.setInt(13, restoran.getVlasnik().getKorisnickiId());
+			//prepSt.setString(11, restoran.getSlika().toString());
+			prepSt.setBoolean(11, restoran.isOdobren());
+			prepSt.setInt(12, restoran.getVlasnik().getKorisnickiId());
 			
 			
 			prepSt.executeUpdate();

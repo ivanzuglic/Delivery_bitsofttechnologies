@@ -61,7 +61,7 @@ public class ArtiklDAO {
 	
 	public int azurirajArtikl (Artikl artikl) {
 		
-		String sql = "UPDATE artikl SET nazivArtikla = ?, opis = ?, cijena = ?, vrijemePripreme = ? WHERE idArtikl = ?";
+		String sql = "UPDATE artikl SET nazivArtikla = ?, opis = ?, cijena = ?, vrijemePripremeMin = ? WHERE idArtikl = ?";
 		int result = 2; // za testiranje
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB);

@@ -410,7 +410,7 @@ public class VlasnikPanel extends JPanel {
 		menuSadrzaj.setLayout(new BoxLayout(menuSadrzaj, BoxLayout.PAGE_AXIS));
 		menuSadrzaj.setBackground(Color.WHITE);
 		
-		//dohvatiMenu(menuSadrzaj);
+		dohvatiMenu(menuSadrzaj);
 		
 		JPanel opisPanel = new JPanel();
 		opisPanel.setBackground(Color.white);

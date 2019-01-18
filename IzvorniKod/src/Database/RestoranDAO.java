@@ -176,7 +176,7 @@ public class RestoranDAO {
 				int idArtikl = rs.getInt(1);
 				String naziv = rs.getString(3);
 				float cijena = rs.getFloat(5);
-				int vrijemePripravljanjaMin = rs.getInt(7);
+				int vrijemePripravljanjaMin = rs.getInt(6);
 				Restoran restoranArtikla = restoran;
 				String opis = rs.getString(4);
 				    
@@ -194,8 +194,8 @@ public class RestoranDAO {
 	
 	public int dodajUMeni (Artikl noviArtikl) {
 		
-		String sql = "INSERT INTO artikl (idRestoran, nazivArtikla, opis, cijena, vrijemePripreme)"	// maknuli bi sliku sa artikla - LM
-				+ "VALUES (?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO artikl (idRestoran, nazivArtikla, opis, cijena, vrijemePripremeMin)"	// maknuli bi sliku sa artikla - LM
+				+ "VALUES (?, ?, ?, ?, ?)";
 		int result = 2; // za testiranje
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 

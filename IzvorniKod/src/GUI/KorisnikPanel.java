@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -241,7 +242,7 @@ public class KorisnikPanel extends JPanel {
 		lozinkaPanel.setBackground(Color.white);
 		lozinkaPanel.setLayout(new FlowLayout());
 		lozinkaPanel.add(new JLabel("                 Lozinka : "));
-		JTextField lozinkaField = new JTextField();
+		JPasswordField lozinkaField = new JPasswordField();
 		lozinkaField.setColumns(15);
 		lozinkaPanel.add(lozinkaField);
 		podaci.add(lozinkaPanel);
@@ -251,7 +252,7 @@ public class KorisnikPanel extends JPanel {
 		potvrLozinkaPanel.setBackground(Color.white);
 		potvrLozinkaPanel.setLayout(new FlowLayout());
 		potvrLozinkaPanel.add(new JLabel("Potvrdite lozinku : "));
-		JTextField potvrdLozinkaField = new JTextField();
+		JPasswordField potvrdLozinkaField = new JPasswordField();
 		potvrdLozinkaField.setColumns(15);
 		potvrLozinkaPanel.add(potvrdLozinkaField);
 		podaci.add(potvrLozinkaPanel);
@@ -309,50 +310,61 @@ public class KorisnikPanel extends JPanel {
 		
 		//Definicjia funkcionalnosti gumba za registraciju
 		ActionListener RegistracijaDialog = (actionEvent) -> {
-			if(registracijaProvjera(korImeField.getText(), lozinkaField.getText(), imeField.getText(), prezField.getText(), brMobField.getText(), mailField.getText())) {
-				poruka.removeAll();
-				poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
-				poruka.revalidate();
-				
-				// dodano isto kao i u prijavi - LM
-				if (window.podLjuska.getZastavice().isAdministrator()) {
-					window.switchToAdmin(window.podLjuska.getTrenutniAdministrator());
-				}
-				
-				if (window.podLjuska.getZastavice().isDispecer()) {
-					window.switchToDispecer(window.podLjuska.getTrenutniDispecer());
-				}
+			
+			if (lozinkaField.getText().equals(potvrdLozinkaField.getText())) {
+				if(registracijaProvjera(korImeField.getText(), lozinkaField.getText(), imeField.getText(), prezField.getText(), brMobField.getText(), mailField.getText())) {
+					poruka.removeAll();
+					poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
+					poruka.revalidate();
+					
+					// dodano isto kao i u prijavi - LM
+					if (window.podLjuska.getZastavice().isAdministrator()) {
+						window.switchToAdmin(window.podLjuska.getTrenutniAdministrator());
+					}
+					
+					if (window.podLjuska.getZastavice().isDispecer()) {
+						window.switchToDispecer(window.podLjuska.getTrenutniDispecer());
+					}
 
-				
-				if (window.podLjuska.getZastavice().isDostavljac()) {
-					window.switchToDostavljac(window.podLjuska.getTrenutniDostavljac());
-				}
+					
+					if (window.podLjuska.getZastavice().isDostavljac()) {
+						window.switchToDostavljac(window.podLjuska.getTrenutniDostavljac());
+					}
 
-				
-				if (window.podLjuska.getZastavice().isKlijent()) {
-					window.switchToKlijent(window.podLjuska.getTrenutniKlijent());
-				}
+					
+					if (window.podLjuska.getZastavice().isKlijent()) {
+						window.switchToKlijent(window.podLjuska.getTrenutniKlijent());
+					}
 
-				
-				if (window.podLjuska.getZastavice().isVlasnik()) {
-					window.switchToVlasnik(window.podLjuska.getTrenutniVlasnik());
+					
+					if (window.podLjuska.getZastavice().isVlasnik()) {
+						window.switchToVlasnik(window.podLjuska.getTrenutniVlasnik());
+					}
+					
+					
+					Timer timer = new Timer(500, new ActionListener() {
+			            public void actionPerformed(ActionEvent e) {
+			            	Registracija.dispatchEvent(new WindowEvent(Registracija, WindowEvent.WINDOW_CLOSING));
+			            }
+			        });
+					timer.setRepeats(false);
+				    timer.start();
 				}
 				
-				
-				Timer timer = new Timer(500, new ActionListener() {
-		            public void actionPerformed(ActionEvent e) {
-		            	Registracija.dispatchEvent(new WindowEvent(Registracija, WindowEvent.WINDOW_CLOSING));
-		            }
-		        });
-				timer.setRepeats(false);
-			    timer.start();
+				else {
+					poruka.removeAll();
+					poruka.add(new JLabel("<html><font color='red'>Neispravni podaci</font></html>"));
+					poruka.revalidate();
+				}
 			}
 			
 			else {
+				
 				poruka.removeAll();
-				poruka.add(new JLabel("<html><font color='red'>Neispravni podaci</font></html>"));
+				poruka.add(new JLabel("<html><font color='red'>Lozinka i potvrda lozinke se ne poklapaju</font></html>"));
 				poruka.revalidate();
 			}
+			
 		};
 		JButton OK = new JButton("Registriraj se");
 		OK.addActionListener(RegistracijaDialog);
@@ -414,7 +426,7 @@ public class KorisnikPanel extends JPanel {
 		lozinka.setBackground(Color.white);
 		lozinka.setLayout(new FlowLayout());
 		lozinka.add(new JLabel("           Laozinka: "));
-		JTextField lozinkaField = new JTextField();
+		JPasswordField lozinkaField = new JPasswordField();
 		lozinkaField.setColumns(15);
 		lozinka.add(lozinkaField);
 		imeLozinka.add(lozinka);

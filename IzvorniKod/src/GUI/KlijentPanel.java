@@ -233,7 +233,7 @@ public class KlijentPanel extends JPanel {
 			kartaFrame.getContentPane().add(viewer);
 			kartaFrame.setSize(600, 600);
 			kartaFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			kartaFrame.setLocation(30, 30);
+			kartaFrame.setLocation(window.getX() + 10, window.getY() + 10);
 			kartaFrame.setVisible(true);
 			
 			//Stvaramo tileFactory - izvor mapa

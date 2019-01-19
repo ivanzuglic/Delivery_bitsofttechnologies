@@ -59,11 +59,11 @@ public class VlasnikDAO {
 				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
 				
 				BufferedImage slika = null;
-				try {
-		        	slika = ImageIO.read(new File(slikaPath)); 			 //dodatno testirat
-		        } catch (IOException e){
-		            e.printStackTrace();
-		        }
+//				try {
+//		        	slika = ImageIO.read(new File(slikaPath)); 			 //dodatno testirat
+//		        } catch (IOException e){
+//		            e.printStackTrace();
+//		        }
 				
 				restoran = new Restoran(idRestoran, imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, oib, iban, ziroRac, adresa);
 			}

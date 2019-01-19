@@ -27,9 +27,8 @@ public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 		this.aktivnaNarudzba = this.dohvatiAktivnuNarudzbu(this.getKorisnickiId());
 	}
 
-	public PodaciKarte pratiPoziciju () {
+	public GeoLokacija pratiPoziciju () {
 		
-		PodaciKarte lokacijaTrenutneNarudzbe = null;
 		GeoLokacija lokacija = null;
 		
 		// prije dohvacanja pozicije updateamo aktivnu narudzbu da osiguramo azurnost informacija
@@ -38,14 +37,7 @@ public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 		// dohvati podatke karte iz baze podataka
 		lokacija = this.dohvatiLokacijuTrNarudzbe(this.aktivnaNarudzba);
 		
-		if (lokacija != null) {
-			
-			lokacijaTrenutneNarudzbe = new PodaciKarte(new ArrayList<GeoLokacija>(), false);
-			lokacijaTrenutneNarudzbe.dodajUListuLokacija(lokacija);
-			
-		}
-		
-		return lokacijaTrenutneNarudzbe;
+		return lokacija;
 	}
 	
 	public void predloziRestoran (String ime, GeoLokacija lokacija, String opis, BufferedImage slika, String telefon, String fax, int OIB, int IBAN, int ziroRacun, String adresa) {
@@ -54,6 +46,9 @@ public class Klijent extends Korisnik {		//Ivan: uklonjen atr 'starost'
 	}
 	
 	public Narudzba getAktivnaNarudzba() {
+		
+		//updateamo aktivnu narudzbu da osiguramo azurnost informacija
+		this.aktivnaNarudzba = this.dohvatiAktivnuNarudzbu(this.getKorisnickiId());
 		
 		return aktivnaNarudzba;
 	}

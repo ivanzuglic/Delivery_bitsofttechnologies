@@ -112,8 +112,7 @@ public class NarudzbaDAO {
 	
 	public Narudzba ucitajNarudzbu(int idNar) {
 		
-		String sql = "SELECT geoSirinaPreuzimanja, geoDuzinaPreuzimanja, geoSirinaDostave, geoDuzinaDostave, aktivnostNar, vrijemeStvaranja, vrijemeZavrsetka, cijena"
-				+ "FROM narudzba WHERE idNar = ?";
+		String sql = "SELECT geoSirinaPreuzimanja, geoDuzinaPreuzimanja, geoSirinaDostave, geoDuzinaDostave, aktivnostNar, vrijemeStvaranja, vrijemeZavrsetka, cijena FROM narudzba WHERE idNar = ?";
 		Narudzba nar = null;
 		
 		Map<Artikl, Integer> artikliNarudzbe = this.getArtikleNarudzbe(idNar);
@@ -155,8 +154,8 @@ public class NarudzbaDAO {
 
 	private Map<Artikl, Integer> getArtikleNarudzbe(int idNar){
 		
-		String sql = "SELECT narudzba.idArtikl, narudzba.kolicina, artikl.* FROM narudzba NATURAL JOIN artikl WHERE idNar = ?";
-		String sql2 = "SELECT artikl.* FROM narudzba NATURAL JOIN artikl WHERE idNar = ?";
+		String sql = "SELECT narudzba.kolicina, artikl.* FROM narudzba JOIN artikl ON (artikl.idArtikl = narudzba.idArtikl) WHERE idNar = ?";
+		String sql2 = "SELECT artikl.* FROM narudzba JOIN artikl ON (artikl.idArtikl = narudzba.idArtikl) WHERE idNar = ?";
 		Map<Artikl, Integer> artikliNarudzbe = new HashMap<>();		
 		Restoran restoran = null;
 		int idRestoran = 0;
@@ -192,9 +191,9 @@ public class NarudzbaDAO {
 			
 			while(rs.next()) {
 				
-				int idArtikl = rs.getInt(1);
-				int kolicina = rs.getInt(2);		    //
-				//int idRestoran = rs.getInt(3);        // pogledati natural join
+				int kolicina = rs.getInt(1);
+				int idArtikl = rs.getInt(2);
+				int idRestoranArtikla = rs.getInt(3);        
 				String nazivArtikla = rs.getString(4);
 				String opis = rs.getString(5);
 				float cijena = rs.getFloat(6);

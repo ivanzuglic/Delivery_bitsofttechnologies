@@ -35,8 +35,10 @@ public class RestoranDAO {
 	
 	public int pohraniRestoran (Restoran restoran) {
 		
-		String sql = "INSERT INTO restoran (imeRestoran, opis, adresa, lokacijaSirina, lokacijaDuzina, kontaktTelefon, fax, OIB, IBAN, ziroRacun, slika, restoranOdobren, idVlasnik)"
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		// privremeno uklonjena slika
+		
+		String sql = "INSERT INTO restoran (imeRestoran, opis, adresa, lokacijaSirina, lokacijaDuzina, kontaktTelefon, fax, OIB, IBAN, ziroRacun, restoranOdobren, idVlasnik)"
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		int idRestoran = 0;
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
@@ -52,9 +54,9 @@ public class RestoranDAO {
 			prepSt.setInt(8, restoran.getOIB());
 			prepSt.setInt(9, restoran.getIBAN());
 			prepSt.setInt(10, restoran.getZiroRacun());
-			prepSt.setString(11, restoran.getSlika().toString());
-			prepSt.setBoolean(12, restoran.isOdobren());
-			prepSt.setInt(13, restoran.getVlasnik().getKorisnickiId());
+			//prepSt.setString(11, restoran.getSlika().toString());
+			prepSt.setBoolean(11, restoran.isOdobren());
+			prepSt.setInt(12, restoran.getVlasnik().getKorisnickiId());
 			
 			
 			prepSt.executeUpdate();
@@ -139,11 +141,11 @@ public class RestoranDAO {
 				
 				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
 				BufferedImage slika = null;
-				try {
-		        	slika = ImageIO.read(new File(slikaPath)); 			 //dodatno testirat
-		        } catch (IOException e){
-		            e.printStackTrace();
-		        }
+//				try {
+//		        	slika = ImageIO.read(new File(slikaPath)); 			 //dodatno testirat
+//		        } catch (IOException e){
+//		            e.printStackTrace();
+//		        }
 				
 				Korisnik vlasnik = new Korisnik (idVlasnik);
 				restoran = new Restoran(idRestoran, imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, oib, iban, ziroRac, adresa);
@@ -176,7 +178,7 @@ public class RestoranDAO {
 				int idArtikl = rs.getInt(1);
 				String naziv = rs.getString(3);
 				float cijena = rs.getFloat(5);
-				int vrijemePripravljanjaMin = rs.getInt(7);
+				int vrijemePripravljanjaMin = rs.getInt(6);
 				Restoran restoranArtikla = restoran;
 				String opis = rs.getString(4);
 				    
@@ -194,8 +196,8 @@ public class RestoranDAO {
 	
 	public int dodajUMeni (Artikl noviArtikl) {
 		
-		String sql = "INSERT INTO artikl (idRestoran, nazivArtikla, opis, cijena, vrijemePripreme)"	// maknuli bi sliku sa artikla - LM
-				+ "VALUES (?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO artikl (idRestoran, nazivArtikla, opis, cijena, vrijemePripremeMin)"	// maknuli bi sliku sa artikla - LM
+				+ "VALUES (?, ?, ?, ?, ?)";
 		int result = 2; // za testiranje
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 

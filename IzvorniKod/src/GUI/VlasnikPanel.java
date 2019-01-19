@@ -8,8 +8,10 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,11 +20,25 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.MouseInputListener;
+
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.OSMTileFactoryInfo;
+import org.jxmapviewer.input.PanMouseInputListener;
+import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
+import org.jxmapviewer.viewer.DefaultTileFactory;
+import org.jxmapviewer.viewer.DefaultWaypoint;
+import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.TileFactoryInfo;
+import org.jxmapviewer.viewer.Waypoint;
+import org.jxmapviewer.viewer.WaypointPainter;
 
 import DataStructure.Artikl;
 import DataStructure.GeoLokacija;
@@ -84,6 +100,10 @@ public class VlasnikPanel extends JPanel {
 		
 		listaListener = (actionEvent) -> {
 			showPanelfill();
+		};
+		
+		pratiListener = (ActionEvent) -> {
+			kartaWindow();
 		};
 		
 		//Definicija Toolbar-a
@@ -183,6 +203,63 @@ public class VlasnikPanel extends JPanel {
 
 	}
 
+	private void kartaWindow() {
+		
+		
+		if (window.podLjuska.getTrenutniVlasnik().getAktivnaNarudzba() != null) {
+			
+			GeoLokacija lokacija = window.podLjuska.getTrenutniKlijent().pratiPoziciju();
+			
+			//Stvaramo novi Map Viewer
+			final JXMapViewer viewer = new JXMapViewer();
+			
+			//Pripremamo JFrame na koji cemo postaviti Map Viewer
+			JFrame kartaFrame = new JFrame("Lokacija Narudžbe");
+			kartaFrame.getContentPane().add(viewer);
+			kartaFrame.setSize(600, 600);
+			kartaFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			kartaFrame.setLocation(30, 30);
+			kartaFrame.setVisible(true);
+			
+			//Stvaramo tileFactory - izvor mapa
+			TileFactoryInfo tfinfo = new OSMTileFactoryInfo();
+			DefaultTileFactory tileFactory = new DefaultTileFactory(tfinfo);
+			viewer.setTileFactory(tileFactory);
+			
+			tileFactory.setThreadPoolSize(4);
+			
+			//Dodajemo interakcije
+			MouseInputListener MIListener = new PanMouseInputListener(viewer);
+			MouseWheelListener MWListener = new ZoomMouseWheelListenerCursor(viewer);
+
+			viewer.addMouseListener(MIListener);
+			viewer.addMouseMotionListener(MIListener);
+			viewer.addMouseWheelListener(MWListener);
+			
+			//Stvaramo Listu lokacija
+			GeoPosition LokacijaNarudzbe = new GeoPosition(lokacija.getGeoSirina(), lokacija.getGeoDuziina());
+			
+			
+			Set<GeoPosition> geoPositions = new HashSet<>();
+			geoPositions.add(LokacijaNarudzbe);
+			
+			Set<Waypoint> waypoints = new HashSet<>();
+			waypoints.add(new DefaultWaypoint(LokacijaNarudzbe));
+			
+			WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<>();
+			waypointPainter.setWaypoints(waypoints);
+			
+			viewer.setAddressLocation(LokacijaNarudzbe);
+			viewer.setZoom(2);
+			viewer.setOverlayPainter(waypointPainter);	
+		}
+		else {
+			
+			JOptionPane.showMessageDialog(window, "Trenutno nemate aktivnih narudžbi", "Obavijest", 1);
+		}
+		
+	}
+	
 	private void kosaricaPanelSwitch() {
 		//JPanel kosaricaPanelMain = new JPanel();
 		//kosaricaPanelMain.setLayout(new BorderLayout());

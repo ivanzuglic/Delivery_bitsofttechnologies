@@ -141,11 +141,11 @@ public class RestoranDAO {
 				
 				GeoLokacija lokacija = new GeoLokacija(lokacijaSirina, lokacijaDuzina, "Restoran");
 				BufferedImage slika = null;
-				try {
-		        	slika = ImageIO.read(new File(slikaPath)); 			 //dodatno testirat
-		        } catch (IOException e){
-		            e.printStackTrace();
-		        }
+//				try {
+//		        	slika = ImageIO.read(new File(slikaPath)); 			 //dodatno testirat
+//		        } catch (IOException e){
+//		            e.printStackTrace();
+//		        }
 				
 				Korisnik vlasnik = new Korisnik (idVlasnik);
 				restoran = new Restoran(idRestoran, imeRestoran, vlasnik, lokacija, opis, slika, odobren, telefon, fax, oib, iban, ziroRac, adresa);

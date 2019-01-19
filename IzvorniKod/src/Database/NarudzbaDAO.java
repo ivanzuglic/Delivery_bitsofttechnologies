@@ -73,38 +73,66 @@ public class NarudzbaDAO {
 		
 		String sql = "INSERT INTO narudzba (idArtikl, idKlijent, kolicina, geoSirinaPreuzimanja, geoDuzinaPreuzimanja, geoSirinaDostave, geoDuzinaDostave, aktivnostNar, vrijemeStvaranja, vrijemeZavrsetka, cijena) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+		String sql2 = "INSERT INTO narudzba (idNar, idArtikl, idKlijent, kolicina, geoSirinaPreuzimanja, geoDuzinaPreuzimanja, geoSirinaDostave, geoDuzinaDostave, aktivnostNar, vrijemeStvaranja, vrijemeZavrsetka, cijena) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		Map<Artikl, Integer> artikli =  narudzba.getOdabraniProizvodi();
 		int idNar = 0;
+		boolean prviArtikl = true;
 		
-		for(Map.Entry<Artikl, Integer> a : narudzba.getOdabraniProizvodi().entrySet()) {
+		for(Map.Entry<Artikl, Integer> a : artikli.entrySet()) {
+			if(prviArtikl == true) {
+				try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
+					PreparedStatement prepSt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+							
+					prepSt.setInt(1, a.getKey().getIdArtikl());
+					prepSt.setInt(2, narudzba.getKupac().getKorisnickiId());
+					prepSt.setInt(3, a.getValue());
+					prepSt.setFloat(4, narudzba.getLokacijaPreuzimanja().getGeoSirina());
+					prepSt.setFloat(5, narudzba.getLokacijaPreuzimanja().getGeoDuziina());
+					prepSt.setFloat(6, narudzba.getLokacijaDostavljanja().getGeoSirina());
+					prepSt.setFloat(7, narudzba.getLokacijaDostavljanja().getGeoDuziina());
+					prepSt.setBoolean(8, false);
+					prepSt.setTimestamp(9, narudzba.getVrijemeStvaranja());
+					prepSt.setTimestamp(10, narudzba.getVrijemeZavrsetka());
+					prepSt.setFloat(11, narudzba.getCijena());
+							
+					prepSt.executeUpdate();
+						
+					ResultSet rs = prepSt.getGeneratedKeys();  // uzimanje zadnjeg idNar
+						
+					if(rs.next()) {
+						idNar = rs.getInt(1);
+						prviArtikl = false;
+					}					
+							
+					} catch (SQLException sqlExc) {										
+						System.out.println(sqlExc.getMessage());
+					}
+				
+			} else {
+				try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
+					PreparedStatement prepSt = con.prepareStatement(sql2)) {
+													
+					prepSt.setInt(1, idNar);
+					prepSt.setInt(2, a.getKey().getIdArtikl());
+					prepSt.setInt(3, narudzba.getKupac().getKorisnickiId());
+					prepSt.setInt(4, a.getValue());
+					prepSt.setFloat(5, narudzba.getLokacijaPreuzimanja().getGeoSirina());
+					prepSt.setFloat(6, narudzba.getLokacijaPreuzimanja().getGeoDuziina());
+					prepSt.setFloat(7, narudzba.getLokacijaDostavljanja().getGeoSirina());
+					prepSt.setFloat(8, narudzba.getLokacijaDostavljanja().getGeoDuziina());
+					prepSt.setBoolean(9, false);
+					prepSt.setTimestamp(10, narudzba.getVrijemeStvaranja());
+					prepSt.setTimestamp(11, narudzba.getVrijemeZavrsetka());
+					prepSt.setFloat(12, narudzba.getCijena());
+							
+					prepSt.executeUpdate();						
+									
+					} catch (SQLException sqlExc) {										
+						System.out.println(sqlExc.getMessage());
+					}
+			}
 			
-			try(Connection con = DriverManager.getConnection(host, userDB, passwDB); 
-				PreparedStatement prepSt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-					
-				prepSt.setInt(1, a.getKey().getIdArtikl());
-				prepSt.setInt(2, narudzba.getKupac().getKorisnickiId());
-				prepSt.setInt(3, a.getValue());
-				prepSt.setFloat(4, narudzba.getLokacijaPreuzimanja().getGeoSirina());
-				prepSt.setFloat(5, narudzba.getLokacijaPreuzimanja().getGeoDuziina());
-				prepSt.setFloat(6, narudzba.getLokacijaDostavljanja().getGeoSirina());
-				prepSt.setFloat(7, narudzba.getLokacijaDostavljanja().getGeoDuziina());
-				prepSt.setBoolean(8, false);
-				prepSt.setTimestamp(9, narudzba.getVrijemeStvaranja());
-				prepSt.setTimestamp(10, narudzba.getVrijemeZavrsetka());
-				prepSt.setFloat(11, narudzba.getCijena());
-					
-				prepSt.executeUpdate();
-				
-				ResultSet rs = prepSt.getGeneratedKeys();  // uzimanje zadnjeg idNar
-				
-				if(rs.next()) {
-					idNar = rs.getInt(1);
-				}
-					
-			} catch (SQLException sqlExc) {				
-				
-				System.out.println(sqlExc.getMessage());
-			}			
 		}				
 		
 		return idNar;

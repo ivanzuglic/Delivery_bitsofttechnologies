@@ -405,8 +405,28 @@ public class KlijentPanel extends JPanel {
 			restoranPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
 			restoranPanel.setMaximumSize(new Dimension(9000, 100));
 			restoranPanel.setLayout(new BorderLayout());
-			//restoranPanel.add(new JLabel(new ImageIcon(restoran.getSlika())), BorderLayout.WEST);
-			restoranPanel.add(new JTextArea(restoran.getOpis()), BorderLayout.CENTER);
+			
+			//privremeno - LM
+			restoranPanel.add(new JLabel(new ImageIcon(getClass().getResource("/images/RestoranMini.png"))), BorderLayout.WEST);
+			
+			// dodao - LM
+			JPanel imeIOpisPanel = new JPanel();
+			imeIOpisPanel.setLayout(new BoxLayout(imeIOpisPanel, BoxLayout.PAGE_AXIS));
+			JTextArea imeArea = new JTextArea(restoran.getIme());
+			JTextArea opisArea = new JTextArea(restoran.getOpis());
+			
+			imeArea.setFont(new Font("Arial Bold", 0, 15));
+			imeArea.setForeground(new Color(0, 153, 255));
+			
+			opisArea.setFont(new Font("Arial Italic", 0, 12));
+			
+			imeIOpisPanel.add(imeArea, BorderLayout.NORTH);
+			imeIOpisPanel.add(opisArea, BorderLayout.CENTER);
+			
+			restoranPanel.add(imeIOpisPanel, BorderLayout.CENTER);
+			
+			// dodao/
+			
 			JButton naruci = new JButton("Naruci");
 			
 			ActionListener naruciListener = (actionEvent) -> {

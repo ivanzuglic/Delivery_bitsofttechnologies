@@ -311,8 +311,21 @@ public class KlijentPanel extends JPanel {
 		labelField.setColumns(14);
 		
 		ActionListener naruciListener = (actionListener) -> {
-			lokacijaDostave = new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), labelField.getText());
-			window.podLjuska.getTrenutniKlijent().getKosarica().finalizirajNarudzbu(lokacijaDostave, trenutniKlijent);
+			
+			if(window.podLjuska.getTrenutniKlijent().getAktivnaNarudzba() == null) {
+				
+				lokacijaDostave = new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), labelField.getText());
+				window.podLjuska.getTrenutniKlijent().getKosarica().finalizirajNarudzbu(lokacijaDostave, trenutniKlijent);
+				
+				JOptionPane.showMessageDialog(window, "Narudžba uspješno provedena!", "Obavijest", 1);
+				
+				window.podLjuska.getTrenutniKlijent().getKosarica().clear();
+			}
+			else {
+				
+				JOptionPane.showMessageDialog(window, "NEUSPJELO! Imate aktivnu narudžbu.", "Obavijest", 1);
+			}
+		
 		};
 		
 		JPanel kosaricaButtonPanel = new JPanel();
@@ -452,10 +465,21 @@ public class KlijentPanel extends JPanel {
 					
 					JPanel artiklNaruci = new JPanel();
 					artiklNaruci.setLayout(new FlowLayout());
-					JButton dodajButton = new JButton("Dodaj");
+					JButton dodajButton = new JButton("Dodaj u košaricu");
+					
 					ActionListener dodaj = (actionEvent2) -> {
-					window.podLjuska.getTrenutniKlijent().getKosarica().dodajArtikl(temp, 1);
+						
+					if (window.podLjuska.getTrenutniKlijent().getKosarica().getRestoran() == null || window.podLjuska.getTrenutniKlijent().getKosarica().getRestoran().equals(restoran)) {
+						
+						window.podLjuska.getTrenutniKlijent().getKosarica().dodajArtikl(temp, 1);
+						JOptionPane.showMessageDialog(window, "Artikl uspješno dodan.", "Obavijest", 1);
+					}
+					else {
+						JOptionPane.showMessageDialog(window, "NEUSPJELO! Jedna narudžba ne može sadržavati artikle iz dva restorana.", "Obavijest", 1);
+					}
+					
 					};
+					
 					dodajButton.addActionListener(dodaj);
 					artiklNaruci.add(dodajButton);
 					artiklPanel.add(artiklInfo, BorderLayout.CENTER);

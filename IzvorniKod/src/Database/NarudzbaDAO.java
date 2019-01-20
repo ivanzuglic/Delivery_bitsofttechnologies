@@ -121,7 +121,7 @@ public class NarudzbaDAO {
 					prepSt.setFloat(6, narudzba.getLokacijaPreuzimanja().getGeoDuziina());
 					prepSt.setFloat(7, narudzba.getLokacijaDostavljanja().getGeoSirina());
 					prepSt.setFloat(8, narudzba.getLokacijaDostavljanja().getGeoDuziina());
-					prepSt.setBoolean(9, false);
+					prepSt.setBoolean(9, true);
 					prepSt.setTimestamp(10, narudzba.getVrijemeStvaranja());
 					prepSt.setTimestamp(11, narudzba.getVrijemeZavrsetka());
 					prepSt.setFloat(12, narudzba.getCijena());

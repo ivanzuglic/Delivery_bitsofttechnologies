@@ -311,7 +311,7 @@ public class KlijentPanel extends JPanel {
 		labelField.setColumns(14);
 		
 		ActionListener naruciListener = (actionListener) -> {
-			trenKosarica.finalizirajNarudzbu(lokacijaDostave, trenutniKlijent);
+			window.podLjuska.getTrenutniKlijent().getKosarica().finalizirajNarudzbu(lokacijaDostave, trenutniKlijent);
 			lokacijaDostave = new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), labelField.getText());
 		};
 		
@@ -340,13 +340,13 @@ public class KlijentPanel extends JPanel {
 	}
 	
 	private void puniKosaricu(JPanel sadrzaj) {
-		Map<Artikl, Integer> artikli = trenKosarica.getOdabraniProizvodi();
+		Map<Artikl, Integer> artikli = window.podLjuska.getTrenutniKlijent().getKosarica().getOdabraniProizvodi();
 		for(Map.Entry<Artikl, Integer> artikl : artikli.entrySet()) {
 			JPanel artiklPanel = new JPanel();
 			artiklPanel.setLayout(new BorderLayout());
 			JPanel artiklInfo = new JPanel();
 			artiklInfo.setLayout(new FlowLayout());
-			artiklInfo.add(new JLabel(artikl.toString()));
+			artiklInfo.add(new JLabel(artikl.getKey().getNaziv()));
 			artiklInfo.add(new JLabel(artikl.getValue().toString()));
 			
 			JPanel artiklKol = new JPanel();
@@ -452,7 +452,7 @@ public class KlijentPanel extends JPanel {
 					artiklNaruci.setLayout(new FlowLayout());
 					JButton dodajButton = new JButton("Dodaj");
 					ActionListener dodaj = (actionEvent2) -> {
-						trenKosarica.dodajArtikl(temp, 1);
+					window.podLjuska.getTrenutniKlijent().getKosarica().dodajArtikl(temp, 1);
 					};
 					dodajButton.addActionListener(dodaj);
 					artiklNaruci.add(dodajButton);

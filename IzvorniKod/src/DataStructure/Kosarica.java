@@ -20,12 +20,12 @@ public class Kosarica {
     // metoda vraca 1 ako je artikl uspjesno dodan, ako nije, vraca -1
     public int dodajArtikl (Artikl noviArtikl, int kolicina) {
     	
-    	if (this.restoran.equals(null) || this.restoran.equals(noviArtikl.getRestoran())) {
+    	if (this.restoran == null || (this.restoran.equals(noviArtikl.getRestoran()))) {
     		
     		this.odabraniProizvodi.put(noviArtikl, kolicina);
         	this.ukupnaCijena = this.izracunajCijenu();
         	
-        	if (this.restoran.equals(null)) {
+        	if (this.restoran == null) {
         		this.restoran = noviArtikl.getRestoran();
         	}
         	

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -65,7 +66,6 @@ public class VlasnikPanel extends JPanel {
 	private DefaultWindow window;
 	private Vlasnik trenutniVlasnik;
 	private Set<Restoran> listaRestorani;
-	private Kosarica trenKosarica;
 	private GeoLokacija lokacijaDostave;
 	private Restoran trenRestoran;
 	
@@ -78,7 +78,6 @@ public class VlasnikPanel extends JPanel {
 		this.trenutniVlasnik = klijent;
 		this.trenRestoran = klijent.getVlastitiRestoran();
 		this.showScrollPane = new JScrollPane();
-		this.trenKosarica = new Kosarica();
 		
 		setLayout(new BorderLayout());
 		centerPanel = new JPanel();
@@ -299,7 +298,7 @@ public class VlasnikPanel extends JPanel {
 		
 		ActionListener naruciListener = (actionListener) -> {
 			lokacijaDostave = new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), labelField.getText());
-			trenKosarica.finalizirajNarudzbu(lokacijaDostave, trenutniVlasnik);
+			trenutniVlasnik.getKosarica().finalizirajNarudzbu(lokacijaDostave, trenutniVlasnik);
 		};
 		
 		JPanel kosaricaButtonPanel = new JPanel();
@@ -327,7 +326,7 @@ public class VlasnikPanel extends JPanel {
 	}
 	
 	private void puniKosaricu(JPanel sadrzaj) {
-		Map<Artikl, Integer> artikli = trenKosarica.getOdabraniProizvodi();
+		Map<Artikl, Integer> artikli = trenutniVlasnik.getKosarica().getOdabraniProizvodi();
 		for(Map.Entry<Artikl, Integer> artikl : artikli.entrySet()) {
 			JPanel artiklPanel = new JPanel();
 			artiklPanel.setLayout(new BorderLayout());
@@ -342,7 +341,7 @@ public class VlasnikPanel extends JPanel {
 			JButton plus = new JButton(" + ");
 			ActionListener plusListener = (actionListener) -> {
 				Integer kolicina = artikl.getValue();
-				trenKosarica.promijeniKolicinu(artikl.getKey(), ++kolicina);
+				trenutniVlasnik.getKosarica().promijeniKolicinu(artikl.getKey(), ++kolicina);
 				puniKosaricu(sadrzaj);
 			};
 			plus.addActionListener(plusListener);
@@ -351,7 +350,7 @@ public class VlasnikPanel extends JPanel {
 			JButton minus = new JButton(" - ");
 			ActionListener minusListener = (actionListener) -> {
 				Integer kolicina = artikl.getValue();
-				trenKosarica.promijeniKolicinu(artikl.getKey(), --kolicina);
+				trenutniVlasnik.getKosarica().promijeniKolicinu(artikl.getKey(), --kolicina);
 				puniKosaricu(sadrzaj);
 			};
 			minus.addActionListener(minusListener);
@@ -410,10 +409,11 @@ public class VlasnikPanel extends JPanel {
 				
 				centerPanel.removeAll();
 				showScrollPane.removeAll();
+				
 				centerPanel.setLayout(new BorderLayout());
+				centerPanel.setBackground(Color.WHITE);
 				
 				JPanel menuSadrzaj = new JPanel();
-				menuSadrzaj.setLayout(new BorderLayout());
 				menuSadrzaj.setLayout(new BoxLayout(menuSadrzaj, BoxLayout.PAGE_AXIS));
 				menuSadrzaj.setBackground(Color.WHITE);
 				
@@ -427,29 +427,52 @@ public class VlasnikPanel extends JPanel {
 				
 				Set<Artikl> menu = restoran.getMeni();
 				for(Artikl temp : menu) {
+					JPanel filler3 = new JPanel();
+					filler3.setMaximumSize(new Dimension(9000, 1));
+					filler3.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+					menuSadrzaj.add(filler3);
+					
 					JPanel artiklPanel = new JPanel();
+					artiklPanel.setBackground(Color.WHITE);
 					artiklPanel.setLayout(new BorderLayout());
 					JPanel artiklInfo = new JPanel();
-					artiklInfo.setLayout(new FlowLayout());
-					artiklInfo.add(new JLabel(temp.toString()));
-					artiklInfo.add(new JLabel(temp.getOpis()));
+					artiklInfo.setBackground(Color.WHITE);
+					artiklInfo.setLayout(new BoxLayout(artiklInfo, BoxLayout.LINE_AXIS));
 					Float cijena = temp.getCijena();
-					artiklInfo.add(new JLabel(cijena.toString()));
+					JLabel tempLabel1 = new JLabel("Naziv: " + temp.getNaziv());
+					tempLabel1.setMaximumSize(new Dimension(280, 90));
+					JLabel tempLabel2 = new JLabel("Opis: " + temp.getOpis());
+					tempLabel2.setMaximumSize(new Dimension(280, 90));
+					JLabel tempLabel3 = new JLabel("Cijena: " + cijena.toString() + "kn");
+					tempLabel3.setMaximumSize(new Dimension(280, 90));
+					artiklInfo.add(tempLabel1);
+					artiklInfo.add(tempLabel2);
+					artiklInfo.add(tempLabel3);
 					
 					JPanel artiklNaruci = new JPanel();
+					artiklNaruci.setBackground(Color.WHITE);
 					artiklNaruci.setLayout(new FlowLayout());
 					JButton dodajButton = new JButton("Dodaj");
 					ActionListener dodaj = (actionEvent2) -> {
-						trenKosarica.dodajArtikl(temp, 1);
+						trenutniVlasnik.getKosarica().dodajArtikl(temp, 1);
 					};
 					dodajButton.addActionListener(dodaj);
 					artiklNaruci.add(dodajButton);
 					artiklPanel.add(artiklInfo, BorderLayout.CENTER);
 					artiklPanel.add(artiklNaruci, BorderLayout.EAST);
+					artiklPanel.setMaximumSize(new Dimension(9000, 50));
+					artiklPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
 					menuSadrzaj.add(artiklPanel);
+					
+					JPanel filler4 = new JPanel();
+					filler4.setMaximumSize(new Dimension(9000, 1));
+					filler4.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+					menuSadrzaj.add(filler3);
+					
 				}
 				
 				showScrollPane = new JScrollPane(menuSadrzaj);
+				showScrollPane.setBackground(Color.WHITE);
 				centerPanel.add(showScrollPane, BorderLayout.CENTER);
 				add(centerPanel, BorderLayout.CENTER);
 				centerPanel.revalidate();

@@ -42,7 +42,7 @@ public class DefaultWindow extends JFrame{
 	/**
 	 * Metoda za promjenu panela sa Korisnika na KLijenta
 	 */
-	public void switchToKlijent(Korisnik klijent) {
+	public void switchToKlijent(Klijent klijent) {
 		remove(korPanel);
 		klijentPanel = new KlijentPanel(this, klijent);
 		add(klijentPanel);

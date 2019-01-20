@@ -311,7 +311,7 @@ public class VlasnikPanel extends JPanel {
 				
 				JOptionPane.showMessageDialog(window, "Narudžba uspješno provedena!", "Obavijest", 1);
 				
-				window.podLjuska.getTrenutniKlijent().getKosarica().clear();
+				window.podLjuska.getTrenutniVlasnik().getKosarica().clear();
 			}
 			else {
 				
@@ -361,6 +361,7 @@ public class VlasnikPanel extends JPanel {
 		Map<Artikl, Integer> artikli = window.podLjuska.getTrenutniVlasnik().getKosarica().getOdabraniProizvodi();
 		
 		for(Map.Entry<Artikl, Integer> artikl : artikli.entrySet()) {
+			
 			if(artikl.getValue() == 0) {
 				artikli.remove(artikl.getKey(), artikl.getValue());
 				continue;

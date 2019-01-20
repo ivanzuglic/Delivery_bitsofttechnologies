@@ -350,6 +350,7 @@ public class KlijentPanel extends JPanel {
 		Map<Artikl, Integer> artikli = window.podLjuska.getTrenutniKlijent().getKosarica().getOdabraniProizvodi();
 
 		for(Map.Entry<Artikl, Integer> artikl : artikli.entrySet()) {
+			
 			if(artikl.getValue() == 0) {
 				artikli.remove(artikl.getKey(), artikl.getValue());
 				continue;
@@ -387,7 +388,7 @@ public class KlijentPanel extends JPanel {
 			JButton plus = new JButton("+");
 			ActionListener plusListener = (actionListener) -> {
 				Integer kolicina = artikl.getValue();
-				window.podLjuska.getTrenutniVlasnik().getKosarica().promijeniKolicinu(artikl.getKey(), ++kolicina);
+				window.podLjuska.getTrenutniKlijent().getKosarica().promijeniKolicinu(artikl.getKey(), ++kolicina);
 				kosaricaPanelSwitch();;
 			};
 			plus.addActionListener(plusListener);
@@ -396,7 +397,7 @@ public class KlijentPanel extends JPanel {
 			JButton minus = new JButton("-");
 			ActionListener minusListener = (actionListener) -> {
 				Integer kolicina = artikl.getValue();
-				window.podLjuska.getTrenutniVlasnik().getKosarica().promijeniKolicinu(artikl.getKey(), --kolicina);
+				window.podLjuska.getTrenutniKlijent().getKosarica().promijeniKolicinu(artikl.getKey(), --kolicina);
 				kosaricaPanelSwitch();
 			};
 			minus.addActionListener(minusListener);

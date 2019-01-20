@@ -20,7 +20,7 @@ public class Kosarica {
     // metoda vraca 1 ako je artikl uspjesno dodan, ako nije, vraca -1
     public int dodajArtikl (Artikl noviArtikl, int kolicina) {
     	
-    	if (this.restoran == null || (this.restoran.equals(noviArtikl.getRestoran()))) {
+    	if (this.restoran == null || ((this.restoran.getId() == (noviArtikl.getRestoran().getId())) && !odabraniProizvodi.containsKey(noviArtikl))) {
     		
     		this.odabraniProizvodi.put(noviArtikl, kolicina);
         	this.ukupnaCijena = this.izracunajCijenu();
@@ -30,6 +30,16 @@ public class Kosarica {
         	}
         	
         	return 1;
+    	}
+    	else if ((this.restoran.getId() == (noviArtikl.getRestoran().getId())) && odabraniProizvodi.containsKey(noviArtikl)) {
+    		
+    		int kolicinaUnutra = this.odabraniProizvodi.get(noviArtikl);
+    		kolicinaUnutra = kolicinaUnutra + 1;
+    		this.odabraniProizvodi.put(noviArtikl, kolicinaUnutra);
+    		
+    		this.ukupnaCijena = this.izracunajCijenu();
+    		
+    		return 1;
     	}
     	else {
     		

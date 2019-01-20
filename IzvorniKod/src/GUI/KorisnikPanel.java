@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
@@ -168,9 +169,6 @@ public class KorisnikPanel extends JPanel {
 			
 			try {
 				ImageIcon slikaRestoran = new ImageIcon(restoran.getSlika());
-				if(slikaRestoran == null) {
-					slikaRestoran = new ImageIcon(getClass().getResource("/images/DefaultRestoranMini.png"));
-				}
 				restoranPanel.add(new JLabel(slikaRestoran), BorderLayout.WEST);
 			} catch (Exception e) {
 				ImageIcon slikaRestoran = new ImageIcon(getClass().getResource("/images/DefaultRestoranMini.png"));
@@ -230,35 +228,41 @@ public class KorisnikPanel extends JPanel {
 					artiklNaruci.setLayout(new FlowLayout());
 					JButton dodajButton = new JButton("Dodaj");
 					ActionListener dodaj = (actionEvent2) -> {
-						JDialog regPopUp = new JDialog();
-						regPopUp.setTitle("Informacija");
-						regPopUp.setLayout(new BorderLayout());
 						
-						ActionListener infoDialog = (actionEvent3) -> {
-							regPopUp.dispatchEvent(new WindowEvent(regPopUp, WindowEvent.WINDOW_CLOSING));
+						JOptionPane.showMessageDialog(window, "Morate se prijaviti kako bi izvršili ovu akciju", "Obavijest", 1);
+						
+//						JDialog regPopUp = new JDialog();
+//						regPopUp.setTitle("Informacija");
+//						regPopUp.setLayout(new BorderLayout());
+//						
+//						ActionListener infoDialog = (actionEvent3) -> {
+//							regPopUp.dispatchEvent(new WindowEvent(regPopUp, WindowEvent.WINDOW_CLOSING));
+//						};
+//						
+//						JPanel buttonPanel = new JPanel();
+//						buttonPanel.setBackground(Color.white);
+//						buttonPanel.setLayout(new FlowLayout());
+//						JButton OK = new JButton("OK");
+//						OK.addActionListener(infoDialog);
+//						buttonPanel.add(OK);
+//						regPopUp.add(buttonPanel, BorderLayout.SOUTH);
+//						
+//						JPanel text = new JPanel();
+//						text.setBackground(Color.white);
+//						JTextArea area = new JTextArea();
+//						area.setText("\nMorate se prijavati kako\nbiste izvrsili tu akciju");
+//						area.setForeground(new Color(0, 153, 255));
+//						area.setEditable(false);
+//						text.add(area);
+//						regPopUp.add(text, BorderLayout.CENTER);
+//						regPopUp.setResizable(false);
+//						regPopUp.setSize(200, 130);
+//						regPopUp.setLocation(window.getX()+10, window.getY()+8);
+//						regPopUp.setModal(true);
+//						regPopUp.setVisible(true);	
+						
+						
 						};
-						
-						JPanel buttonPanel = new JPanel();
-						buttonPanel.setBackground(Color.white);
-						buttonPanel.setLayout(new FlowLayout());
-						JButton OK = new JButton("OK");
-						OK.addActionListener(infoDialog);
-						buttonPanel.add(OK);
-						regPopUp.add(buttonPanel, BorderLayout.SOUTH);
-						
-						JPanel text = new JPanel();
-						text.setBackground(Color.white);
-						JTextArea area = new JTextArea();
-						area.setText("\nMorate se prijavati kako\nbiste izvrsili tu akciju");
-						area.setForeground(new Color(0, 153, 255));
-						area.setEditable(false);
-						text.add(area);
-						regPopUp.add(text, BorderLayout.CENTER);
-						regPopUp.setResizable(false);
-						regPopUp.setSize(200, 130);
-						regPopUp.setLocation(window.getX()+10, window.getY()+8);
-						regPopUp.setModal(true);
-						regPopUp.setVisible(true);					};
 					dodajButton.addActionListener(dodaj);
 					artiklNaruci.add(dodajButton);
 					artiklPanel.add(artiklInfo, BorderLayout.CENTER);

@@ -59,12 +59,6 @@ import DataStructure.Narudzba;
 import DataStructure.PodaciKarte;
 import DataStructure.Restoran;
 
-/**
- * Razred koji definira izgled i funkcionalnosti za Klijente
- * @author tonis
- *
- */
-
 public class KlijentPanel extends JPanel {
 	
 	private JPanel buttonsPanel1;
@@ -314,7 +308,7 @@ public class KlijentPanel extends JPanel {
 			if(window.podLjuska.getTrenutniKlijent().getAktivnaNarudzba() == null) {
 				
 				lokacijaDostave = new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), labelField.getText());
-				window.podLjuska.getTrenutniKlijent().getKosarica().finalizirajNarudzbu(lokacijaDostave, trenutniKlijent);
+				window.podLjuska.getTrenutniKlijent().getKosarica().finalizirajNarudzbu(lokacijaDostave, window.podLjuska.getTrenutniKlijent());
 				
 				JOptionPane.showMessageDialog(window, "Narudžba uspješno provedena!", "Obavijest", 1);
 				
@@ -369,7 +363,7 @@ public class KlijentPanel extends JPanel {
 			JButton plus = new JButton(" + ");
 			ActionListener plusListener = (actionListener) -> {
 				Integer kolicina = artikl.getValue();
-				trenutniKlijent.getKosarica().promijeniKolicinu(artikl.getKey(), ++kolicina);
+				window.podLjuska.getTrenutniKlijent().getKosarica().promijeniKolicinu(artikl.getKey(), ++kolicina);
 				puniKosaricu(sadrzaj);
 			};
 			plus.addActionListener(plusListener);
@@ -378,7 +372,7 @@ public class KlijentPanel extends JPanel {
 			JButton minus = new JButton(" - ");
 			ActionListener minusListener = (actionListener) -> {
 				Integer kolicina = artikl.getValue();
-				trenutniKlijent.getKosarica().promijeniKolicinu(artikl.getKey(), --kolicina);
+				window.podLjuska.getTrenutniKlijent().getKosarica().promijeniKolicinu(artikl.getKey(), --kolicina);
 				puniKosaricu(sadrzaj);
 			};
 			minus.addActionListener(minusListener);
@@ -420,9 +414,6 @@ public class KlijentPanel extends JPanel {
 
 			try {
 				ImageIcon slikaRestoran = new ImageIcon(restoran.getSlika());
-				if(slikaRestoran == null) {
-					slikaRestoran = new ImageIcon(getClass().getResource("/images/DefaultRestoranMini.png"));
-				}
 				restoranPanel.add(new JLabel(slikaRestoran), BorderLayout.WEST);
 			} catch (Exception e) {
 				ImageIcon slikaRestoran = new ImageIcon(getClass().getResource("/images/DefaultRestoranMini.png"));
@@ -485,7 +476,7 @@ public class KlijentPanel extends JPanel {
 					
 					ActionListener dodaj = (actionEvent2) -> {
 				
-					if (window.podLjuska.getTrenutniKlijent().getKosarica().getRestoran() == null || window.podLjuska.getTrenutniKlijent().getKosarica().getRestoran().equals(restoran)) {
+					if (window.podLjuska.getTrenutniKlijent().getKosarica().getRestoran() == null || window.podLjuska.getTrenutniKlijent().getKosarica().getRestoran().getId() == (restoran.getId())) {
 						
 						window.podLjuska.getTrenutniKlijent().getKosarica().dodajArtikl(temp, 1);
 						JOptionPane.showMessageDialog(window, "Artikl uspješno dodan.", "Obavijest", 1);

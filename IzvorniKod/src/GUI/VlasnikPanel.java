@@ -216,7 +216,7 @@ public class VlasnikPanel extends JPanel {
 		
 		if (window.podLjuska.getTrenutniVlasnik().getAktivnaNarudzba() != null) {
 			
-			GeoLokacija lokacija = window.podLjuska.getTrenutniKlijent().pratiPoziciju();
+			GeoLokacija lokacija = window.podLjuska.getTrenutniVlasnik().pratiPoziciju();
 			
 			//Stvaramo novi Map Viewer
 			final JXMapViewer viewer = new JXMapViewer();
@@ -269,8 +269,6 @@ public class VlasnikPanel extends JPanel {
 	}
 	
 	private void kosaricaPanelSwitch() {
-		//JPanel kosaricaPanelMain = new JPanel();
-		//kosaricaPanelMain.setLayout(new BorderLayout());
 		remove(showScrollPane);
 		remove(centerPanel);
 		
@@ -305,8 +303,21 @@ public class VlasnikPanel extends JPanel {
 		labelField.setColumns(14);
 		
 		ActionListener naruciListener = (actionListener) -> {
-			lokacijaDostave = new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), labelField.getText());
-			trenutniVlasnik.getKosarica().finalizirajNarudzbu(lokacijaDostave, trenutniVlasnik);
+			
+			if(window.podLjuska.getTrenutniVlasnik().getAktivnaNarudzba() == null) {
+				
+				lokacijaDostave = new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), labelField.getText());
+				window.podLjuska.getTrenutniVlasnik().getKosarica().finalizirajNarudzbu(lokacijaDostave, window.podLjuska.getTrenutniVlasnik());
+				
+				JOptionPane.showMessageDialog(window, "Narudžba uspješno provedena!", "Obavijest", 1);
+				
+				window.podLjuska.getTrenutniKlijent().getKosarica().clear();
+			}
+			else {
+				
+				JOptionPane.showMessageDialog(window, "NEUSPJELO! Imate aktivnu narudžbu.", "Obavijest", 1);
+			}
+
 		};
 		
 		JPanel kosaricaButtonPanel = new JPanel();
@@ -334,13 +345,15 @@ public class VlasnikPanel extends JPanel {
 	}
 	
 	private void puniKosaricu(JPanel sadrzaj) {
-		Map<Artikl, Integer> artikli = trenutniVlasnik.getKosarica().getOdabraniProizvodi();
+		
+		Map<Artikl, Integer> artikli = window.podLjuska.getTrenutniVlasnik().getKosarica().getOdabraniProizvodi();
+		
 		for(Map.Entry<Artikl, Integer> artikl : artikli.entrySet()) {
 			JPanel artiklPanel = new JPanel();
 			artiklPanel.setLayout(new BorderLayout());
 			JPanel artiklInfo = new JPanel();
 			artiklInfo.setLayout(new FlowLayout());
-			artiklInfo.add(new JLabel(artikl.toString()));
+			artiklInfo.add(new JLabel(artikl.getKey().getNaziv()));
 			artiklInfo.add(new JLabel(artikl.getValue().toString()));
 			
 			JPanel artiklKol = new JPanel();
@@ -349,7 +362,7 @@ public class VlasnikPanel extends JPanel {
 			JButton plus = new JButton(" + ");
 			ActionListener plusListener = (actionListener) -> {
 				Integer kolicina = artikl.getValue();
-				trenutniVlasnik.getKosarica().promijeniKolicinu(artikl.getKey(), ++kolicina);
+				window.podLjuska.getTrenutniVlasnik().getKosarica().promijeniKolicinu(artikl.getKey(), ++kolicina);
 				puniKosaricu(sadrzaj);
 			};
 			plus.addActionListener(plusListener);
@@ -358,7 +371,7 @@ public class VlasnikPanel extends JPanel {
 			JButton minus = new JButton(" - ");
 			ActionListener minusListener = (actionListener) -> {
 				Integer kolicina = artikl.getValue();
-				trenutniVlasnik.getKosarica().promijeniKolicinu(artikl.getKey(), --kolicina);
+				window.podLjuska.getTrenutniVlasnik().getKosarica().promijeniKolicinu(artikl.getKey(), --kolicina);
 				puniKosaricu(sadrzaj);
 			};
 			minus.addActionListener(minusListener);
@@ -401,9 +414,6 @@ public class VlasnikPanel extends JPanel {
 
 			try {
 				ImageIcon slikaRestoran = new ImageIcon(restoran.getSlika());
-				if(slikaRestoran == null) {
-					slikaRestoran = new ImageIcon(getClass().getResource("/images/DefaultRestoranMini.png"));
-				}
 				restoranPanel.add(new JLabel(slikaRestoran), BorderLayout.WEST);
 			} catch (Exception e) {
 				ImageIcon slikaRestoran = new ImageIcon(getClass().getResource("/images/DefaultRestoranMini.png"));
@@ -463,9 +473,20 @@ public class VlasnikPanel extends JPanel {
 					artiklNaruci.setBackground(Color.WHITE);
 					artiklNaruci.setLayout(new FlowLayout());
 					JButton dodajButton = new JButton("Dodaj");
+					
 					ActionListener dodaj = (actionEvent2) -> {
-						trenutniVlasnik.getKosarica().dodajArtikl(temp, 1);
+						
+						if (window.podLjuska.getTrenutniVlasnik().getKosarica().getRestoran() == null || window.podLjuska.getTrenutniVlasnik().getKosarica().getRestoran().getId() == (restoran.getId())) {
+							
+							window.podLjuska.getTrenutniVlasnik().getKosarica().dodajArtikl(temp, 1);
+							JOptionPane.showMessageDialog(window, "Artikl uspješno dodan.", "Obavijest", 1);
+						}
+						else {
+							JOptionPane.showMessageDialog(window, "NEUSPJELO! Jedna narudžba ne može sadržavati artikle iz dva restorana.", "Obavijest", 1);
+						}
+						
 					};
+					
 					dodajButton.addActionListener(dodaj);
 					artiklNaruci.add(dodajButton);
 					artiklPanel.add(artiklInfo, BorderLayout.CENTER);

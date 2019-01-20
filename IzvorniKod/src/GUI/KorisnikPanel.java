@@ -134,6 +134,7 @@ public class KorisnikPanel extends JPanel {
 			restoranPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
 			restoranPanel.setMaximumSize(new Dimension(9000, 100));
 			restoranPanel.setLayout(new BorderLayout());
+			
 			try {
 				ImageIcon slikaRestoran = new ImageIcon(restoran.getSlika());
 				if(slikaRestoran == null) {

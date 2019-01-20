@@ -311,8 +311,8 @@ public class KlijentPanel extends JPanel {
 		labelField.setColumns(14);
 		
 		ActionListener naruciListener = (actionListener) -> {
-			window.podLjuska.getTrenutniKlijent().getKosarica().finalizirajNarudzbu(lokacijaDostave, trenutniKlijent);
 			lokacijaDostave = new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), labelField.getText());
+			window.podLjuska.getTrenutniKlijent().getKosarica().finalizirajNarudzbu(lokacijaDostave, trenutniKlijent);
 		};
 		
 		JPanel kosaricaButtonPanel = new JPanel();
@@ -403,6 +403,7 @@ public class KlijentPanel extends JPanel {
 			restoranPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
 			restoranPanel.setMaximumSize(new Dimension(9000, 100));
 			restoranPanel.setLayout(new BorderLayout());
+
 			try {
 				ImageIcon slikaRestoran = new ImageIcon(restoran.getSlika());
 				if(slikaRestoran == null) {
@@ -414,6 +415,7 @@ public class KlijentPanel extends JPanel {
 				restoranPanel.add(new JLabel(slikaRestoran), BorderLayout.WEST);
 			}
 			restoranPanel.add(new JTextArea("Naziv: " + restoran.getIme() + "\nOpis: " + restoran.getOpis()), BorderLayout.CENTER);
+
 			JButton naruci = new JButton("Naruci");
 			
 			ActionListener naruciListener = (actionEvent) -> {

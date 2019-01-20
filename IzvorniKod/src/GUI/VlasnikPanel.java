@@ -5,16 +5,21 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -391,6 +396,7 @@ public class VlasnikPanel extends JPanel {
 			restoranPanel.setLayout(new BorderLayout());
 			
 			//privremeno - LM
+
 			try {
 				ImageIcon slikaRestoran = new ImageIcon(restoran.getSlika());
 				if(slikaRestoran == null) {
@@ -402,6 +408,7 @@ public class VlasnikPanel extends JPanel {
 				restoranPanel.add(new JLabel(slikaRestoran), BorderLayout.WEST);
 			}
 			restoranPanel.add(new JTextArea("Naziv: " + restoran.getIme() + "\nOpis: " + restoran.getOpis()), BorderLayout.CENTER);
+
 			JButton naruci = new JButton("Naruci");
 			
 			ActionListener naruciListener = (actionEvent) -> {
@@ -605,9 +612,6 @@ public class VlasnikPanel extends JPanel {
 			artiklInfo.add(ukloni);
 			
 			menuSadrzaj.add(artiklInfo);
-			
 		}
 	}
-
 }
-

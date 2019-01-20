@@ -117,8 +117,7 @@ public class KorisnikPanel extends JPanel {
 		usrInfoPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
 		northPanel.add(usrInfoPanel, BorderLayout.EAST);
 		
-		//Nepotpuna definicija panela sa listom restorana
-		//Potrebno dalje istraziti kako radi JScrollPane
+		//Definicija panela sa listom restorana
 		JPanel restorani = new JPanel();
 		restorani.setLayout(new BoxLayout(restorani, BoxLayout.PAGE_AXIS));
 		restorani.setBackground(Color.WHITE);
@@ -135,8 +134,18 @@ public class KorisnikPanel extends JPanel {
 			restoranPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
 			restoranPanel.setMaximumSize(new Dimension(9000, 100));
 			restoranPanel.setLayout(new BorderLayout());
-			//restoranPanel.add(new JLabel(new ImageIcon(restoran.getSlika())), BorderLayout.WEST);
-			restoranPanel.add(new JTextArea(restoran.getOpis()), BorderLayout.CENTER);
+			try {
+				ImageIcon slikaRestoran = new ImageIcon(restoran.getSlika());
+				if(slikaRestoran == null) {
+					slikaRestoran = new ImageIcon(getClass().getResource("/images/DefaultRestoranMini.png"));
+				}
+				restoranPanel.add(new JLabel(slikaRestoran), BorderLayout.WEST);
+			} catch (Exception e) {
+				ImageIcon slikaRestoran = new ImageIcon(getClass().getResource("/images/DefaultRestoranMini.png"));
+				restoranPanel.add(new JLabel(slikaRestoran), BorderLayout.WEST);
+			}
+			
+			restoranPanel.add(new JTextArea("Naziv: " + restoran.getIme() + "\nOpis: " + restoran.getOpis()), BorderLayout.CENTER);
 			JButton naruci = new JButton("Naruci");
 			
 			ActionListener naruciListener = (actionEvent) -> {
@@ -172,7 +181,7 @@ public class KorisnikPanel extends JPanel {
 			};
 			
 			naruci.addActionListener(naruciListener);
-			restoranPanel.add(new JButton("Naruci"), BorderLayout.EAST);
+			restoranPanel.add(naruci, BorderLayout.EAST);
 			restorani.add(restoranPanel);
 			
 			JPanel filler2 = new JPanel();

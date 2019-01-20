@@ -78,6 +78,7 @@ public class VlasnikPanel extends JPanel {
 		this.trenutniVlasnik = klijent;
 		this.trenRestoran = klijent.getVlastitiRestoran();
 		this.showScrollPane = new JScrollPane();
+		this.trenKosarica = new Kosarica();
 		
 		setLayout(new BorderLayout());
 		centerPanel = new JPanel();
@@ -283,7 +284,6 @@ public class VlasnikPanel extends JPanel {
 		opisKosaricaPanel.add(opisKosarica);
 		centerPanel.add(opisKosaricaPanel, BorderLayout.NORTH);
 		
-		//trenKosarica = window.podLjuska.getKosarica;
 		puniKosaricu(kosaricaSadrzaj);
 		
 		JLabel unosAdr1 = new JLabel("Informacije o adresi: ");
@@ -298,8 +298,8 @@ public class VlasnikPanel extends JPanel {
 		labelField.setColumns(14);
 		
 		ActionListener naruciListener = (actionListener) -> {
-			trenKosarica.finalizirajNarudzbu(lokacijaDostave, trenutniVlasnik);
 			lokacijaDostave = new GeoLokacija(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), labelField.getText());
+			trenKosarica.finalizirajNarudzbu(lokacijaDostave, trenutniVlasnik);
 		};
 		
 		JPanel kosaricaButtonPanel = new JPanel();
@@ -327,7 +327,7 @@ public class VlasnikPanel extends JPanel {
 	}
 	
 	private void puniKosaricu(JPanel sadrzaj) {
-		Map<Artikl, Integer> artikli = new HashMap<Artikl, Integer>();
+		Map<Artikl, Integer> artikli = trenKosarica.getOdabraniProizvodi();
 		for(Map.Entry<Artikl, Integer> artikl : artikli.entrySet()) {
 			JPanel artiklPanel = new JPanel();
 			artiklPanel.setLayout(new BorderLayout());
@@ -374,7 +374,6 @@ public class VlasnikPanel extends JPanel {
 		remove(centerPanel);
 		centerPanel.removeAll();
 		showScrollPane.removeAll();
-		//JPanel restorani = new JPanel();
 		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
 		centerPanel.setBackground(Color.WHITE);
 		window.podLjuska.napuniSetRestorana();
@@ -392,44 +391,74 @@ public class VlasnikPanel extends JPanel {
 			restoranPanel.setLayout(new BorderLayout());
 			
 			//privremeno - LM
-			//restoranPanel.add(new JLabel(new ImageIcon(restoran.getSlika())), BorderLayout.WEST);
-			restoranPanel.add(new JTextArea(restoran.getOpis()), BorderLayout.CENTER);
+			try {
+				ImageIcon slikaRestoran = new ImageIcon(restoran.getSlika());
+				if(slikaRestoran == null) {
+					slikaRestoran = new ImageIcon(getClass().getResource("/images/DefaultRestoranMini.png"));
+				}
+				restoranPanel.add(new JLabel(slikaRestoran), BorderLayout.WEST);
+			} catch (Exception e) {
+				ImageIcon slikaRestoran = new ImageIcon(getClass().getResource("/images/DefaultRestoranMini.png"));
+				restoranPanel.add(new JLabel(slikaRestoran), BorderLayout.WEST);
+			}
+			restoranPanel.add(new JTextArea("Naziv: " + restoran.getIme() + "\nOpis: " + restoran.getOpis()), BorderLayout.CENTER);
 			JButton naruci = new JButton("Naruci");
 			
 			ActionListener naruciListener = (actionEvent) -> {
-				JDialog regPopUp = new JDialog();
-				regPopUp.setTitle("Informacija");
-				regPopUp.setLayout(new BorderLayout());
+				remove(showScrollPane);
+				remove(centerPanel);
 				
-				ActionListener infoDialog = (actionEvent2) -> {
-					regPopUp.dispatchEvent(new WindowEvent(regPopUp, WindowEvent.WINDOW_CLOSING));
-				};
+				centerPanel.removeAll();
+				showScrollPane.removeAll();
+				centerPanel.setLayout(new BorderLayout());
 				
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.setBackground(Color.white);
-				buttonPanel.setLayout(new FlowLayout());
-				JButton OK = new JButton("OK");
-				OK.addActionListener(infoDialog);
-				buttonPanel.add(OK);
-				regPopUp.add(buttonPanel, BorderLayout.SOUTH);
+				JPanel menuSadrzaj = new JPanel();
+				menuSadrzaj.setLayout(new BorderLayout());
+				menuSadrzaj.setLayout(new BoxLayout(menuSadrzaj, BoxLayout.PAGE_AXIS));
+				menuSadrzaj.setBackground(Color.WHITE);
 				
-				JPanel text = new JPanel();
-				text.setBackground(Color.white);
-				JTextArea area = new JTextArea();
-				area.setText("\nMorate se prijavati kako\nbiste izvrsili tu akciju");
-				area.setForeground(new Color(0, 153, 255));
-				area.setEditable(false);
-				text.add(area);
-				regPopUp.add(text, BorderLayout.CENTER);
-				regPopUp.setResizable(false);
-				regPopUp.setSize(200, 130);
-				regPopUp.setLocation(window.getX()+10, window.getY()+8);
-				regPopUp.setModal(true);
-				regPopUp.setVisible(true);
+				JPanel opisMenuPanel = new JPanel();
+				opisMenuPanel.setBackground(Color.white);
+				JLabel opisMenu = new JLabel();
+				opisMenu.setText(restoran.getIme());
+				opisMenu.setForeground(new Color(0, 153, 255));
+				opisMenuPanel.add(opisMenu);
+				centerPanel.add(opisMenuPanel, BorderLayout.NORTH);
+				
+				Set<Artikl> menu = restoran.getMeni();
+				for(Artikl temp : menu) {
+					JPanel artiklPanel = new JPanel();
+					artiklPanel.setLayout(new BorderLayout());
+					JPanel artiklInfo = new JPanel();
+					artiklInfo.setLayout(new FlowLayout());
+					artiklInfo.add(new JLabel(temp.toString()));
+					artiklInfo.add(new JLabel(temp.getOpis()));
+					Float cijena = temp.getCijena();
+					artiklInfo.add(new JLabel(cijena.toString()));
+					
+					JPanel artiklNaruci = new JPanel();
+					artiklNaruci.setLayout(new FlowLayout());
+					JButton dodajButton = new JButton("Dodaj");
+					ActionListener dodaj = (actionEvent2) -> {
+						trenKosarica.dodajArtikl(temp, 1);
+					};
+					dodajButton.addActionListener(dodaj);
+					artiklNaruci.add(dodajButton);
+					artiklPanel.add(artiklInfo, BorderLayout.CENTER);
+					artiklPanel.add(artiklNaruci, BorderLayout.EAST);
+					menuSadrzaj.add(artiklPanel);
+				}
+				
+				showScrollPane = new JScrollPane(menuSadrzaj);
+				centerPanel.add(showScrollPane, BorderLayout.CENTER);
+				add(centerPanel, BorderLayout.CENTER);
+				centerPanel.revalidate();
+				revalidate();
+				
 			};
 			
 			naruci.addActionListener(naruciListener);
-			restoranPanel.add(new JButton("Naruci"), BorderLayout.EAST);
+			restoranPanel.add(naruci, BorderLayout.EAST);
 			centerPanel.add(restoranPanel);
 			
 			JPanel filler2 = new JPanel();
@@ -492,7 +521,7 @@ public class VlasnikPanel extends JPanel {
 		JPanel opisPanel = new JPanel();
 		opisPanel.setBackground(Color.white);
 		JLabel opis = new JLabel();
-		opis.setText("Trenutni sadrzaj menu-a vaseg restorana: ");
+		opis.setText("Trenutni sadrzaj menu-a vaseg restorana (" + trenRestoran.getIme() + "): ");
 		opis.setForeground(new Color(0, 153, 255));
 		opisPanel.add(opis);
 		

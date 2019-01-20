@@ -320,8 +320,15 @@ public class VlasnikPanel extends JPanel {
 
 		};
 		
+		JPanel kosaricaSouthPanel = new JPanel();
+		kosaricaSouthPanel.setLayout(new BoxLayout(kosaricaSouthPanel, BoxLayout.PAGE_AXIS));
 		JPanel kosaricaButtonPanel = new JPanel();
+		
 		kosaricaButtonPanel.setLayout(new FlowLayout());
+		
+		JPanel ukupnaCijena = new JPanel();
+		ukupnaCijena.setBackground(Color.white);
+		ukupnaCijena.add(new JLabel("<html><b>Ukupna cijena narudzbe: </b><html>" + window.podLjuska.getTrenutniVlasnik().getKosarica().getUkupnaCijena() + "kn"));
 		
 		kosaricaButtonPanel.add(unosAdr1);
 		kosaricaButtonPanel.add(unosAdr2);
@@ -335,7 +342,12 @@ public class VlasnikPanel extends JPanel {
 		naruci.addActionListener(naruciListener);
 		kosaricaButtonPanel.add(naruci);
 		kosaricaButtonPanel.setBackground(Color.WHITE);
-		centerPanel.add(kosaricaButtonPanel, BorderLayout.SOUTH);
+		
+		kosaricaSouthPanel.add(ukupnaCijena);
+		kosaricaSouthPanel.add(kosaricaButtonPanel);
+		kosaricaSouthPanel.setBackground(Color.white);
+
+		centerPanel.add(kosaricaSouthPanel, BorderLayout.SOUTH);
 		
 		showScrollPane = new JScrollPane(kosaricaSadrzaj);
 		centerPanel.add(showScrollPane, BorderLayout.CENTER);
@@ -349,42 +361,73 @@ public class VlasnikPanel extends JPanel {
 		Map<Artikl, Integer> artikli = window.podLjuska.getTrenutniVlasnik().getKosarica().getOdabraniProizvodi();
 		
 		for(Map.Entry<Artikl, Integer> artikl : artikli.entrySet()) {
+			if(artikl.getValue() == 0) {
+				artikli.remove(artikl.getKey(), artikl.getValue());
+				continue;
+			}
+			
+			JPanel filler3 = new JPanel();
+			filler3.setMaximumSize(new Dimension(9000, 1));
+			filler3.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+			sadrzaj.add(filler3);
+			
 			JPanel artiklPanel = new JPanel();
+			artiklPanel.setBackground(Color.WHITE);
+			artiklPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
+			artiklPanel.setMaximumSize(new Dimension(3000, 70));
 			artiklPanel.setLayout(new BorderLayout());
 			JPanel artiklInfo = new JPanel();
-			artiklInfo.setLayout(new FlowLayout());
-			artiklInfo.add(new JLabel(artikl.getKey().getNaziv()));
-			artiklInfo.add(new JLabel(artikl.getValue().toString()));
+			artiklInfo.setBackground(Color.WHITE);
+			
+			JLabel tempLabel1 = new JLabel("Naziv: " + artikl.getKey().getNaziv());
+			Float cijena = artikl.getKey().getCijena();
+			JLabel tempLabel2 = new JLabel("Cijena: " + cijena.toString());
+			//JLabel tempLabel3 = new JLabel("Kolicina: " + artikl.getValue().toString());
+			tempLabel1.setMaximumSize(new Dimension(280, 90));
+			tempLabel2.setMaximumSize(new Dimension(280, 90));
+			//tempLabel3.setMaximumSize(new Dimension(280, 90));
+			
+			artiklInfo.setLayout(new BoxLayout(artiklInfo, BoxLayout.LINE_AXIS));
+			artiklInfo.add(tempLabel1);
+			artiklInfo.add(tempLabel2);
+			//artiklInfo.add(tempLabel3);
 			
 			JPanel artiklKol = new JPanel();
-			artiklKol.setLayout(new FlowLayout());
+			artiklKol.setLayout(new BoxLayout(artiklKol, BoxLayout.LINE_AXIS));
 			
-			JButton plus = new JButton(" + ");
+			JButton plus = new JButton("+");
 			ActionListener plusListener = (actionListener) -> {
 				Integer kolicina = artikl.getValue();
 				window.podLjuska.getTrenutniVlasnik().getKosarica().promijeniKolicinu(artikl.getKey(), ++kolicina);
-				puniKosaricu(sadrzaj);
+				kosaricaPanelSwitch();;
 			};
 			plus.addActionListener(plusListener);
 			
 			
-			JButton minus = new JButton(" - ");
+			JButton minus = new JButton("-");
 			ActionListener minusListener = (actionListener) -> {
 				Integer kolicina = artikl.getValue();
 				window.podLjuska.getTrenutniVlasnik().getKosarica().promijeniKolicinu(artikl.getKey(), --kolicina);
-				puniKosaricu(sadrzaj);
+				kosaricaPanelSwitch();
 			};
 			minus.addActionListener(minusListener);
 			
-			JLabel kolicinaLabel = new JLabel(" " + artikl.getValue().toString() + " ");
+			JLabel kolicinaLabel = new JLabel("    " + artikl.getValue().toString() + "    ");
 			
-			artiklKol.add(plus);
-			artiklKol.add(kolicinaLabel);
 			artiklKol.add(minus);
+			artiklKol.add(kolicinaLabel);
+			artiklKol.add(plus);
+			artiklKol.setBackground(Color.white);
 			
 			artiklPanel.add(artiklInfo, BorderLayout.CENTER);
-			artiklPanel.add(artiklInfo, BorderLayout.WEST);
+			artiklPanel.add(artiklKol, BorderLayout.EAST);
 			sadrzaj.add(artiklPanel);
+			
+			JPanel filler4 = new JPanel();
+			filler4.setMaximumSize(new Dimension(9000, 1));
+			filler4.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+			sadrzaj.add(filler3);
+			
 			revalidate();
 		}
 	}
@@ -421,7 +464,7 @@ public class VlasnikPanel extends JPanel {
 			}
 			restoranPanel.add(new JTextArea("Naziv: " + restoran.getIme() + "\nOpis: " + restoran.getOpis()), BorderLayout.CENTER);
 
-			JButton naruci = new JButton("Naruci");
+			JButton naruci = new JButton("Pregledaj");
 			
 			ActionListener naruciListener = (actionEvent) -> {
 				remove(showScrollPane);

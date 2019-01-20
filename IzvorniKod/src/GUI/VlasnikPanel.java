@@ -565,37 +565,6 @@ public class VlasnikPanel extends JPanel {
 			centerPanel.add(filler2);
 		}
 		
-		
-		/*
-		//Primjer1
-		JPanel restoran = new JPanel();
-		restoran.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
-		restoran.setMaximumSize(new Dimension(9000, 100));
-		restoran.setLayout(new BorderLayout());
-		restoran.add(new JLabel(new ImageIcon(getClass().getResource("/images/DodajrestoranMini.png"))), BorderLayout.WEST);
-		restoran.add(new JTextArea("Nekakav opis za restoran"), BorderLayout.CENTER);
-		JButton tempButton = new JButton("Naruci");
-		//tempButton.addActionListener(naruciListener);
-		restoran.add(tempButton, BorderLayout.EAST);
-		restorani.add(restoran);
-		
-		//Filler
-		JPanel filler = new JPanel();
-		filler.setMaximumSize(new Dimension(9000, 1));
-		filler.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-		restorani.add(filler);
-		
-		//Primjer2
-		JPanel restoran2 = new JPanel();
-		restoran2.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
-		restoran2.setMaximumSize(new Dimension(9000, 100));
-		restoran2.setLayout(new BorderLayout());
-		restoran2.add(new JLabel(new ImageIcon(getClass().getResource("/images/DodajrestoranMini.png"))), BorderLayout.WEST);
-		restoran2.add(new JTextArea("\nNekakav opis za restoran"), BorderLayout.CENTER);
-		restoran2.add(new JButton("Naruci"), BorderLayout.EAST);
-		restorani.add(restoran2);
-		*/
-		
 		showScrollPane = new JScrollPane(centerPanel);
 		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
 		add(showScrollPane, BorderLayout.CENTER);
@@ -608,6 +577,9 @@ public class VlasnikPanel extends JPanel {
 	private void urediPanel() {
 		remove(showScrollPane);
 		remove(centerPanel);
+		showScrollPane.removeAll();
+		centerPanel.removeAll();
+
 		centerPanel.setLayout(new BorderLayout());
 				
 		JPanel menuSadrzaj = new JPanel();
@@ -637,20 +609,22 @@ public class VlasnikPanel extends JPanel {
 		vrijemeField.setColumns(4);
 		
 		ActionListener dodajListener = (actionListener) -> {
+			try {
 				String naziv = nazivField.getText();
 				float cijena = Float.parseFloat(cijenaField.getText());
 				String opisArt = opisField.getText();
 				int vrijeme = Integer.parseInt(vrijemeField.getText());
 				trenRestoran.AddMeni(new Artikl(naziv, cijena, vrijeme, trenRestoran, opisArt), window.podLjuska.getZastavice(), trenutniVlasnik);
-				urediPanel();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(window, "Uneseni podaci nisu prihvatljivi", "Obavijest", 1);
+			}
+			urediPanel();
 		};
 		
 		JPanel urediButtonPanel = new JPanel();
 		urediButtonPanel.setBackground(Color.white);
 		urediButtonPanel.setPreferredSize(new Dimension(3000, 60));
 		
-		//JPanel urediButtonPanel2 = new JPanel();
-		//urediButtonPanel2.setBackground(Color.white);
 		
 		urediButtonPanel.add(unosAdr1);
 		urediButtonPanel.add(nazivField);
@@ -668,8 +642,6 @@ public class VlasnikPanel extends JPanel {
 		
 		showScrollPane = new JScrollPane(menuSadrzaj);
 		
-		centerPanel.removeAll();
-		showScrollPane.removeAll();
 		showScrollPane.setBackground(Color.white);
 		centerPanel.add(opisPanel, BorderLayout.NORTH);
 		centerPanel.add(showScrollPane, BorderLayout.CENTER);
@@ -682,27 +654,56 @@ public class VlasnikPanel extends JPanel {
 	}
 
 	private void dohvatiMenu(JPanel menuSadrzaj) {
-		Set<Artikl> menu = trenRestoran.getMeni();
+		Set<Artikl> menu = window.podLjuska.getTrenutniVlasnik().getVlastitiRestoran().getMeni();
 		for(Artikl temp : menu) {
-			JPanel artiklInfo = new JPanel();
-			Float cijena = temp.getCijena();
-			Integer vrijemePripravljanja = temp.getVrijemePripravljanja();
-			artiklInfo.setLayout(new FlowLayout());
-			artiklInfo.add(new JLabel(temp.getNaziv()));
-			artiklInfo.add(new JLabel(cijena.toString()));
-			artiklInfo.add(new JLabel("Vrijeme pripravljanja: " + vrijemePripravljanja.toString() + "'"));
-			artiklInfo.add(new JLabel("Opis: " + temp.getOpis()));
+			JPanel filler3 = new JPanel();
+			filler3.setMaximumSize(new Dimension(9000, 1));
+			filler3.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+			menuSadrzaj.add(filler3);
 			
-			ActionListener ukloniListener = (actionEvent) -> {
-				trenRestoran.RemoveMeni(temp, window.podLjuska.getZastavice(), trenutniVlasnik);
+			JPanel artiklPanel = new JPanel();
+			artiklPanel.setBackground(Color.WHITE);
+			artiklPanel.setLayout(new BorderLayout());
+			JPanel artiklInfo = new JPanel();
+			artiklInfo.setBackground(Color.WHITE);
+			artiklInfo.setLayout(new BoxLayout(artiklInfo, BoxLayout.LINE_AXIS));
+			Float cijena = temp.getCijena();
+			JLabel tempLabel1 = new JLabel("Naziv: " + temp.getNaziv());
+			tempLabel1.setMaximumSize(new Dimension(200, 90));
+			JLabel tempLabel2 = new JLabel("Opis: " + temp.getOpis());
+			tempLabel2.setMaximumSize(new Dimension(200, 90));
+			JLabel tempLabel3 = new JLabel("Cijena: " + cijena.toString() + "kn");
+			tempLabel3.setMaximumSize(new Dimension(200, 90));
+			JLabel tempLabel4 = new JLabel("Vrijeme pripravljanja: " + cijena.toString() + "'");
+			tempLabel4.setMaximumSize(new Dimension(200, 90));
+			artiklInfo.add(tempLabel1);
+			artiklInfo.add(tempLabel2);
+			artiklInfo.add(tempLabel3);
+			artiklInfo.add(tempLabel4);
+			
+			JPanel artiklNaruci = new JPanel();
+			artiklNaruci.setBackground(Color.WHITE);
+			artiklNaruci.setLayout(new BoxLayout(artiklNaruci, BoxLayout.LINE_AXIS));
+			JButton dodajButton = new JButton("Ukloni");
+			
+			ActionListener ukloni = (actionEvent2) -> {
+				
+				window.podLjuska.getTrenutniVlasnik().getVlastitiRestoran().RemoveMeni(temp, window.podLjuska.getZastavice(), window.podLjuska.getTrenutniVlasnik());
 				urediPanel();
 			};
 			
-			JButton ukloni = new JButton("Ukloni");
-			ukloni.addActionListener(ukloniListener);
-			artiklInfo.add(ukloni);
+			dodajButton.addActionListener(ukloni);
+			artiklNaruci.add(dodajButton);
+			artiklPanel.add(artiklInfo, BorderLayout.CENTER);
+			artiklPanel.add(artiklNaruci, BorderLayout.EAST);
+			artiklPanel.setMaximumSize(new Dimension(9000, 50));
+			artiklPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
+			menuSadrzaj.add(artiklPanel);
 			
-			menuSadrzaj.add(artiklInfo);
+			JPanel filler4 = new JPanel();
+			filler4.setMaximumSize(new Dimension(9000, 1));
+			filler4.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+			menuSadrzaj.add(filler3);			
 		}
 	}
 }

@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -16,7 +17,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -24,7 +27,11 @@ import javax.swing.ScrollPaneLayout;
 import javax.swing.SpringLayout;
 import javax.swing.Timer;
 
+import DataStructure.Artikl;
 import DataStructure.Klijent;
+import DataStructure.Korisnik;
+import DataStructure.Kosarica;
+import DataStructure.Restoran;
 import jdk.nashorn.internal.ir.BlockLexicalContext;
 
 /**
@@ -39,9 +46,12 @@ public class KorisnikPanel extends JPanel {
 	private JPanel logoPanel;
 	private JPanel northPanel;
 	private JPanel usrInfoPanel;
+	private JPanel centerPanel;
+	private ActionListener listaListener;
 	private ActionListener prijaviSeListener;
 	private ActionListener registrirajSeListener;
 	private DefaultWindow window;
+	private Set<Restoran> listaRestorani;
 	
 	
 	/**
@@ -50,7 +60,13 @@ public class KorisnikPanel extends JPanel {
 	 */
 	public KorisnikPanel(DefaultWindow window) {
 		this.window = window;
+		this.showScrollPane = new JScrollPane();
 		setLayout(new BorderLayout());
+		
+		centerPanel = new JPanel();
+		centerPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
+		centerPanel.setBackground(Color.white);
+		add(centerPanel, BorderLayout.CENTER);
 		
 		//Definicija Listenera za gumbove za Prijavu i Registraciju
 		prijaviSeListener = (actionEvent) -> {
@@ -59,6 +75,17 @@ public class KorisnikPanel extends JPanel {
 		registrirajSeListener = (actionEvent) -> {
 			registrirajSeWindow();
 		};
+		listaListener = (actionEvent) -> {
+			showPanelfill();
+		};
+		
+		//Definicija gumba za listu restorana
+		JButton listaRestorana = new JButton();
+		listaRestorana.setMaximumSize(new Dimension(120, 120));
+		listaRestorana.addActionListener(listaListener);
+		ImageIcon listaImg = new ImageIcon(getClass().getResource("/images/listaMini.png"));
+		listaRestorana.setIcon(listaImg);
+		listaRestorana.setBackground(Color.white);
 		
 		//Definicija gumba PrijaviSe
 		JButton PrijaviSe = new JButton("    Prijavi se    ");
@@ -77,6 +104,7 @@ public class KorisnikPanel extends JPanel {
 		//Definicija panela sa gumbovima
 		buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+		buttonsPanel.add(listaRestorana);
 		buttonsPanel.add(PrijaviSe);
 		buttonsPanel.add(RegistrirajSe);
 		buttonsPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
@@ -112,33 +140,200 @@ public class KorisnikPanel extends JPanel {
 		usrInfoPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
 		northPanel.add(usrInfoPanel, BorderLayout.EAST);
 		
-		//Nepotpuna definicija panela sa listom restorana
-		//Potrebno dalje istraziti kako radi JScrollPane
-		JPanel restorani = new JPanel();
-		restorani.setLayout(new BoxLayout(restorani, BoxLayout.PAGE_AXIS));
-		restorani.setBackground(Color.WHITE);
+		showPanelfill();
 		
+	}
+	
+	
+	private void showPanelfill() {
+		remove(showScrollPane);
+		remove(centerPanel);
+		centerPanel.removeAll();
+		showScrollPane.removeAll();
+		//JPanel restorani = new JPanel();
+		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
+		centerPanel.setBackground(Color.WHITE);
+		window.podLjuska.napuniSetRestorana();
+		listaRestorani = window.podLjuska.getRestorani();
+		
+		for (Restoran restoran : listaRestorani) {
+			JPanel filler1 = new JPanel();
+			filler1.setMaximumSize(new Dimension(9000, 1));
+			filler1.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+			centerPanel.add(filler1);
+			
+			JPanel restoranPanel = new JPanel();
+			restoranPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
+			restoranPanel.setMaximumSize(new Dimension(9000, 100));
+			restoranPanel.setLayout(new BorderLayout());
+			
+			try {
+				ImageIcon slikaRestoran = new ImageIcon(restoran.getSlika());
+				restoranPanel.add(new JLabel(slikaRestoran), BorderLayout.WEST);
+			} catch (Exception e) {
+				ImageIcon slikaRestoran = new ImageIcon(getClass().getResource("/images/DefaultRestoranMini.png"));
+				restoranPanel.add(new JLabel(slikaRestoran), BorderLayout.WEST);
+			}
+			restoranPanel.add(new JTextArea("Naziv: " + restoran.getIme() + "\nOpis: " + restoran.getOpis()), BorderLayout.CENTER);
+			JButton naruci = new JButton("Pregledaj");
+			
+			ActionListener naruciListener = (actionEvent) -> {
+				remove(showScrollPane);
+				remove(centerPanel);
+				
+				centerPanel.removeAll();
+				showScrollPane.removeAll();
+				
+				centerPanel.setLayout(new BorderLayout());
+				centerPanel.setBackground(Color.WHITE);
+				
+				JPanel menuSadrzaj = new JPanel();
+				menuSadrzaj.setLayout(new BoxLayout(menuSadrzaj, BoxLayout.PAGE_AXIS));
+				menuSadrzaj.setBackground(Color.WHITE);
+				
+				JPanel opisMenuPanel = new JPanel();
+				opisMenuPanel.setBackground(Color.white);
+				JLabel opisMenu = new JLabel();
+				opisMenu.setText(restoran.getIme());
+				opisMenu.setForeground(new Color(0, 153, 255));
+				opisMenuPanel.add(opisMenu);
+				centerPanel.add(opisMenuPanel, BorderLayout.NORTH);
+				
+				Set<Artikl> menu = restoran.getMeni();
+				for(Artikl temp : menu) {
+					JPanel filler3 = new JPanel();
+					filler3.setMaximumSize(new Dimension(9000, 1));
+					filler3.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+					menuSadrzaj.add(filler3);
+					
+					JPanel artiklPanel = new JPanel();
+					artiklPanel.setBackground(Color.WHITE);
+					artiklPanel.setLayout(new BorderLayout());
+					JPanel artiklInfo = new JPanel();
+					artiklInfo.setBackground(Color.WHITE);
+					artiklInfo.setLayout(new BoxLayout(artiklInfo, BoxLayout.LINE_AXIS));
+					Float cijena = temp.getCijena();
+					JLabel tempLabel1 = new JLabel("Naziv: " + temp.getNaziv());
+					tempLabel1.setMaximumSize(new Dimension(280, 90));
+					JLabel tempLabel2 = new JLabel("Opis: " + temp.getOpis());
+					tempLabel2.setMaximumSize(new Dimension(280, 90));
+					JLabel tempLabel3 = new JLabel("Cijena: " + cijena.toString() + "kn");
+					tempLabel3.setMaximumSize(new Dimension(280, 90));
+					artiklInfo.add(tempLabel1);
+					artiklInfo.add(tempLabel2);
+					artiklInfo.add(tempLabel3);
+					
+					JPanel artiklNaruci = new JPanel();
+					artiklNaruci.setBackground(Color.WHITE);
+					artiklNaruci.setLayout(new FlowLayout());
+					JButton dodajButton = new JButton("Dodaj");
+					ActionListener dodaj = (actionEvent2) -> {
+						
+						JOptionPane.showMessageDialog(window, "Morate se prijaviti kako bi izvršili ovu akciju", "Obavijest", 1);
+						
+//						JDialog regPopUp = new JDialog();
+//						regPopUp.setTitle("Informacija");
+//						regPopUp.setLayout(new BorderLayout());
+//						
+//						ActionListener infoDialog = (actionEvent3) -> {
+//							regPopUp.dispatchEvent(new WindowEvent(regPopUp, WindowEvent.WINDOW_CLOSING));
+//						};
+//						
+//						JPanel buttonPanel = new JPanel();
+//						buttonPanel.setBackground(Color.white);
+//						buttonPanel.setLayout(new FlowLayout());
+//						JButton OK = new JButton("OK");
+//						OK.addActionListener(infoDialog);
+//						buttonPanel.add(OK);
+//						regPopUp.add(buttonPanel, BorderLayout.SOUTH);
+//						
+//						JPanel text = new JPanel();
+//						text.setBackground(Color.white);
+//						JTextArea area = new JTextArea();
+//						area.setText("\nMorate se prijavati kako\nbiste izvrsili tu akciju");
+//						area.setForeground(new Color(0, 153, 255));
+//						area.setEditable(false);
+//						text.add(area);
+//						regPopUp.add(text, BorderLayout.CENTER);
+//						regPopUp.setResizable(false);
+//						regPopUp.setSize(200, 130);
+//						regPopUp.setLocation(window.getX()+10, window.getY()+8);
+//						regPopUp.setModal(true);
+//						regPopUp.setVisible(true);	
+						
+						
+						};
+					dodajButton.addActionListener(dodaj);
+					artiklNaruci.add(dodajButton);
+					artiklPanel.add(artiklInfo, BorderLayout.CENTER);
+					artiklPanel.add(artiklNaruci, BorderLayout.EAST);
+					artiklPanel.setMaximumSize(new Dimension(9000, 50));
+					artiklPanel.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
+					menuSadrzaj.add(artiklPanel);
+					
+					JPanel filler4 = new JPanel();
+					filler4.setMaximumSize(new Dimension(9000, 1));
+					filler4.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+					menuSadrzaj.add(filler3);
+					
+				}
+				
+				showScrollPane = new JScrollPane(menuSadrzaj);
+				showScrollPane.setBackground(Color.WHITE);
+				centerPanel.add(showScrollPane, BorderLayout.CENTER);
+				add(centerPanel, BorderLayout.CENTER);
+				centerPanel.revalidate();
+				revalidate();
+			};
+			
+			naruci.addActionListener(naruciListener);
+			restoranPanel.add(naruci, BorderLayout.EAST);
+			centerPanel.add(restoranPanel);
+			
+			JPanel filler2 = new JPanel();
+			filler2.setMaximumSize(new Dimension(9000, 1));
+			filler2.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+			centerPanel.add(filler2);
+		}
+		
+		
+		/*
 		//Primjer1
 		JPanel restoran = new JPanel();
-		restoran.setMaximumSize(new Dimension(900, 100));
+		restoran.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
+		restoran.setMaximumSize(new Dimension(9000, 100));
 		restoran.setLayout(new BorderLayout());
 		restoran.add(new JLabel(new ImageIcon(getClass().getResource("/images/DodajrestoranMini.png"))), BorderLayout.WEST);
-		restoran.add(new JTextField("Nekakav opis za restoran"), BorderLayout.CENTER);
-		restoran.add(new JButton("Naruci"), BorderLayout.EAST);
+		restoran.add(new JTextArea("Nekakav opis za restoran"), BorderLayout.CENTER);
+		JButton tempButton = new JButton("Naruci");
+		//tempButton.addActionListener(naruciListener);
+		restoran.add(tempButton, BorderLayout.EAST);
 		restorani.add(restoran);
+		
+		//Filler
+		JPanel filler = new JPanel();
+		filler.setMaximumSize(new Dimension(9000, 1));
+		filler.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+		restorani.add(filler);
 		
 		//Primjer2
 		JPanel restoran2 = new JPanel();
-		restoran2.setMaximumSize(new Dimension(900, 100));
+		restoran2.setBorder(BorderFactory.createLineBorder(new Color(155, 226, 255), 2));
+		restoran2.setMaximumSize(new Dimension(9000, 100));
 		restoran2.setLayout(new BorderLayout());
 		restoran2.add(new JLabel(new ImageIcon(getClass().getResource("/images/DodajrestoranMini.png"))), BorderLayout.WEST);
-		restoran2.add(new JTextField("Nekakav opis za restoran"), BorderLayout.CENTER);
+		restoran2.add(new JTextArea("\nNekakav opis za restoran"), BorderLayout.CENTER);
 		restoran2.add(new JButton("Naruci"), BorderLayout.EAST);
 		restorani.add(restoran2);
+		*/
 		
-		showScrollPane = new JScrollPane(restorani);
+		showScrollPane = new JScrollPane(centerPanel);
 		showScrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 153, 255), 2));
 		add(showScrollPane, BorderLayout.CENTER);
+		centerPanel.revalidate();
+		showScrollPane.revalidate();
+		revalidate();
+		
 	}
 
 	private void registrirajSeWindow() {
@@ -166,7 +361,7 @@ public class KorisnikPanel extends JPanel {
 		lozinkaPanel.setBackground(Color.white);
 		lozinkaPanel.setLayout(new FlowLayout());
 		lozinkaPanel.add(new JLabel("                 Lozinka : "));
-		JTextField lozinkaField = new JTextField();
+		JPasswordField lozinkaField = new JPasswordField();
 		lozinkaField.setColumns(15);
 		lozinkaPanel.add(lozinkaField);
 		podaci.add(lozinkaPanel);
@@ -176,7 +371,7 @@ public class KorisnikPanel extends JPanel {
 		potvrLozinkaPanel.setBackground(Color.white);
 		potvrLozinkaPanel.setLayout(new FlowLayout());
 		potvrLozinkaPanel.add(new JLabel("Potvrdite lozinku : "));
-		JTextField potvrdLozinkaField = new JTextField();
+		JPasswordField potvrdLozinkaField = new JPasswordField();
 		potvrdLozinkaField.setColumns(15);
 		potvrLozinkaPanel.add(potvrdLozinkaField);
 		podaci.add(potvrLozinkaPanel);
@@ -234,25 +429,61 @@ public class KorisnikPanel extends JPanel {
 		
 		//Definicjia funkcionalnosti gumba za registraciju
 		ActionListener RegistracijaDialog = (actionEvent) -> {
-			if(registracijaProvjera(korImeField.getText(), lozinkaField.getText(), imeField.getText(), prezField.getText(), brMobField.getText(), mailField.getText())) {
-				poruka.removeAll();
-				poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
-				poruka.revalidate();
-				window.switchToKlijent(new Klijent(korImeField.getText(), lozinkaField.getText(), imeField.getText(), prezField.getText(), brMobField.getText(), mailField.getText()));
-				Timer timer = new Timer(1500, new ActionListener() {
-		            public void actionPerformed(ActionEvent e) {
-		            	Registracija.dispatchEvent(new WindowEvent(Registracija, WindowEvent.WINDOW_CLOSING));
-		            }
-		        });
-				timer.setRepeats(false);
-			    timer.start();
+			
+			if (lozinkaField.getText().equals(potvrdLozinkaField.getText())) {
+				if(registracijaProvjera(korImeField.getText(), lozinkaField.getText(), imeField.getText(), prezField.getText(), brMobField.getText(), mailField.getText())) {
+					poruka.removeAll();
+					poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
+					poruka.revalidate();
+					
+					// dodano isto kao i u prijavi - LM
+					if (window.podLjuska.getZastavice().isAdministrator()) {
+						window.switchToAdmin(window.podLjuska.getTrenutniAdministrator());
+					}
+					
+					if (window.podLjuska.getZastavice().isDispecer()) {
+						window.switchToDispecer(window.podLjuska.getTrenutniDispecer());
+					}
+
+					
+					if (window.podLjuska.getZastavice().isDostavljac()) {
+						window.switchToDostavljac(window.podLjuska.getTrenutniDostavljac());
+					}
+
+					
+					if (window.podLjuska.getZastavice().isKlijent()) {
+						window.switchToKlijent(window.podLjuska.getTrenutniKlijent());
+					}
+
+					
+					if (window.podLjuska.getZastavice().isVlasnik()) {
+						window.switchToVlasnik(window.podLjuska.getTrenutniVlasnik());
+					}
+					
+					
+					Timer timer = new Timer(500, new ActionListener() {
+			            public void actionPerformed(ActionEvent e) {
+			            	Registracija.dispatchEvent(new WindowEvent(Registracija, WindowEvent.WINDOW_CLOSING));
+			            }
+			        });
+					timer.setRepeats(false);
+				    timer.start();
+				}
+				
+				else {
+					poruka.removeAll();
+					poruka.add(new JLabel("<html><font color='red'>Neispravni podaci</font></html>"));
+					poruka.revalidate();
+				}
 			}
 			
 			else {
+				
 				poruka.removeAll();
-				poruka.add(new JLabel("<html><font color='red'>Neispravni podaci</font></html>"));
+				poruka.add(new JLabel("<html><font color='red'>Lozinka i potvrda lozinke se ne poklapaju</font></html>"));
 				poruka.revalidate();
 			}
+			
 		};
 		JButton OK = new JButton("Registriraj se");
 		OK.addActionListener(RegistracijaDialog);
@@ -314,7 +545,7 @@ public class KorisnikPanel extends JPanel {
 		lozinka.setBackground(Color.white);
 		lozinka.setLayout(new FlowLayout());
 		lozinka.add(new JLabel("           Laozinka: "));
-		JTextField lozinkaField = new JTextField();
+		JPasswordField lozinkaField = new JPasswordField();
 		lozinkaField.setColumns(15);
 		lozinka.add(lozinkaField);
 		imeLozinka.add(lozinka);
@@ -336,9 +567,35 @@ public class KorisnikPanel extends JPanel {
 				poruka.removeAll();
 				poruka.add(new JLabel("<html><font color='green'>Uspijeh!</font></html>"));
 				poruka.revalidate();
+
 				//window.switchToKlijent(getUsr(imeField.getText(), lozinkaField.getText()));
-				window.switchToKlijent(window.podLjuska.getTrenutniKlijent());
-				Timer timer = new Timer(1500, new ActionListener() {
+				//window.switchToKlijent(window.podLjuska.getTrenutniKlijent());
+
+				
+				if (window.podLjuska.getZastavice().isAdministrator()) {
+					window.switchToAdmin(window.podLjuska.getTrenutniAdministrator());
+				}
+				
+				if (window.podLjuska.getZastavice().isDispecer()) {
+					window.switchToDispecer(window.podLjuska.getTrenutniDispecer());
+				}
+
+				
+				if (window.podLjuska.getZastavice().isDostavljac()) {
+					window.switchToDostavljac(window.podLjuska.getTrenutniDostavljac());
+				}
+
+				
+				if (window.podLjuska.getZastavice().isKlijent()) {
+					window.switchToKlijent(window.podLjuska.getTrenutniKlijent());
+				}
+
+				
+				if (window.podLjuska.getZastavice().isVlasnik()) {
+					window.switchToVlasnik(window.podLjuska.getTrenutniVlasnik());
+				}
+
+				Timer timer = new Timer(500, new ActionListener() {
 		            public void actionPerformed(ActionEvent e) {
 		            	Prijava.dispatchEvent(new WindowEvent(Prijava, WindowEvent.WINDOW_CLOSING));
 		            }

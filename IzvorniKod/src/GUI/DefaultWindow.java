@@ -7,6 +7,7 @@ import javax.swing.WindowConstants;
 import DataStructure.Klijent;
 import DataStructure.Korisnik;
 import DataStructure.PodatkovnaLjuska;
+import DataStructure.Vlasnik;
 
 
 /**
@@ -17,6 +18,7 @@ import DataStructure.PodatkovnaLjuska;
  */
 
 public class DefaultWindow extends JFrame{
+	private VlasnikPanel vlasnikPanel;
 	private KorisnikPanel korPanel;
 	private KlijentPanel klijentPanel;
 	protected PodatkovnaLjuska podLjuska = new PodatkovnaLjuska(); ;
@@ -25,9 +27,13 @@ public class DefaultWindow extends JFrame{
 	 * Konstruktor koji inicijalizira program kao Korisnik
 	 */
 	public DefaultWindow() {
-		setSize(1024, 720);
+		setSize(1024, 730);
 	    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	    setTitle("Dostavljaona!");
+	    
+	    //vlasnikPanel = new VlasnikPanel(this, new Vlasnik("ime", "prezime"));
+	    //add(vlasnikPanel);
+	    
 	    korPanel = new KorisnikPanel(this);
 	    add(korPanel);
 	}
@@ -36,7 +42,7 @@ public class DefaultWindow extends JFrame{
 	/**
 	 * Metoda za promjenu panela sa Korisnika na KLijenta
 	 */
-	public void switchToKlijent(Korisnik klijent) {
+	public void switchToKlijent(Klijent klijent) {
 		remove(korPanel);
 		klijentPanel = new KlijentPanel(this, klijent);
 		add(klijentPanel);
@@ -65,5 +71,39 @@ public class DefaultWindow extends JFrame{
 	      window.setVisible(true);
 	    });
 	  }
+
+
+	public void switchToVlasnik(Vlasnik trenutniVlasnk) {
+		
+		remove(korPanel);
+		vlasnikPanel = new VlasnikPanel(this, trenutniVlasnk);
+		add(vlasnikPanel);
+		revalidate();
+	}
+	
+	public void switchToKorisnikFromVlasnik() {
+		remove(vlasnikPanel);
+		korPanel = new KorisnikPanel(this);
+		add(korPanel);
+		revalidate();
+	}
+
+
+	public void switchToDostavljac(Korisnik trenutniKorisnik) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void switchToDispecer(Korisnik trenutniKorisnik) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void switchToAdmin(Korisnik trenutniKorisnik) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import com.sun.org.apache.xpath.internal.operations.Equals;
+
 import DataStructure.Artikl;
 import DataStructure.Restoran;
 
@@ -61,7 +64,7 @@ public class ArtiklDAO {
 	
 	public int azurirajArtikl (Artikl artikl) {
 		
-		String sql = "UPDATE artikl SET nazivArtikla = ?, opis = ?, cijena = ?, vrijemePripreme = ? WHERE idArtikl = ?";
+		String sql = "UPDATE artikl SET nazivArtikla = ?, opis = ?, cijena = ?, vrijemePripremeMin = ? WHERE idArtikl = ?";
 		int result = 2; // za testiranje
 		
 		try(Connection con = DriverManager.getConnection(host, userDB, passwDB);

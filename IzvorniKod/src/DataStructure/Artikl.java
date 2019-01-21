@@ -2,7 +2,7 @@ package DataStructure;
 
 import Database.ArtiklDAO;
 
-public class Artikl {
+public class Artikl implements Comparable<Artikl> {
 	
 	private int idArtikl;
 	private String naziv;
@@ -129,4 +129,32 @@ public class Artikl {
     		this.idArtikl = id;
     	}
     }
+
+	@Override
+	public int compareTo(Artikl o) {
+		
+		return ((Integer)o.getIdArtikl()).compareTo((Integer)this.getIdArtikl());
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + idArtikl;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Artikl other = (Artikl) obj;
+		if (idArtikl != other.idArtikl)
+			return false;
+		return true;
+	}
 }

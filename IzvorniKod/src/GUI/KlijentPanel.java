@@ -346,9 +346,14 @@ public class KlijentPanel extends JPanel {
 	}
 	
 	private void puniKosaricu(JPanel sadrzaj) {
-
+	
 		Map<Artikl, Integer> artikli = window.podLjuska.getTrenutniKlijent().getKosarica().getOdabraniProizvodi();
 
+		if (artikli.isEmpty()) {
+			
+			window.podLjuska.getTrenutniKlijent().getKosarica().clear();
+		}
+		
 		for(Map.Entry<Artikl, Integer> artikl : artikli.entrySet()) {
 			
 			if(artikl.getValue() == 0) {

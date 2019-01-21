@@ -691,8 +691,6 @@ public class VlasnikPanel extends JPanel {
 				window.podLjuska.getTrenutniVlasnik().getVlastitiRestoran().RemoveMeni(temp, window.podLjuska.getZastavice(), window.podLjuska.getTrenutniVlasnik());
 				
 				urediPanel();
-				
-				
 			};
 			
 			dodajButton.addActionListener(ukloni);

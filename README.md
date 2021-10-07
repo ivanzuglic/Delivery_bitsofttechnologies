@@ -1,9 +1,2 @@
-Dobrodosli na projekt!!
-
-Lista ljudi koji su uspjesno instalirali git i napravili commit
-	1. Luka Mrkovic
-	2. Josip Ramljak
-	3. Ivan Zuglic
-	4. Toni Sterbic
-	5. Maja Matesic
-	6. Lucia Barisic
+Goal of this project was to develop an application for food delivery.
+Application allows user to view and order food from restaurants, and to restaurants it allows to present and sell their food offerings.
